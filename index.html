@@ -11,25 +11,470 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <style>
-    :root{--brand:#008e91;--ink:#0b1f22;--muted:#5a6b6d;--bg:#f7fbfb;--card:#ffffff}
-    *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:system-ui,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
-    .container{max-width:1100px;margin:0 auto;padding:0 20px}
-    header{position:sticky;top:0;background:rgba(255,255,255,.9);border-bottom:1px solid #e8efef;z-index:50}
-    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
-    nav a{margin-left:18px;font-weight:600;color:#1a2c2f}
-    .section{padding:56px 0}
-    .grid{display:grid;gap:16px}
-    @media (min-width:768px){.grid-3{grid-template-columns:repeat(3,1fr)}}
-    footer{padding:20px 0;border-top:1px solid #e8efef;color:var(--muted);font-size:.9rem}
+    :root {
+      --brand: #008e91;
+      --brand-light: #00a8ac;
+      --brand-dark: #006f72;
+      --white: #ffffff;
+      --black: #000000;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--gray-50);
+    }
+    
+    body {
+      overflow-x: hidden;
+    }
+    
+    a {
+      color: var(--brand);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--brand-dark);
+      text-decoration: underline;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 24px;
+      }
+    }
+    
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      box-shadow: var(--shadow);
+      z-index: 50;
+    }
+    
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--brand);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .nav-links a {
+      padding: 8px 12px;
+      font-weight: 600;
+      color: var(--gray-700);
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+    
+    .nav-links a:hover {
+      background: var(--gray-100);
+      text-decoration: none;
+      color: var(--brand);
+    }
+    
+    @media (max-width: 767px) {
+      .nav-links {
+        gap: 4px;
+      }
+      .nav-links a {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+      }
+      .logo {
+        font-size: 1.3rem;
+      }
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 80px 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0 0 24px 0;
+      line-height: 1.2;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin: 0 0 32px 0;
+      opacity: 0.95;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      font-size: 1rem;
+      min-width: 160px;
+    }
+    
+    .btn-primary {
+      background: var(--white);
+      color: var(--brand);
+    }
+    
+    .btn-primary:hover {
+      background: var(--gray-100);
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 2px solid var(--white);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--white);
+      color: var(--brand);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    
+    @media (min-width: 768px) {
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+      .cta-buttons {
+        flex-direction: row;
+        gap: 24px;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .hero {
+        padding: 60px 0;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+    }
+    
+    /* Sections */
+    .section {
+      padding: 80px 0;
+    }
+    
+    .section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 64px 0;
+      color: var(--gray-900);
+    }
+    
+    @media (max-width: 767px) {
+      .section {
+        padding: 60px 0;
+      }
+      .section h2 {
+        font-size: 2rem;
+        margin-bottom: 48px;
+      }
+    }
+    
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+    }
+    
+    @media (min-width: 768px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+      }
+    }
+    
+    .feature-card {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--brand);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px auto;
+      font-size: 24px;
+      color: var(--white);
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 16px 0;
+      color: var(--gray-900);
+    }
+    
+    .feature-card p {
+      color: var(--gray-600);
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    /* Privacy Section */
+    .privacy-section {
+      background: var(--white);
+    }
+    
+    .privacy-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    
+    .privacy-content h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 32px 0 16px 0;
+      color: var(--brand);
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 8px;
+    }
+    
+    .privacy-content h3:first-of-type {
+      margin-top: 0;
+    }
+    
+    .privacy-content p {
+      margin: 16px 0;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+    
+    .privacy-content ul {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+    
+    .privacy-content li {
+      margin: 8px 0;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+    
+    .privacy-content .last-updated {
+      background: var(--gray-100);
+      padding: 16px;
+      border-radius: var(--border-radius);
+      font-style: italic;
+      color: var(--gray-600);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    
+    .privacy-highlight {
+      background: var(--brand);
+      color: var(--white);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      margin: 24px 0;
+    }
+    
+    .privacy-highlight h4 {
+      margin: 0 0 12px 0;
+      font-weight: 700;
+    }
+    
+    /* Contact Section */
+    .contact-section {
+      background: var(--gray-900);
+      color: var(--white);
+      text-align: center;
+    }
+    
+    .contact-section h2 {
+      color: var(--white);
+    }
+    
+    .contact-info {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 768px) {
+      .contact-info {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .contact-card {
+      background: var(--gray-800);
+      padding: 24px;
+      border-radius: var(--border-radius-lg);
+    }
+    
+    .contact-card h3 {
+      color: var(--brand-light);
+      margin: 0 0 12px 0;
+      font-weight: 700;
+    }
+    
+    .contact-card a {
+      color: var(--white);
+      font-weight: 600;
+    }
+    
+    .contact-card a:hover {
+      color: var(--brand-light);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--black);
+      color: var(--gray-300);
+      padding: 32px 0;
+      text-align: center;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .footer-links a {
+      color: var(--gray-300);
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a:hover {
+      color: var(--brand-light);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 12px;
+      }
+      
+      .feature-card {
+        padding: 24px;
+      }
+      
+      .contact-info {
+        gap: 24px;
+      }
+      
+      .footer-links {
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="container nav">
-      <div class="logo">Souqna</div>
-      <nav>
+      <div class="logo">🏪 Souqna</div>
+      <nav class="nav-links">
         <a href="#features">Features / الميزات</a>
         <a href="#privacy">Privacy / الخصوصية</a>
         <a href="#contact">Contact / تواصل</a>
@@ -38,58 +483,149 @@
   </header>
 
   <main>
-    <section id="hero" class="section container">
-      <h1>Souqna — A simple marketplace / سوقنا — سوق بسيط للجميع</h1>
-      <p>Buy & sell items, find jobs, and browse property — fast and local.<br>بيع وشراء، وظائف، وعقارات — بسرعة وبشكل محلي.</p>
-    </section>
-
-    <section id="features" class="section container">
-      <h2>Features / الميزات</h2>
-      <div class="grid grid-3">
-        <div>
-          <h3>Buy & Sell / بيع وشراء</h3>
-          <p>Post listings with photos and prices.<br>أنشئ إعلانات مع صور وأسعار.</p>
-        </div>
-        <div>
-          <h3>Jobs / وظائف</h3>
-          <p>Find or post job offers.<br>ابحث أو انشر فرص عمل.</p>
-        </div>
-        <div>
-          <h3>Property / عقارات</h3>
-          <p>Browse apartments, houses, and land.<br>تصفح شقق، منازل، وأراضٍ.</p>
+    <section class="hero">
+      <div class="container">
+        <h1>Souqna — Your Local Marketplace<br>سوقنا — سوقك المحلي</h1>
+        <p>Buy & sell items, find jobs, and browse property — fast, safe, and local.<br>بيع وشراء، وظائف، وعقارات — بسرعة وأمان ومحلياً.</p>
+        <div class="cta-buttons">
+          <a href="#" class="btn btn-primary">Download App / تحميل التطبيق</a>
+          <a href="#features" class="btn btn-secondary">Learn More / اعرف أكثر</a>
         </div>
       </div>
     </section>
 
-    <section id="privacy" class="section container">
-      <h2>Privacy Policy / سياسة الخصوصية</h2>
-      <p><em>Last updated: 20 August 2025 / آخر تحديث: 20 آب 2025</em></p>
-
-      <h3>Who we are / من نحن</h3>
-      <p>Souqna operates the Souqna app and website. Contact: privacy@souqna.net<br>سوقنا تدير تطبيق وموقع سوقنا. للتواصل: privacy@souqna.net</p>
-
-      <h3>What we collect / ما الذي نجمعه</h3>
-      <ul>
-        <li>Account info (optional). / معلومات الحساب (اختياري).</li>
-        <li>Listings & messages. / الإعلانات والرسائل.</li>
-        <li>Location data (optional). / بيانات الموقع (اختياري).</li>
-        <li>Device & usage data. / بيانات الجهاز والاستخدام.</li>
-      </ul>
-
-      <h3>Your rights / حقوقك</h3>
-      <p>You can request access or deletion of your data. / يمكنك طلب الوصول لبياناتك أو حذفها.</p>
+    <section id="features" class="section">
+      <div class="container">
+        <h2>Features / الميزات</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🛍️</div>
+            <h3>Buy & Sell / بيع وشراء</h3>
+            <p>Post listings with multiple photos, detailed descriptions, and competitive prices. Connect directly with buyers and sellers in your area.<br><br>أنشئ إعلانات مع صور متعددة ووصف مفصل وأسعار تنافسية. تواصل مباشرة مع المشترين والبائعين في منطقتك.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💼</div>
+            <h3>Jobs / وظائف</h3>
+            <p>Discover job opportunities or post openings. From part-time gigs to full-time careers, find what you're looking for.<br><br>اكتشف فرص العمل أو انشر وظائف شاغرة. من الأعمال الجزئية إلى الوظائف الدائمة، ابحث عما تريد.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏠</div>
+            <h3>Property / عقارات</h3>
+            <p>Browse apartments, houses, commercial spaces, and land. Find your next home or investment opportunity.<br><br>تصفح شقق، منازل، مساحات تجارية، وأراضٍ. ابحث عن منزلك القادم أو فرصة استثمارية.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="contact" class="section container">
-      <h2>Contact / تواصل</h2>
-      <p>Email: hello@souqna.net / البريد: payment@souqna.net</p>
+    <section id="privacy" class="section privacy-section">
+      <div class="container">
+        <h2>Privacy Policy / سياسة الخصوصية</h2>
+        <div class="privacy-content">
+          <div class="last-updated">
+            <strong>Last updated: 20 August 2025 / آخر تحديث: 20 آب 2025</strong>
+          </div>
+
+          <div class="privacy-highlight">
+            <h4>Your Privacy Matters / خصوصيتك مهمة</h4>
+            <p>We believe in transparency and your right to control your personal information. This policy explains how we collect, use, and protect your data when you use Souqna.<br><br>نحن نؤمن بالشفافية وبحقك في التحكم في معلوماتك الشخصية. تشرح هذه السياسة كيف نجمع ونستخدم ونحمي بياناتك عند استخدام سوقنا.</p>
+          </div>
+
+          <h3>Who We Are / من نحن</h3>
+          <p>Souqna is a marketplace platform that connects buyers and sellers across Syria and the region. We are committed to creating a safe, transparent trading environment for our community.<br><br>سوقنا هي منصة سوق تربط المشترين والبائعين في سوريا والمنطقة. نحن ملتزمون بخلق بيئة تجارية آمنة وشفافة لمجتمعنا.</p>
+          <p><strong>Contact us:</strong> privacy@souqna.net / <strong>تواصل معنا:</strong> privacy@souqna.net</p>
+
+          <h3>What Information We Collect / ما المعلومات التي نجمعها</h3>
+          <ul>
+            <li><strong>Account Information (Optional):</strong> Email, phone number, and profile details you choose to provide / <strong>معلومات الحساب (اختياري):</strong> البريد الإلكتروني ورقم الهاتف وتفاصيل الملف الشخصي التي تختار تقديمها</li>
+            <li><strong>Listings & Communications:</strong> Items you post for sale, messages sent through our platform / <strong>الإعلانات والاتصالات:</strong> العناصر التي تنشرها للبيع والرسائل المرسلة عبر منصتنا</li>
+            <li><strong>Location Data (Optional):</strong> Approximate location to show relevant local listings / <strong>بيانات الموقع (اختياري):</strong> الموقع التقريبي لإظهار الإعلانات المحلية ذات الصلة</li>
+            <li><strong>Technical Information:</strong> Device type, browser information, IP address, and app usage statistics / <strong>المعلومات التقنية:</strong> نوع الجهاز ومعلومات المتصفح وعنوان IP وإحصائيات استخدام التطبيق</li>
+          </ul>
+
+          <h3>How We Use Your Information / كيف نستخدم معلوماتك</h3>
+          <ul>
+            <li>Provide and improve our marketplace services / تقديم وتحسين خدمات السوق لدينا</li>
+            <li>Connect buyers and sellers safely / ربط المشترين والبائعين بأمان</li>
+            <li>Prevent fraud and maintain platform security / منع الاحتيال والحفاظ على أمان المنصة</li>
+            <li>Send important updates about your listings / إرسال تحديثات مهمة حول إعلاناتك</li>
+            <li>Analyze usage to improve user experience / تحليل الاستخدام لتحسين تجربة المستخدم</li>
+          </ul>
+
+          <h3>Data Sharing / مشاركة البيانات</h3>
+          <p>We do <strong>not</strong> sell your personal information. We only share data when:<br>نحن <strong>لا</strong> نبيع معلوماتك الشخصية. نشارك البيانات فقط عندما:</p>
+          <ul>
+            <li>You explicitly consent to sharing / توافق صراحة على المشاركة</li>
+            <li>Required by law or legal processes / مطلوب بموجب القانون أو العمليات القانونية</li>
+            <li>Necessary to prevent fraud or protect user safety / ضروري لمنع الاحتيال أو حماية سلامة المستخدم</li>
+          </ul>
+
+          <h3>Data Security / أمان البيانات</h3>
+          <p>We implement industry-standard security measures including encryption, secure servers, and regular security audits to protect your information.<br><br>نطبق تدابير أمنية معيارية في الصناعة بما في ذلك التشفير والخوادم الآمنة وعمليات التدقيق الأمني المنتظمة لحماية معلوماتك.</p>
+
+          <h3>Your Rights / حقوقك</h3>
+          <ul>
+            <li><strong>Access:</strong> Request a copy of your personal data / <strong>الوصول:</strong> طلب نسخة من بياناتك الشخصية</li>
+            <li><strong>Correction:</strong> Update or correct inaccurate information / <strong>التصحيح:</strong> تحديث أو تصحيح المعلومات غير الدقيقة</li>
+            <li><strong>Deletion:</strong> Request deletion of your account and data / <strong>الحذف:</strong> طلب حذف حسابك وبياناتك</li>
+            <li><strong>Portability:</strong> Export your data in a standard format / <strong>قابلية النقل:</strong> تصدير بياناتك بتنسيق قياسي</li>
+            <li><strong>Opt-out:</strong> Unsubscribe from marketing communications / <strong>إلغاء الاشتراك:</strong> إلغاء الاشتراك في الاتصالات التسويقية</li>
+          </ul>
+
+          <h3>Data Retention / الاحتفاظ بالبيانات</h3>
+          <p>We keep your data only as long as necessary to provide our services or as required by law. Inactive accounts are typically deleted after 2 years.<br><br>نحتفظ ببياناتك فقط طالما كان ذلك ضرورياً لتقديم خدماتنا أو حسب ما يتطلبه القانون. عادة ما يتم حذف الحسابات غير النشطة بعد عامين.</p>
+
+          <h3>Changes to This Policy / التغييرات على هذه السياسة</h3>
+          <p>We may update this policy to reflect changes in our practices or for legal compliance. We'll notify users of significant changes via email or app notifications.<br><br>قد نحدث هذه السياسة لتعكس التغييرات في ممارساتنا أو للامتثال القانوني. سنخطر المستخدمين بالتغييرات المهمة عبر البريد الإلكتروني أو إشعارات التطبيق.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <h2>Contact Us / تواصل معنا</h2>
+        <div class="contact-info">
+          <div class="contact-card">
+            <h3>General Inquiries / الاستفسارات العامة</h3>
+            <p><a href="mailto:hello@souqna.net">hello@souqna.net</a></p>
+          </div>
+          <div class="contact-card">
+            <h3>Privacy & Data / الخصوصية والبيانات</h3>
+            <p><a href="mailto:privacy@souqna.net">privacy@souqna.net</a></p>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer>
-    <div class="container">© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
+    <div class="container">
+      <div class="footer-content">
+        <div>© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
+        <div class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
   </footer>
 
-  <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
