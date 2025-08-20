@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Souqna — Buy & Sell • Jobs • Property</title>
+  <meta name="description" content="Souqna is a simple marketplace for Syria and the region — buy & sell items, find jobs, and browse property listings." />
+  <meta name="theme-color" content="#008e91" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <style>
+    :root{--brand:#008e91;--ink:#0b1f22;--muted:#5a6b6d;--bg:#f7fbfb;--card:#ffffff}
+    *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:system-ui,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;background:rgba(255,255,255,.9);border-bottom:1px solid #e8efef;z-index:50}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
+    nav a{margin-left:18px;font-weight:600;color:#1a2c2f}
+    .section{padding:56px 0}
+    .grid{display:grid;gap:16px}
+    @media (min-width:768px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    footer{padding:20px 0;border-top:1px solid #e8efef;color:var(--muted);font-size:.9rem}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">Souqna</div>
+      <nav>
+        <a href="#features">Features / الميزات</a>
+        <a href="#privacy">Privacy / الخصوصية</a>
+        <a href="#contact">Contact / تواصل</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="section container">
+      <h1>Souqna — A simple marketplace / سوقنا — سوق بسيط للجميع</h1>
+      <p>Buy & sell items, find jobs, and browse property — fast and local.<br>بيع وشراء، وظائف، وعقارات — بسرعة وبشكل محلي.</p>
+    </section>
+
+    <section id="features" class="section container">
+      <h2>Features / الميزات</h2>
+      <div class="grid grid-3">
+        <div>
+          <h3>Buy & Sell / بيع وشراء</h3>
+          <p>Post listings with photos and prices.<br>أنشئ إعلانات مع صور وأسعار.</p>
+        </div>
+        <div>
+          <h3>Jobs / وظائف</h3>
+          <p>Find or post job offers.<br>ابحث أو انشر فرص عمل.</p>
+        </div>
+        <div>
+          <h3>Property / عقارات</h3>
+          <p>Browse apartments, houses, and land.<br>تصفح شقق، منازل، وأراضٍ.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy" class="section container">
+      <h2>Privacy Policy / سياسة الخصوصية</h2>
+      <p><em>Last updated: 20 August 2025 / آخر تحديث: 20 آب 2025</em></p>
+
+      <h3>Who we are / من نحن</h3>
+      <p>Souqna operates the Souqna app and website. Contact: privacy@souqna.net<br>سوقنا تدير تطبيق وموقع سوقنا. للتواصل: privacy@souqna.net</p>
+
+      <h3>What we collect / ما الذي نجمعه</h3>
+      <ul>
+        <li>Account info (optional). / معلومات الحساب (اختياري).</li>
+        <li>Listings & messages. / الإعلانات والرسائل.</li>
+        <li>Location data (optional). / بيانات الموقع (اختياري).</li>
+        <li>Device & usage data. / بيانات الجهاز والاستخدام.</li>
+      </ul>
+
+      <h3>Your rights / حقوقك</h3>
+      <p>You can request access or deletion of your data. / يمكنك طلب الوصول لبياناتك أو حذفها.</p>
+    </section>
+
+    <section id="contact" class="section container">
+      <h2>Contact / تواصل</h2>
+      <p>Email: hello@souqna.net / البريد: payment@souqna.net</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+</body>
+</html>
