@@ -92,10 +92,28 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       font-weight: 800;
       font-size: 1.5rem;
       color: var(--brand);
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 142, 145, 0.3);
+      overflow: hidden;
+    }
+    
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .nav-links {
@@ -128,6 +146,14 @@
       }
       .logo {
         font-size: 1.3rem;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+      }
+      .logo-icon img {
+        width: 100%;
+        height: 100%;
       }
     }
     
@@ -473,7 +499,12 @@
 <body>
   <header>
     <div class="container nav">
-      <div class="logo">🏪 Souqna</div>
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="./logo.png" alt="Souqna Logo" />
+        </div>
+        Souqna
+      </div>
       <nav class="nav-links">
         <a href="#features">Features / الميزات</a>
         <a href="#privacy">Privacy / الخصوصية</a>
