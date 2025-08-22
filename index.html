@@ -274,7 +274,128 @@
       }
     }
     
-    /* Features Grid */
+    /* About Section */
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .founder-card {
+      background: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: grid;
+      gap: 32px;
+      padding: 48px;
+    }
+    
+    @media (min-width: 768px) {
+      .founder-card {
+        grid-template-columns: 200px 1fr;
+        gap: 48px;
+      }
+    }
+    
+    .founder-image {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    
+    .avatar {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 4px solid var(--white);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .founder-info h3 {
+      color: var(--brand);
+      font-size: 1.3rem;
+      margin: 0 0 8px 0;
+      font-weight: 600;
+    }
+    
+    .founder-info h4 {
+      color: var(--gray-900);
+      font-size: 2rem;
+      margin: 0 0 8px 0;
+      font-weight: 700;
+    }
+    
+    .title {
+      color: var(--brand-dark);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 24px 0;
+    }
+    
+    .founder-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    
+    @media (min-width: 480px) {
+      .founder-details {
+        flex-direction: row;
+        gap: 32px;
+      }
+    }
+    
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+    
+    .detail-icon {
+      font-size: 1.2rem;
+    }
+    
+    .founder-story p {
+      color: var(--gray-700);
+      line-height: 1.7;
+      margin: 0 0 20px 0;
+    }
+    
+    .founder-story blockquote {
+      background: var(--brand);
+      color: var(--white);
+      padding: 24px;
+      border-radius: var(--border-radius);
+      margin: 32px 0 0 0;
+      font-style: italic;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      border-left: 4px solid var(--brand-light);
+    }
+    
+    @media (max-width: 767px) {
+      .founder-card {
+        padding: 32px 24px;
+      }
+      
+      .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 40px;
+      }
+      
+      .founder-info h4 {
+        font-size: 1.7rem;
+      }
+    }
     .features-grid {
       display: grid;
       gap: 32px;
@@ -413,7 +534,7 @@
     
     @media (min-width: 768px) {
       .contact-info {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
     
@@ -507,6 +628,7 @@
       </div>
       <nav class="nav-links">
         <a href="#features">Features / الميزات</a>
+        <a href="#about">About / عنا</a>
         <a href="#privacy">Privacy / الخصوصية</a>
         <a href="#contact">Contact / تواصل</a>
       </nav>
@@ -597,7 +719,7 @@
           <ul>
             <li><strong>Access:</strong> Request a copy of your personal data / <strong>الوصول:</strong> طلب نسخة من بياناتك الشخصية</li>
             <li><strong>Correction:</strong> Update or correct inaccurate information / <strong>التصحيح:</strong> تحديث أو تصحيح المعلومات غير الدقيقة</li>
-            <li><strong>Deletion:</strong> Request deletion of your account and data / <strong>الحذف:</strong> طلب حذف حسابك وبياناتك</li>
+            <li><strong>Deletion:</strong> Request deletion of your account and data by emailing <a href="mailto:service@souqna.net">service@souqna.net</a> / <strong>الحذف:</strong> طلب حذف حسابك وبياناتك عبر مراسلة <a href="mailto:service@souqna.net" style="color: var(--white);">service@souqna.net</a></li>
             <li><strong>Portability:</strong> Export your data in a standard format / <strong>قابلية النقل:</strong> تصدير بياناتك بتنسيق قياسي</li>
             <li><strong>Opt-out:</strong> Unsubscribe from marketing communications / <strong>إلغاء الاشتراك:</strong> إلغاء الاشتراك في الاتصالات التسويقية</li>
           </ul>
@@ -623,6 +745,53 @@
             <h3>Privacy & Data / الخصوصية والبيانات</h3>
             <p><a href="mailto:privacy@souqna.net">privacy@souqna.net</a></p>
           </div>
+          <div class="contact-card">
+            <h3>Account Services / خدمات الحساب</h3>
+            <p><a href="mailto:service@souqna.net">service@souqna.net</a></p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">For account deletion requests<br>لطلبات حذف الحساب</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <h2>About Us / عنا</h2>
+        <div class="about-content">
+          <div class="founder-card">
+            <div class="founder-image">
+              <div class="avatar">🧑‍💻</div>
+            </div>
+            <div class="founder-info">
+              <h3>Meet the Founder / تعرف على المؤسس</h3>
+              <h4>Amer Alhafid</h4>
+              <p class="title">Software Engineer & Digital Innovator<br>مهندس برمجيات ومبتكر رقمي</p>
+              
+              <div class="founder-details">
+                <div class="detail-item">
+                  <span class="detail-icon">🎂</span>
+                  <span>30 years old / 30 عاماً</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-icon">📍</span>
+                  <span>Bochum, Germany / بوخوم، ألمانيا</span>
+                </div>
+              </div>
+              
+              <div class="founder-story">
+                <p>Born with a passion for connecting communities through technology, Amer bridges the gap between his Syrian heritage and German innovation. As a software engineer living in Bochum, he understands the challenges of finding trusted local marketplaces.</p>
+                
+                <p>With over a decade of coding experience and a heart full of entrepreneurial spirit, Amer created Souqna to solve a simple problem: "Why should buying and selling locally be complicated?" His vision combines German precision with Middle Eastern warmth, creating a platform where trust meets technology.</p>
+                
+                <p style="direction: rtl; text-align: right;">وُلد عامر بشغف لربط المجتمعات من خلال التكنولوجيا، يجسر الفجوة بين تراثه السوري والابتكار الألماني. كمهندس برمجيات يعيش في بوخوم، يفهم تحديات العثور على أسواق محلية موثوقة. مع أكثر من عقد من الخبرة في البرمجة وقلب مليء بالروح الريادية، أنشأ عامر سوقنا لحل مشكلة بسيطة: "لماذا يجب أن يكون البيع والشراء محلياً معقداً؟"</p>
+                
+                <blockquote>
+                  "Technology should bring people together, not create barriers. Souqna is my way of building bridges between communities, one transaction at a time."<br><br>
+                  <span style="direction: rtl;">"التكنولوجيا يجب أن تجمع الناس، وليس أن تخلق حواجز. سوقنا هي طريقتي لبناء جسور بين المجتمعات، صفقة واحدة في كل مرة."</span>
+                </blockquote>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -634,6 +803,7 @@
         <div>© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
         <div class="footer-links">
           <a href="#features">Features</a>
+          <a href="#about">About</a>
           <a href="#privacy">Privacy</a>
           <a href="#contact">Contact</a>
         </div>
