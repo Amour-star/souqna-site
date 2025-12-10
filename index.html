@@ -560,39 +560,287 @@
     }
     
     /* Footer */
-    footer {
-      background: var(--black);
-      color: var(--gray-300);
-      padding: 32px 0;
-      text-align: center;
+    .modern-footer {
+      background: linear-gradient(135deg, var(--gray-900), #0b1224 55%, #0f1a33);
+      color: var(--gray-100);
+      padding: 64px 0;
+      position: relative;
+      overflow: hidden;
     }
-    
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      align-items: center;
+
+    .modern-footer::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(0, 142, 145, 0.25), transparent 60%);
+      filter: blur(18px);
     }
-    
-    @media (min-width: 768px) {
-      .footer-content {
-        flex-direction: row;
-        justify-content: space-between;
+
+    .modern-footer::after {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      left: -40px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(0, 168, 172, 0.2), transparent 60%);
+      filter: blur(18px);
+    }
+
+    .footer-grid {
+      position: relative;
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 960px) {
+      .footer-grid {
+        grid-template-columns: 1.1fr 1fr 1.2fr;
+        align-items: start;
       }
     }
-    
-    .footer-links {
-      display: flex;
-      gap: 24px;
+
+    .footer-brand {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px);
     }
-    
-    .footer-links a {
-      color: var(--gray-300);
-      font-size: 0.9rem;
+
+    .footer-logo {
+      margin: 0 0 8px 0;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--white);
+      letter-spacing: 0.5px;
     }
-    
-    .footer-links a:hover {
+
+    .footer-copy {
+      margin: 0 0 8px 0;
+      color: var(--gray-200);
+      font-size: 0.95rem;
+    }
+
+    .footer-copy a {
       color: var(--brand-light);
+      font-weight: 700;
+    }
+
+    .footer-subcopy {
+      margin: 0 0 16px 0;
+      color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .store-btn strong {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .store-btn small {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--gray-200);
+      margin-top: 2px;
+    }
+
+    .store-btn:hover {
+      text-decoration: none;
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    .store-icon {
+      font-size: 1.4rem;
+    }
+
+    .store-btn.android {
+      border-color: rgba(0, 168, 172, 0.45);
+      background: linear-gradient(135deg, rgba(0, 142, 145, 0.8), rgba(0, 168, 172, 0.75));
+    }
+
+    .store-btn.ios {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .footer-links-group h4,
+    .footer-feedback h4 {
+      margin: 0 0 12px 0;
+      color: var(--white);
+    }
+
+    .footer-links-group ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links-group li {
+      color: var(--gray-200);
+      font-size: 0.95rem;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-links-group li span {
+      color: var(--gray-100);
+      font-weight: 600;
+    }
+
+    .footer-links-group a {
+      color: var(--brand-light);
+      font-weight: 600;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .quick-links a {
+      color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .quick-links a:hover {
+      color: var(--brand-light);
+      text-decoration: none;
+    }
+
+    .footer-feedback {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px);
+    }
+
+    .footer-subtext {
+      margin: 0 0 16px 0;
+      color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .feedback-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-row input,
+    .form-row textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+
+    .form-row input::placeholder,
+    .form-row textarea::placeholder {
+      color: var(--gray-400);
+    }
+
+    .btn.btn-light {
+      background: var(--white);
+      color: var(--gray-900);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn.btn-light:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(255, 255, 255, 0.26);
+    }
+
+    .feedback-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feedback-entry {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--gray-100);
+    }
+
+    .entry-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .entry-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .entry-name {
+      margin: 0;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .entry-time {
+      margin: 0;
+      color: var(--gray-300);
+      font-size: 0.85rem;
+    }
+
+    .entry-message {
+      margin: 0;
+      color: var(--gray-100);
+      line-height: 1.6;
     }
     
     /* Responsive adjustments */
@@ -600,19 +848,27 @@
       .container {
         padding: 0 12px;
       }
-      
+
       .feature-card {
         padding: 24px;
       }
-      
+
       .contact-info {
         gap: 24px;
       }
-      
-      .footer-links {
-        flex-wrap: wrap;
-        gap: 16px;
+
+      .footer-actions {
+        width: 100%;
         justify-content: center;
+      }
+
+      .store-btn {
+        flex: 1 1 100%;
+        justify-content: center;
+      }
+
+      .footer-grid {
+        gap: 24px;
       }
     }
   </style>
@@ -797,15 +1053,54 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="modern-footer">
     <div class="container">
-      <div class="footer-content">
-        <div>© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
-        <div class="footer-links">
-          <a href="#features">Features</a>
-          <a href="#about">About</a>
-          <a href="#privacy">Privacy</a>
-          <a href="#contact">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="footer-logo">Souqna</p>
+          <p class="footer-copy">© <span id="year"></span> — All rights reserved for <a href="https://kiwiit.de" target="_blank" rel="noopener noreferrer">kiwiit.de</a></p>
+          <p class="footer-subcopy">Built to connect communities with trust and simplicity.</p>
+          <div class="footer-actions">
+            <a class="store-btn android" href="https://play.google.com/store/apps/details?id=com.souqnaapp" target="_blank" rel="noopener noreferrer">
+              <span class="store-icon">🤖</span>
+              <span class="store-text"><strong>Download</strong><small>Google Play</small></span>
+            </a>
+            <a class="store-btn ios" href="https://apps.apple.com/us/app/souqna-app/id6753893826" target="_blank" rel="noopener noreferrer">
+              <span class="store-icon"></span>
+              <span class="store-text"><strong>Download</strong><small>App Store</small></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Contact & Support</h4>
+          <ul>
+            <li><span>Privacy & Data:</span> <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a></li>
+            <li><span>General Inquiries:</span> <a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></li>
+            <li><span>Job Offers:</span> <a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></li>
+            <li><span>Account Services:</span> <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a></li>
+          </ul>
+          <div class="quick-links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+
+        <div class="footer-feedback">
+          <h4>Forum — Share Your Feedback</h4>
+          <p class="footer-subtext">No login required: add your name and thoughts to help us improve.</p>
+          <form id="feedback-form" class="feedback-form">
+            <div class="form-row">
+              <input type="text" id="feedback-name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-row">
+              <textarea id="feedback-message" name="message" rows="3" placeholder="Your feedback" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-light">Submit feedback</button>
+          </form>
+          <div id="feedback-list" class="feedback-list" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -827,6 +1122,37 @@
         }
       });
     });
+
+    // Lightweight feedback forum (client-side only)
+    const feedbackForm = document.getElementById('feedback-form');
+    const feedbackList = document.getElementById('feedback-list');
+
+    if (feedbackForm && feedbackList) {
+      feedbackForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById('feedback-name').value.trim();
+        const message = document.getElementById('feedback-message').value.trim();
+
+        if (!name || !message) return;
+
+        const entry = document.createElement('div');
+        entry.className = 'feedback-entry';
+        entry.innerHTML = `
+          <div class="entry-header">
+            <span class="entry-avatar">${name.charAt(0).toUpperCase()}</span>
+            <div>
+              <p class="entry-name">${name}</p>
+              <p class="entry-time">Just now</p>
+            </div>
+          </div>
+          <p class="entry-message">${message}</p>
+        `;
+
+        feedbackList.prepend(entry);
+        feedbackForm.reset();
+      });
+    }
   </script>
 </body>
 </html>
