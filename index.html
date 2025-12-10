@@ -188,6 +188,13 @@
       align-items: center;
       justify-content: center;
     }
+
+    .store-button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     
     .btn {
       display: inline-flex;
@@ -234,7 +241,7 @@
         font-size: 3.5rem;
       }
       .cta-buttons {
-        flex-direction: row;
+        flex-direction: column;
         gap: 24px;
       }
     }
@@ -560,39 +567,429 @@
     }
     
     /* Footer */
-    footer {
-      background: var(--black);
-      color: var(--gray-300);
-      padding: 32px 0;
-      text-align: center;
+    .modern-footer {
+      background: linear-gradient(135deg, var(--gray-900), #0b1224 55%, #0f1a33);
+      color: var(--gray-100);
+      padding: 64px 0;
+      position: relative;
+      overflow: hidden;
     }
-    
-    .footer-content {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      align-items: center;
+
+    .modern-footer::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(0, 142, 145, 0.25), transparent 60%);
+      filter: blur(18px);
     }
-    
-    @media (min-width: 768px) {
-      .footer-content {
-        flex-direction: row;
-        justify-content: space-between;
+
+    .modern-footer::after {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      left: -40px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(0, 168, 172, 0.2), transparent 60%);
+      filter: blur(18px);
+    }
+
+    .footer-grid {
+      position: relative;
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 960px) {
+      .footer-grid {
+        grid-template-columns: 1.1fr 1fr 1.2fr;
+        align-items: start;
       }
     }
-    
-    .footer-links {
-      display: flex;
-      gap: 24px;
+
+    .footer-brand {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px);
     }
-    
-    .footer-links a {
+
+    .footer-logo {
+      margin: 0 0 8px 0;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--white);
+      letter-spacing: 0.5px;
+    }
+
+    .footer-copy {
+      margin: 0 0 8px 0;
+      color: var(--gray-200);
+      font-size: 0.95rem;
+    }
+
+    .footer-copy a {
+      color: var(--brand-light);
+      font-weight: 700;
+    }
+
+    .footer-subcopy {
+      margin: 0 0 16px 0;
       color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .store-btn strong {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .store-btn small {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--gray-200);
+      margin-top: 2px;
+    }
+
+    .store-btn:hover {
+      text-decoration: none;
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    .store-icon {
+      font-size: 1.4rem;
+    }
+
+    .store-btn.android {
+      border-color: rgba(0, 168, 172, 0.45);
+      background: linear-gradient(135deg, rgba(0, 142, 145, 0.8), rgba(0, 168, 172, 0.75));
+    }
+
+    .store-btn.ios {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Forum Section */
+    .forum-section {
+      background: var(--white);
+    }
+
+    .forum-card {
+      background: var(--gray-50);
+      border-radius: var(--border-radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tab-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tab-button {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-800);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-button.active {
+      background: var(--brand);
+      color: var(--white);
+      border-color: var(--brand);
+      box-shadow: var(--shadow);
+    }
+
+    .tab-button:focus {
+      outline: 2px solid var(--brand-light);
+      outline-offset: 2px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .forum-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .forum-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .forum-form input,
+    .forum-form textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--gray-200);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .forum-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .forum-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .forum-meta {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    .feedback-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feedback-entry {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--gray-900);
+      box-shadow: var(--shadow);
+    }
+
+    .entry-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .entry-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .entry-name {
+      margin: 0;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .entry-time {
+      margin: 0;
+      color: var(--gray-600);
       font-size: 0.9rem;
     }
-    
-    .footer-links a:hover {
+
+    .entry-message {
+      margin: 0;
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+
+    .footer-links-group h4,
+    .footer-feedback h4 {
+      margin: 0 0 12px 0;
+      color: var(--white);
+    }
+
+    .footer-links-group ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-links-group li {
+      color: var(--gray-200);
+      font-size: 0.95rem;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-links-group li span {
+      color: var(--gray-100);
+      font-weight: 600;
+    }
+
+    .footer-links-group a {
       color: var(--brand-light);
+      font-weight: 600;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .quick-links a {
+      color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .quick-links a:hover {
+      color: var(--brand-light);
+      text-decoration: none;
+    }
+
+    .footer-feedback {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px);
+    }
+
+    .footer-subtext {
+      margin: 0 0 16px 0;
+      color: var(--gray-300);
+      font-size: 0.95rem;
+    }
+
+    .feedback-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-row input,
+    .form-row textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+
+    .form-row input::placeholder,
+    .form-row textarea::placeholder {
+      color: var(--gray-400);
+    }
+
+    .btn.btn-light {
+      background: var(--white);
+      color: var(--gray-900);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn.btn-light:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(255, 255, 255, 0.26);
+    }
+
+    .feedback-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feedback-entry {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--gray-100);
+    }
+
+    .entry-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .entry-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand), var(--brand-light));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .entry-name {
+      margin: 0;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .entry-time {
+      margin: 0;
+      color: var(--gray-300);
+      font-size: 0.85rem;
+    }
+
+    .entry-message {
+      margin: 0;
+      color: var(--gray-100);
+      line-height: 1.6;
     }
     
     /* Responsive adjustments */
@@ -600,19 +997,17 @@
       .container {
         padding: 0 12px;
       }
-      
+
       .feature-card {
         padding: 24px;
       }
-      
+
       .contact-info {
         gap: 24px;
       }
-      
-      .footer-links {
-        flex-wrap: wrap;
-        gap: 16px;
-        justify-content: center;
+
+      .footer-grid {
+        gap: 24px;
       }
     }
   </style>
@@ -630,6 +1025,7 @@
         <a href="#features">Features / الميزات</a>
         <a href="#about">About / عنا</a>
         <a href="#privacy">Privacy / الخصوصية</a>
+        <a href="#forum">Forum / المنتدى</a>
         <a href="#contact">Contact / تواصل</a>
       </nav>
     </div>
@@ -641,7 +1037,16 @@
         <h1>Souqna — Your Local Marketplace<br>سوقنا — سوقك المحلي</h1>
         <p>Buy & sell items, find jobs, and browse property — fast, safe, and local.<br>بيع وشراء، وظائف، وعقارات — بسرعة وأمان ومحلياً.</p>
         <div class="cta-buttons">
-          <a href="#" class="btn btn-primary">Download App / تحميل التطبيق</a>
+          <div class="store-button-row">
+            <a class="store-btn android" href="https://play.google.com/store/apps/details?id=com.souqnaapp" target="_blank" rel="noopener noreferrer">
+              <span class="store-icon">🤖</span>
+              <span class="store-text"><strong>Download App / تحميل التطبيق</strong><small>Google Play</small></span>
+            </a>
+            <a class="store-btn ios" href="https://apps.apple.com/us/app/souqna-app/id6753893826" target="_blank" rel="noopener noreferrer">
+              <span class="store-icon"></span>
+              <span class="store-text"><strong>Download App / تحميل التطبيق</strong><small>App Store</small></span>
+            </a>
+          </div>
           <a href="#features" class="btn btn-secondary">Learn More / اعرف أكثر</a>
         </div>
       </div>
@@ -685,7 +1090,7 @@
 
           <h3>Who We Are / من نحن</h3>
           <p>Souqna is a marketplace platform that connects buyers and sellers across Syria and the region. We are committed to creating a safe, transparent trading environment for our community.<br><br>سوقنا هي منصة سوق تربط المشترين والبائعين في سوريا والمنطقة. نحن ملتزمون بخلق بيئة تجارية آمنة وشفافة لمجتمعنا.</p>
-          <p><strong>Contact us:</strong> privacy@souqna.net / <strong>تواصل معنا:</strong> privacy@souqna.net</p>
+          <p><strong>Contact us:</strong> appsouqna@gmail.com / <strong>تواصل معنا:</strong> appsouqna@gmail.com</p>
 
           <h3>What Information We Collect / ما المعلومات التي نجمعها</h3>
           <ul>
@@ -719,7 +1124,7 @@
           <ul>
             <li><strong>Access:</strong> Request a copy of your personal data / <strong>الوصول:</strong> طلب نسخة من بياناتك الشخصية</li>
             <li><strong>Correction:</strong> Update or correct inaccurate information / <strong>التصحيح:</strong> تحديث أو تصحيح المعلومات غير الدقيقة</li>
-            <li><strong>Deletion:</strong> Request deletion of your account and data by emailing <a href="mailto:service@souqna.net">service@souqna.net</a> / <strong>الحذف:</strong> طلب حذف حسابك وبياناتك عبر مراسلة <a href="mailto:service@souqna.net" style="color: var(--white);">service@souqna.net</a></li>
+            <li><strong>Deletion:</strong> Request deletion of your account and data by emailing <a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a> / <strong>الحذف:</strong> طلب حذف حسابك وبياناتك عبر مراسلة <a href="mailto:souqna.net@gmail.com" style="color: var(--white);">souqna.net@gmail.com</a></li>
             <li><strong>Portability:</strong> Export your data in a standard format / <strong>قابلية النقل:</strong> تصدير بياناتك بتنسيق قياسي</li>
             <li><strong>Opt-out:</strong> Unsubscribe from marketing communications / <strong>إلغاء الاشتراك:</strong> إلغاء الاشتراك في الاتصالات التسويقية</li>
           </ul>
@@ -739,16 +1144,47 @@
         <div class="contact-info">
           <div class="contact-card">
             <h3>General Inquiries / الاستفسارات العامة</h3>
-            <p><a href="mailto:hello@souqna.net">hello@souqna.net</a></p>
+            <p><a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></p>
           </div>
           <div class="contact-card">
             <h3>Privacy & Data / الخصوصية والبيانات</h3>
-            <p><a href="mailto:privacy@souqna.net">privacy@souqna.net</a></p>
+            <p><a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a></p>
           </div>
           <div class="contact-card">
             <h3>Account Services / خدمات الحساب</h3>
-            <p><a href="mailto:service@souqna.net">service@souqna.net</a></p>
+            <p><a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></p>
             <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">For account deletion requests<br>لطلبات حذف الحساب</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="forum" class="section forum-section">
+      <div class="container">
+        <h2>Forum / المنتدى</h2>
+        <div class="forum-card">
+          <div class="tab-controls" role="tablist" aria-label="Forum tabs">
+            <button class="tab-button active" data-tab="share" role="tab" aria-selected="true" aria-controls="share-panel">Share Feedback</button>
+            <button class="tab-button" data-tab="view" role="tab" aria-selected="false" aria-controls="view-panel">View Posts</button>
+          </div>
+
+          <div class="tab-panel active" id="share-panel" role="tabpanel">
+            <div class="forum-grid">
+              <p class="forum-meta">No login required — add your name and feedback. Entries are saved to a downloadable JSON file stored with the site.</p>
+              <form id="forum-form" class="forum-form">
+                <input type="text" id="forum-name" name="name" placeholder="Your name / اسمك" required />
+                <textarea id="forum-message" name="message" placeholder="Your feedback / ملاحظاتك" required></textarea>
+                <div class="forum-actions">
+                  <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                  <a id="download-feedback-json" class="btn btn-secondary" href="#">Download JSON</a>
+                  <span id="feedback-status" class="forum-meta" aria-live="polite"></span>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="view-panel" role="tabpanel">
+            <div id="forum-feedback-list" class="feedback-list" aria-live="polite"></div>
           </div>
         </div>
       </div>
@@ -797,15 +1233,29 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="modern-footer">
     <div class="container">
-      <div class="footer-content">
-        <div>© <span id="year"></span> Souqna — All rights reserved / جميع الحقوق محفوظة</div>
-        <div class="footer-links">
-          <a href="#features">Features</a>
-          <a href="#about">About</a>
-          <a href="#privacy">Privacy</a>
-          <a href="#contact">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="footer-logo">Souqna</p>
+          <p class="footer-copy">© <span id="year"></span> — All rights reserved for <a href="https://kiwiit.de" target="_blank" rel="noopener noreferrer">kiwiit.de</a></p>
+          <p class="footer-subcopy">Built to connect communities with trust and simplicity.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <h4>Contact & Support</h4>
+          <ul>
+            <li><span>Privacy & Data:</span> <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a></li>
+            <li><span>General Inquiries:</span> <a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></li>
+            <li><span>Job Offers:</span> <a href="mailto:souqna.net@gmail.com">souqna.net@gmail.com</a></li>
+            <li><span>Account Services:</span> <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a></li>
+          </ul>
+          <div class="quick-links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#contact">Contact</a>
+          </div>
         </div>
       </div>
     </div>
@@ -813,7 +1263,7 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -827,6 +1277,110 @@
         }
       });
     });
+
+    // Forum tabs
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.tab;
+
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanels.forEach(panel => panel.classList.remove('active'));
+
+        button.classList.add('active');
+        const panel = document.getElementById(`${target}-panel`);
+        if (panel) {
+          panel.classList.add('active');
+        }
+
+        tabButtons.forEach(btn => {
+          btn.setAttribute('aria-selected', btn === button ? 'true' : 'false');
+        });
+      });
+    });
+
+    // Forum feedback with JSON download
+    const forumForm = document.getElementById('forum-form');
+    const feedbackList = document.getElementById('forum-feedback-list');
+    const downloadLink = document.getElementById('download-feedback-json');
+    const feedbackStatus = document.getElementById('feedback-status');
+
+    let feedbackEntries = [];
+
+    const loadFeedback = () => {
+      try {
+        const stored = localStorage.getItem('souqnaFeedback');
+        feedbackEntries = stored ? JSON.parse(stored) : [];
+      } catch (error) {
+        feedbackEntries = [];
+      }
+    };
+
+    const persistFeedback = () => {
+      localStorage.setItem('souqnaFeedback', JSON.stringify(feedbackEntries));
+      if (downloadLink) {
+        const blob = new Blob([JSON.stringify(feedbackEntries, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = 'feedback-data.json';
+      }
+    };
+
+    const renderFeedback = () => {
+      if (!feedbackList) return;
+      feedbackList.innerHTML = '';
+
+      if (!feedbackEntries.length) {
+        feedbackList.innerHTML = '<p class="forum-meta">No feedback yet — be the first to share your thoughts.</p>';
+        return;
+      }
+
+      feedbackEntries.slice().reverse().forEach(entry => {
+        const entryEl = document.createElement('div');
+        entryEl.className = 'feedback-entry';
+        entryEl.innerHTML = `
+          <div class="entry-header">
+            <span class="entry-avatar">${entry.name.charAt(0).toUpperCase()}</span>
+            <div>
+              <p class="entry-name">${entry.name}</p>
+              <p class="entry-time">${entry.timestamp}</p>
+            </div>
+          </div>
+          <p class="entry-message">${entry.message}</p>
+        `;
+        feedbackList.appendChild(entryEl);
+      });
+    };
+
+    const addFeedback = (name, message) => {
+      const timestamp = new Date().toLocaleString();
+      feedbackEntries.push({ name, message, timestamp });
+      persistFeedback();
+      renderFeedback();
+      if (feedbackStatus) {
+        feedbackStatus.textContent = 'Saved locally and ready in feedback-data.json';
+        setTimeout(() => feedbackStatus.textContent = '', 4000);
+      }
+    };
+
+    if (forumForm) {
+      loadFeedback();
+      persistFeedback();
+      renderFeedback();
+
+      forumForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const name = document.getElementById('forum-name').value.trim();
+        const message = document.getElementById('forum-message').value.trim();
+
+        if (!name || !message) return;
+
+        addFeedback(name, message);
+        forumForm.reset();
+      });
+    }
   </script>
 </body>
 </html>
