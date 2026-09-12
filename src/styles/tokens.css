@@ -63,8 +63,9 @@
   --transition: 160ms ease;
 }
 
+/* Dark mode is only applied when explicitly set via data-theme="dark" */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
+  :root[data-theme='dark'] {
     --brand-soft: #0d3d3e;
     --bg: #0b1220;
     --surface: #131c2b;
