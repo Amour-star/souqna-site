@@ -128,7 +128,11 @@ input, select, textarea {
   width: 100%;
   max-width: var(--content-max);
   margin-inline: auto;
-  padding-inline: var(--space-4);
+  padding-inline: var(--space-3);
+}
+
+@media (min-width: 420px) {
+  .container { padding-inline: var(--space-4); }
 }
 
 @media (min-width: 900px) {
@@ -136,8 +140,12 @@ input, select, textarea {
 }
 
 .page {
-  padding-block: var(--space-5) var(--space-7);
+  padding-block: var(--space-4) var(--space-6);
   min-height: 60vh;
+}
+
+@media (min-width: 600px) {
+  .page { padding-block: var(--space-5) var(--space-7); }
 }
 
 /* Mobile browsers get a bottom tab bar; keep content clear of it. */
