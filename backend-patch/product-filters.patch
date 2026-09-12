@@ -1,0 +1,63 @@
+Optional server-side price filtering and sorting
+================================================
+
+Apply inside `showProducts()` and `showProductsWithoutAuth()` in
+app/Http/Controllers/Application/Product/ProductController.php, immediately
+before the existing `// Default order` line.
+
+All three parameters are optional, so existing mobile-app requests that do not
+send them behave exactly as they do today.
+
+--- ProductController.php
++++ ProductController.php
+@@ existing filters (sellerID) @@
+             if ($request->filled('sellerID')) {
+                 $query->where('userID', $request->sellerID);
+             }
+ 
++            // Price range (optional; added for the web client's filters).
++            if ($request->filled('minPrice') && is_numeric($request->minPrice)) {
++                $query->where('price', '>=', (float) $request->minPrice);
++            }
++            if ($request->filled('maxPrice') && is_numeric($request->maxPrice)) {
++                $query->where('price', '<=', (float) $request->maxPrice);
++            }
++
++            // Condition (1 = new, 2 = used).
++            if ($request->filled('condition')) {
++                $query->where('condition', (int) $request->condition);
++            }
++
++            // Sorting (optional). Unknown values fall through to the default.
++            $sortBy = (string) $request->input('sortBy', '');
++            $sorted = true;
++            switch ($sortBy) {
++                case 'price_asc':
++                    $query->orderBy('price', 'asc');
++                    break;
++                case 'price_desc':
++                    $query->orderBy('price', 'desc');
++                    break;
++                case 'oldest':
++                    $query->orderBy('created_at', 'asc');
++                    break;
++                case 'newest':
++                    $query->orderBy('created_at', 'desc');
++                    break;
++                default:
++                    $sorted = false;
++            }
++
+             // Default order
+-            $query->orderBy('created_at', 'desc');
++            if (!$sorted) {
++                $query->orderBy('created_at', 'desc');
++            }
+
+Recommended indexes (MySQL) for these filters at scale:
+
+    ALTER TABLE products ADD INDEX products_status_created_idx (status, created_at);
+    ALTER TABLE products ADD INDEX products_category_idx (categoryID, status);
+    ALTER TABLE products ADD INDEX products_subcategory_idx (subCategoryID, status);
+    ALTER TABLE products ADD INDEX products_user_idx (userID, status);
+    ALTER TABLE products ADD INDEX products_price_idx (price);

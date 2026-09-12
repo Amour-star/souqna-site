@@ -1,0 +1,176 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/*
+ * Arabic typography.
+ *
+ * Arabic glyphs carry more vertical detail than Latin — ascenders, descenders
+ * and dots — so the same line-height that reads comfortably in English feels
+ * cramped and the text needs marginally more size to match perceived weight.
+ * These are deliberately small adjustments, applied only when the document is
+ * in Arabic.
+ */
+:root[lang='ar'] body {
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+:root[lang='ar'] h1,
+:root[lang='ar'] h2,
+:root[lang='ar'] h3,
+:root[lang='ar'] h4 {
+  line-height: 1.45;
+}
+
+/* Arabic has no uppercase, so letter-spaced small caps just look broken. */
+:root[lang='ar'] .site-footer__heading,
+:root[lang='ar'] .seller-card__title,
+:root[lang='ar'] .menu__header {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 var(--space-3);
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text);
+}
+
+h1 { font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem); }
+h2 { font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem); }
+h3 { font-size: 1.125rem; }
+
+p { margin: 0 0 var(--space-3); }
+
+a {
+  color: var(--brand-dark);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; }
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-light);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Only remove the default outline where a custom focus ring is provided. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-3);
+  top: -60px;
+  z-index: 200;
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--brand);
+  border-radius: var(--radius);
+  transition: top var(--transition);
+}
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+@media (min-width: 900px) {
+  .container { padding-inline: var(--space-5); }
+}
+
+.page {
+  padding-block: var(--space-5) var(--space-7);
+  min-height: 60vh;
+}
+
+/* Mobile browsers get a bottom tab bar; keep content clear of it. */
+@media (max-width: 899px) {
+  body { padding-bottom: var(--bottom-nav-height); }
+}
+
+.stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.row { display: flex; align-items: center; gap: var(--space-3); }
+.row-wrap { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.spacer { flex: 1; }
+.muted { color: var(--text-muted); }
+.small { font-size: 0.875rem; }
+.text-center { text-align: center; }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,161 @@
+.sell-page { max-width: 880px; }
+
+.sell-steps {
+  display: flex;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sell-steps::-webkit-scrollbar { display: none; }
+.sell-steps__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.sell-steps__item--active {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-weight: 700;
+}
+.sell-steps__item--done { color: var(--success); border-color: var(--success); }
+.sell-steps__index {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--surface-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .sell-steps__label { display: none; }
+}
+
+.sell-draft-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius);
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+}
+
+.sell-panel { display: flex; flex-direction: column; gap: var(--space-5); }
+.sell-row { display: grid; gap: var(--space-3); grid-template-columns: 2fr 1fr; }
+
+.sell-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 150px;
+  padding: var(--space-5);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+.dropzone:hover { border-color: var(--brand); color: var(--brand-dark); }
+.dropzone span:first-child { font-size: 2rem; }
+
+.photo-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.photo-grid__item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+.photo-grid__item img { width: 100%; height: 100%; object-fit: cover; }
+.photo-grid__cover {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+.photo-grid__actions {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: rgba(15, 23, 42, 0.66);
+}
+.photo-grid__actions button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+.photo-grid__actions button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.sell-preview {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) {
+  .sell-preview { grid-template-columns: 260px 1fr; }
+}
+.sell-preview__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.sell-gate { max-width: 560px; margin-inline: auto; text-align: center; }
+.sell-gate .btn { margin-top: var(--space-4); }
+
+.sell-success { max-width: 560px; margin-inline: auto; text-align: center; }
+.sell-success__icon { font-size: 3rem; }

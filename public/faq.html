@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الأسئلة الشائعة | Souqna FAQ</title>
+  <meta name="description" content="أجوبة الأسئلة الشائعة حول استخدام منصة سوقنا. تعلم كيفية البيع والشراء والتواصل والأمان." />
+  <style>
+    :root {
+      --brand: #008e91;
+      --brand-dark: #006f72;
+      --white: #ffffff;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-900: #0f172a;
+      --radius: 12px;
+      --shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.8;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    h1 { margin-top: 0; color: var(--brand); font-size: 2.2rem; }
+    h2 { color: var(--brand-dark); font-size: 1.4rem; margin-top: 32px; border-bottom: 2px solid var(--brand); padding-bottom: 12px; }
+    .faq-item { margin-bottom: 24px; }
+    .faq-question {
+      cursor: pointer;
+      padding: 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border-right: 4px solid var(--brand);
+      font-weight: 600;
+      color: var(--brand-dark);
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .faq-question:hover { background: var(--gray-100); }
+    .faq-question::before { content: "▶ "; font-size: 0.8em; margin-left: 8px; transition: transform 0.3s; }
+    .faq-question.open::before { transform: rotate(90deg); }
+    .faq-answer {
+      display: none;
+      padding: 16px;
+      padding-top: 12px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+    .faq-answer.open { display: block; }
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    .lang-switch a { color: var(--brand); text-decoration: none; margin: 0 8px; }
+    .lang-switch a:hover { text-decoration: underline; }
+    a { color: var(--brand); }
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <a href="/faq.html">العربية</a> | <a href="#" onclick="alert('English version coming soon');">English</a>
+  </div>
+
+  <main class="container">
+    <div class="card">
+      <h1>❓ الأسئلة الشائعة</h1>
+      <p>
+        هنا توجد إجابات الأسئلة الأكثر شيوعاً حول استخدام سوقنا. إذا لم تجد ما تبحث عنه، <a href="mailto:appsouqna@gmail.com">تواصل معنا</a>.
+      </p>
+
+      <h2>الحساب والتسجيل</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          ما هو سوقنا؟
+        </div>
+        <div class="faq-answer">
+          سوقنا هي منصة إلكترونية سورية آمنة وموثوقة للبيع والشراء. تتيح للأفراد نشر الإعلانات والبحث عن المنتجات والخدمات والتواصل مع البائعين والمشترين. تعمل على الويب والهواتف الذكية.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          هل التسجيل مجاني؟
+        </div>
+        <div class="faq-answer">
+          نعم! التسجيل على سوقنا مجاني تماماً. لا توجد رسوم خفية. كل ما عليك فعله هو إدخال بريدك الإلكتروني أو رقم هاتفك وإنشاء كلمة مرور قوية.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أنشئ حساباً؟
+        </div>
+        <div class="faq-answer">
+          1. اضغط على "إنشاء حساب" أو "التسجيل"<br>
+          2. اختر التسجيل عبر البريد الإلكتروني أو الهاتف<br>
+          3. أدخل بياناتك والتحقق من الرمز المرسل إليك<br>
+          4. اختر كلمة مرور قوية<br>
+          5. أكمل ملفك الشخصي بإضافة اسمك وصورتك
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أسجل الدخول؟
+        </div>
+        <div class="faq-answer">
+          اضغط على "تسجيل الدخول" وأدخل بريدك الإلكتروني أو رقم هاتفك وكلمة المرور. إذا نسيت كلمة المرور، اضغط على "نسيت كلمة المرور؟" لإعادة تعيينها.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          نسيت كلمة المرور، ماذا أفعل؟
+        </div>
+        <div class="faq-answer">
+          1. اذهب إلى صفحة تسجيل الدخول<br>
+          2. اضغط على "نسيت كلمة المرور؟"<br>
+          3. أدخل بريدك الإلكتروني أو رقمك<br>
+          4. ستتلقى رابطاً أو رمزاً لإعادة تعيين كلمة المرور<br>
+          5. أنشئ كلمة مرور جديدة قوية
+        </div>
+      </div>
+
+      <h2>البيع</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أنشر إعلاناً؟
+        </div>
+        <div class="faq-answer">
+          1. تأكد من تسجيل دخولك<br>
+          2. اضغط على "+ أضف إعلاناً"<br>
+          3. اختر الفئة والفئة الفرعية<br>
+          4. أضف صوراً واضحة (أمامي، خلفي، وقريبة)<br>
+          5. أدخل العنوان والوصف والسعر والحالة والموقع<br>
+          6. اضغط "نشر الإعلان"
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          هل يوجد رسوم لنشر الإعلانات؟
+        </div>
+        <div class="faq-answer">
+          لا، النشر مجاني تماماً. يمكنك نشر عدد غير محدود من الإعلانات دون أي رسوم.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أختار الصور الجيدة للإعلان؟
+        </div>
+        <div class="faq-answer">
+          - التقط صوراً واضحة في ضوء جيد<br>
+          - استخدم صور من زوايا مختلفة<br>
+          - أول صورة هي الأهم (الصورة المصغرة الظاهرة)<br>
+          - تجنب الصور الباهتة أو المائلة<br>
+          - أضف صور قريبة لتفاصيل مهمة<br>
+          - الصور الحقيقية أفضل من الصور المتخيلة
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أعدل إعلاناً بعد نشره؟
+        </div>
+        <div class="faq-answer">
+          1. اذهب إلى "ملفي الشخصي"<br>
+          2. اختر "إعلاناتي"<br>
+          3. اختر الإعلان الذي تريد تعديله<br>
+          4. اضغط على رمز التعديل (قلم) أو "تعديل"<br>
+          5. غيّر ما تريد وحفظ التغييرات
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أحذف إعلاناً؟
+        </div>
+        <div class="faq-answer">
+          1. اذهب إلى "ملفي الشخصي"<br>
+          2. اختر "إعلاناتي"<br>
+          3. اختر الإعلان الذي تريد حذفه<br>
+          4. اضغط على رمز الحذف (سلة) أو "حذف"<br>
+          5. أكد الحذف
+        </div>
+      </div>
+
+      <h2>الشراء والبحث</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أبحث عن منتج معين؟
+        </div>
+        <div class="faq-answer">
+          استخدم شريط البحث وأدخل اسم المنتج (مثل "آيفون" أو "سيارة"). يمكنك أيضاً استخدام الفلاتر لتحديد السعر والموقع والحالة.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أفلتر النتائج؟
+        </div>
+        <div class="faq-answer">
+          بعد البحث أو فتح فئة، استخدم الفلاتر على اليسار (أو أسفل على الهاتف) للتصفية حسب:<br>
+          - السعر (حد أدنى وأقصى)<br>
+          - الموقع والمدينة<br>
+          - الحالة (جديد/مستعمل)<br>
+          - المسافة
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أحفظ الإعلانات المفضلة؟
+        </div>
+        <div class="faq-answer">
+          اضغط على قلب ❤️ على الإعلان لحفظه. يمكنك العثور على جميع المفضلة لديك في "المفضلة" من القائمة الرئيسية.
+        </div>
+      </div>
+
+      <h2>الرسائل والتواصل</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أتواصل مع البائع أو المشتري؟
+        </div>
+        <div class="faq-answer">
+          1. اذهب إلى الإعلان<br>
+          2. اضغط على "تواصل مع البائع"<br>
+          3. ستنتقل إلى محادثة آمنة<br>
+          4. اكتب رسالتك واضغط "إرسال"<br>
+          استخدم فقط نظام الرسائل للتواصل الأولي
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          أين أجد رسائلي؟
+        </div>
+        <div class="faq-answer">
+          اضغط على "رسائلي" أو "الرسائل" من القائمة الرئيسية. ستجد جميع محادثاتك مع المشترين والبائعين الآخرين.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          هل الرسائل آمنة؟
+        </div>
+        <div class="faq-answer">
+          نعم، جميع الرسائل مشفرة وآمنة. لا يمكن لأحد آخر قراءة رسائلك الخاصة. لكن تجنب مشاركة معلومات حساسة جداً مثل أرقام الحسابات البنكية.
+        </div>
+      </div>
+
+      <h2>الأمان والخصوصية</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أحافظ على أماني؟
+        </div>
+        <div class="faq-answer">
+          - استخدم كلمة مرور قوية وفريدة<br>
+          - لا تشارك كلمة المرور مع أحد<br>
+          - التقابل في مكان عام آمن<br>
+          - افحص المنتج قبل الدفع<br>
+          - لا تدفع بالكامل مقدماً<br>
+          - ثق بحدسك - إذا شعرت بعدم الارتياح، توقف
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          ما الذي يجب أن أفعله إذا واجهت احتيالاً؟
+        </div>
+        <div class="faq-answer">
+          1. توقف عن التواصل فوراً<br>
+          2. استخدم زر "الإبلاغ" على الإعلان<br>
+          3. حفظ لقطات شاشة للرسائل المريبة<br>
+          4. تواصل معنا عبر <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a><br>
+          5. إذا كان هناك احتيال مالي، بلغ الجهات المختصة
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أحذف حسابي؟
+        </div>
+        <div class="faq-answer">
+          1. اضغط على "ملفي الشخصي"<br>
+          2. اختر "الإعدادات"<br>
+          3. ابحث عن "حذف الحساب"<br>
+          4. اتبع الخطوات المطلوبة<br>
+          ملاحظة: حذف الحساب دائم ولا يمكن التراجع عنه
+        </div>
+      </div>
+
+      <h2>الفني والتطبيق</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أحمل تطبيق سوقنا؟
+        </div>
+        <div class="faq-answer">
+          البحث عن "سوقنا" في:<br>
+          - Google Play (للأندرويد)<br>
+          - App Store (للآيفون)<br>
+          أو زيارة <a href="https://www.souqna.net">www.souqna.net</a> من هاتفك
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          ما الفرق بين الويب والتطبيق؟
+        </div>
+        <div class="faq-answer">
+          كلاهما متطابق تقريباً. التطبيق قد يكون أسرع قليلاً ويعطيك إشعارات أفضل. الويب يعمل في أي متصفح وليس بحاجة لتنزيل.
+        </div>
+      </div>
+
+      <h2>الدعم والمساعدة</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          كيف أتواصل مع خدمة العملاء؟
+        </div>
+        <div class="faq-answer">
+          أرسل رسالة إلى <a href="mailto:appsouqna@gmail.com">appsouqna@gmail.com</a> وصف مشكلتك أو سؤالك بوضوح. سنرد عليك في أقرب وقت.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+          هل هناك طرق أخرى للمساعدة؟
+        </div>
+        <div class="faq-answer">
+          نعم، يمكنك:<br>
+          - قراءة <a href="/safety.html">نصائح الأمان</a><br>
+          - قراءة <a href="/how-it-works.html">كيف يعمل سوقنا</a><br>
+          - مراجعة <a href="/terms.html">شروط الاستخدام</a><br>
+          - مراجعة <a href="/privacy.html">سياسة الخصوصية</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px; padding: 24px; background: var(--gray-50); border-radius: 8px; text-align: center;">
+        <p><strong>لم تجد إجابتك؟</strong></p>
+        <p><a href="mailto:appsouqna@gmail.com">تواصل معنا مباشرة</a> - سعداء بمساعدتك!</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Auto-expand first item for better UX
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstQuestion = document.querySelector('.faq-question');
+      if (firstQuestion) {
+        firstQuestion.classList.add('open');
+        firstQuestion.nextElementSibling.classList.add('open');
+      }
+    });
+  </script>
+</body>
+</html>

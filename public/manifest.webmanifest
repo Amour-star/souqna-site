@@ -1,0 +1,16 @@
+{
+  "name": "سوقنا — Souqna",
+  "short_name": "سوقنا",
+  "description": "منصة سورية آمنة للبيع والشراء. سيارات، عقارات، موبايلات، أثاث وغيرها — Buy and sell locally.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008e91",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png"},
+    {"src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

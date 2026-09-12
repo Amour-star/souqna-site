@@ -1,0 +1,305 @@
+/* Application shell: header, category bar, mobile tab bar and footer. */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  min-height: var(--header-height);
+  padding-block: var(--space-2);
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--brand);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.site-header__brand:hover { text-decoration: none; }
+.site-header__brand img { border-radius: 50%; }
+
+/*
+ * Below 900px the search takes a row of its own instead of competing with the
+ * brand and the action icons — on a 390px phone a shared row squeezed it to
+ * zero width. This mirrors the app, where search is its own full-width field.
+ */
+.site-header__search {
+  order: 3;
+  flex: 1 0 100%;
+  display: flex;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.site-header__search-input { min-width: 0; flex: 1; }
+.site-header__search-btn { flex-shrink: 0; }
+.site-header__search-label { display: none; }
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+/*
+ * These live on desktop only. The selectors are scoped to the header so they
+ * beat the `display: inline-flex` that `.btn` / `.icon-btn` set — equal
+ * specificity would otherwise be decided by stylesheet order.
+ */
+.site-header .site-header__sell { display: none; }
+.site-header .site-header__icon { display: none; }
+
+.site-header__badge {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.site-header__menu { position: relative; }
+
+.menu {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-2));
+  inset-inline-end: 0;
+  z-index: 110;
+  min-width: 220px;
+  max-width: min(280px, calc(100vw - var(--space-5)));
+  padding: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+}
+.menu__header {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-subtle);
+}
+.menu__item {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  text-align: start;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.menu__item:hover { background: var(--surface-muted); text-decoration: none; }
+.menu__separator {
+  height: 1px;
+  margin: var(--space-2) 0;
+  background: var(--border);
+}
+
+@media (min-width: 900px) {
+  .site-header__inner { flex-wrap: nowrap; padding-block: 0; }
+  .site-header__search { order: 0; flex: 1 1 auto; }
+  .site-header__search-label { display: inline; }
+  .site-header .site-header__sell { display: inline-flex; }
+  .site-header .site-header__icon { display: inline-flex; position: relative; }
+}
+
+.site-header__categories {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  display: none;
+}
+.site-header__categories-inner {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.site-header__categories-inner::-webkit-scrollbar { display: none; }
+
+.category-link {
+  padding: var(--space-3) var(--space-3);
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+}
+.category-link:hover { color: var(--text); text-decoration: none; }
+.category-link--active {
+  color: var(--brand-dark);
+  border-bottom-color: var(--brand);
+  font-weight: 600;
+}
+
+@media (min-width: 900px) {
+  .site-header__categories { display: block; }
+}
+
+/* ---- Mobile tab bar ---- */
+.bottom-nav {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 100;
+  display: flex;
+  height: var(--bottom-nav-height);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+@media (min-width: 900px) {
+  .bottom-nav { display: none; }
+}
+
+.bottom-nav__item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  text-decoration: none;
+  min-width: 0;
+}
+.bottom-nav__item:hover { text-decoration: none; }
+.bottom-nav__item--active { color: var(--brand-dark); font-weight: 700; }
+.bottom-nav__item--active .bottom-nav__icon { transform: translateY(-1px); }
+.bottom-nav__icon { font-size: 1.25rem; line-height: 1; }
+.bottom-nav__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bottom-nav__item--primary .bottom-nav__icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 1rem;
+}
+.bottom-nav__badge {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: calc(50% - 22px);
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  margin-top: var(--space-8);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding-block: var(--space-6) var(--space-5);
+}
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) {
+  .site-footer__grid { grid-template-columns: 2fr 1fr 1fr; }
+}
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--brand);
+  margin-bottom: var(--space-3);
+}
+.site-footer__stores { display: flex; gap: var(--space-3); margin-top: var(--space-3); }
+.site-footer__heading {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-subtle);
+  margin-bottom: var(--space-3);
+}
+.site-footer__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.site-footer__list a { color: var(--text-muted); }
+.site-footer__list a:hover { color: var(--brand-dark); }
+.site-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Language switcher ---- */
+.lang-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-muted);
+}
+.lang-switch__option {
+  min-height: 32px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition);
+}
+.lang-switch__option:hover { color: var(--text); }
+.lang-switch__option[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--brand-dark);
+  box-shadow: var(--shadow-sm);
+}

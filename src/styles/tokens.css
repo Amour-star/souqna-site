@@ -1,0 +1,83 @@
+/**
+ * Souqna design tokens.
+ *
+ * Brand colour and radii match the existing Souqna identity (#008e91) used by
+ * the mobile app and the previous website. Everything is expressed with
+ * logical properties so the same rules work in Arabic (RTL) and English (LTR).
+ */
+:root {
+  --brand: #008e91;
+  --brand-light: #00a8ac;
+  --brand-dark: #006f72;
+  --brand-soft: #e6f4f4;
+  --brand-contrast: #ffffff;
+
+  --accent: #f59e0b;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --success: #059669;
+  --success-soft: #ecfdf5;
+
+  --bg: #f6f8f9;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f6;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --text-inverse: #ffffff;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+
+  /*
+   * One family for both scripts. IBM Plex Sans Arabic ships matched Arabic and
+   * Latin designs, so the interface reads as one system in either language
+   * instead of looking like an English UI with Arabic pasted in. The system
+   * stack behind it keeps text correct if the webfont never arrives.
+   */
+  --font: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', 'Noto Sans Arabic', Arial, sans-serif;
+
+  --header-height: 64px;
+  --bottom-nav-height: 60px;
+  --content-max: 1240px;
+
+  --transition: 160ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --brand-soft: #0d3d3e;
+    --bg: #0b1220;
+    --surface: #131c2b;
+    --surface-muted: #1b2536;
+    --border: #26324a;
+    --border-strong: #35435e;
+    --text: #e9eef5;
+    --text-muted: #9fb0c6;
+    --text-subtle: #7d8ea6;
+    --danger-soft: #3a1d1d;
+    --success-soft: #123028;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+}

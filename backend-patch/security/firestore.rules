@@ -1,0 +1,71 @@
+rules_version = '2';
+
+/**
+ * Souqna Firestore rules.
+ *
+ * Do not publish these until both clients sign in to Firebase with a custom
+ * token — see FIRESTORE_SECURITY.md, "Rollout order". Publishing early removes
+ * chat from every shipped app build.
+ *
+ * `request.auth.uid` is the Souqna user UUID, minted by the Laravel backend and
+ * matching the ids already stored in `members`.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isMember(members) {
+      return isSignedIn() && request.auth.uid in members;
+    }
+
+    match /conversations/{conversationId} {
+      // Only the two participants may read a conversation. `list` is covered by
+      // the same rule, so the inbox query must filter on the caller's own id —
+      // which is what both clients already do.
+      allow get, list: if isMember(resource.data.members);
+
+      // A conversation can only be created with the author as a participant,
+      // which stops anyone opening a thread in someone else's name.
+      allow create: if isMember(request.resource.data.members)
+                    && request.resource.data.members.size() == 2;
+
+      // Participants may update the summary fields, but may never rewrite who
+      // the participants are.
+      allow update: if isMember(resource.data.members)
+                    && request.resource.data.members == resource.data.members;
+
+      // Conversations are not deletable from a client; moderation happens
+      // server-side with admin credentials.
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        function parentMembers() {
+          return get(/databases/$(database)/documents/conversations/$(conversationId)).data.members;
+        }
+
+        allow read: if isMember(parentMembers());
+
+        // A sender may only write messages attributed to themselves.
+        allow create: if isMember(parentMembers())
+                      && request.resource.data.user._id == request.auth.uid;
+
+        // Messages are immutable once sent.
+        allow update, delete: if false;
+      }
+    }
+
+    // Chat profile cache. A user may only write their own record.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Anything not matched above is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

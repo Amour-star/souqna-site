@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>كيف يعمل سوقنا | How Souqna Works</title>
+  <meta name="description" content="شرح مفصل لكيفية استخدام منصة سوقنا. تعلم كيفية البيع والشراء والتواصل مع المشترين والبائعين بسهولة." />
+  <style>
+    :root {
+      --brand: #008e91;
+      --brand-dark: #006f72;
+      --white: #ffffff;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-700: #334155;
+      --gray-900: #0f172a;
+      --success: #10b981;
+      --radius: 12px;
+      --shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.8;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    h1 { margin-top: 0; color: var(--brand); font-size: 2.2rem; }
+    h2 { margin-top: 28px; color: var(--brand-dark); font-size: 1.4rem; border-bottom: 2px solid var(--brand); padding-bottom: 12px; }
+    h3 { color: var(--brand); margin-top: 20px; }
+    .process {
+      display: grid;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .step {
+      padding: 20px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border-right: 4px solid var(--brand);
+      position: relative;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--brand);
+      color: var(--white);
+      border-radius: 50%;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .step strong { color: var(--brand-dark); }
+    p, li { color: var(--gray-700); }
+    .highlight { background: var(--gray-100); padding: 16px; border-radius: 8px; margin: 16px 0; }
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    .lang-switch a { color: var(--brand); text-decoration: none; margin: 0 8px; }
+    .lang-switch a:hover { text-decoration: underline; }
+    ul { padding-right: 20px; }
+    a { color: var(--brand); }
+    .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    @media (max-width: 600px) { .section-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="lang-switch">
+    <a href="/how-it-works.html">العربية</a> | <a href="#" onclick="alert('English version coming soon');">English</a>
+  </div>
+
+  <main class="container">
+    <div class="card">
+      <h1>🚀 كيف يعمل سوقنا؟</h1>
+      <p>
+        سوقنا منصة سهلة وآمنة للبيع والشراء. سواء كنت مشتري أو بائع، ستجد هنا كل ما تحتاجه للتعامل بسهولة وأمان.
+      </p>
+
+      <h2>👥 للمشتري</h2>
+      <div class="process">
+        <div class="step">
+          <div class="step-number">1</div>
+          <strong>استعرض الإعلانات</strong><br>
+          <p>تصفح آلاف الإعلانات من أشخاص قريبين منك. استخدم البحث والفلاتر للعثور على ما تبحث عنه تماماً.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <strong>اختر الإعلان</strong><br>
+          <p>اضغط على الإعلان الذي يعجبك لترى جميع التفاصيل والصور والسعر والموقع.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <strong>تواصل مع البائع</strong><br>
+          <p>اضغط "تواصل مع البائع" للبدء في محادثة آمنة. اطرح أسئلتك وناقش التفاصيل.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <strong>الاتفاق والالتقاء</strong><br>
+          <p>بعد الاتفاق على السعر والموقع والوقت، قابل البائع في مكان آمن.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <strong>الفحص والدفع</strong><br>
+          <p>افحص المنتج بعناية قبل الدفع. بعد التأكد من حالته، أتمم عملية الدفع.</p>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>💡 نصيحة:</strong> احفظ الإعلانات المفضلة لديك بالضغط على قلب ❤️ للعودة إليها لاحقاً.
+      </div>
+
+      <h2>📢 للبائع</h2>
+      <div class="process">
+        <div class="step">
+          <div class="step-number">1</div>
+          <strong>إنشاء حساب</strong><br>
+          <p>سجل حساب جديد أو ادخل إذا كان لديك حساب بالفعل. استخدم بريدك الإلكتروني أو رقم هاتفك.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <strong>اختر الفئة</strong><br>
+          <p>حدد فئة المنتج (سيارات، موبايلات، عقارات، أثاث، إلخ) ثم الفئة الفرعية إن وجدت.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <strong>أضف الصور</strong><br>
+          <p>التقط صوراً واضحة من زوايا مختلفة. الصور الجيدة تزيد فرص البيع بسرعة.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <strong>أدخل التفاصيل</strong><br>
+          <p>اكتب عنوان جذاب، وصف مفصل، السعر، الحالة (جديد/مستعمل)، والموقع.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <strong>نشر الإعلان</strong><br>
+          <p>اضغط "نشر الإعلان" واجلس وانتظر رسائل المشترين المهتمين.</p>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>💡 نصيحة:</strong> اكتب وصفاً مفصلاً وصادقاً. البائعون الموثوقون يحصلون على عروض أفضل وأسرع.
+      </div>
+
+      <h2>💬 نظام الرسائل</h2>
+      <p>
+        بمجرد أن يهتم مشتري بإعلانك (أو أنت بإعلان)، يمكنك التواصل معهم عبر نظام الرسائل الآمن:
+      </p>
+      <ul>
+        <li><strong>محادثات آمنة:</strong> تكون جميع الرسائل مشفرة وآمنة داخل التطبيق.</li>
+        <li><strong>لا تشارك رقمك الشخصي مباشرة:</strong> استخدم الرسائل أولاً، وشارك تفاصيلك الشخصية عندما تشعر بالارتياح.</li>
+        <li><strong>الإشعارات الفورية:</strong> استقبل إشعارات عندما يرد أحدهم على رسالتك.</li>
+      </ul>
+
+      <h2>⭐ المفضلة والإشعارات</h2>
+      <div class="section-grid">
+        <div>
+          <h3>📌 المفضلة</h3>
+          <p>احفظ الإعلانات المهمة بالضغط على القلب. وجدها لاحقاً في صفحة "المفضلة".</p>
+        </div>
+        <div>
+          <h3>🔔 الإشعارات</h3>
+          <p>استقبل إشعارات للرسائل الجديدة والمشترين المهتمين بإعلاناتك.</p>
+        </div>
+      </div>
+
+      <h2>👤 ملفك الشخصي</h2>
+      <p>
+        في ملفك الشخصي ستجد:
+      </p>
+      <ul>
+        <li><strong>إعلاناتي:</strong> جميع الإعلانات التي نشرتها. يمكنك تعديلها أو حذفها.</li>
+        <li><strong>المفضلة:</strong> الإعلانات التي احفظتها.</li>
+        <li><strong>الرسائل:</strong> جميع محادثاتك مع المشترين والبائعين.</li>
+        <li><strong>الإعدادات:</strong> غير كلمة المرورك أو تفضيلاتك.</li>
+      </ul>
+
+      <h2>🔒 الأمان والخصوصية</h2>
+      <ul>
+        <li>🔐 <strong>كلمة مرور قوية:</strong> استخدم كلمة مرور فريدة وآمنة.</li>
+        <li>🚫 <strong>لا تشارك بيانات حساسة:</strong> لا تشارك رقم هويتك أو معلومات بنكية عبر الرسائل.</li>
+        <li>📍 <strong>الموقع الآمن:</strong> قابل المشترين/البائعين في أماكن عامة وآمنة.</li>
+        <li>⚠️ <strong>أبلغ عن الاحتيال:</strong> إذا شعرت بأي شيء مريب، استخدم زر "الإبلاغ" وتواصل معنا.</li>
+      </ul>
+
+      <h2>❓ أسئلة متكررة</h2>
+      <div style="background: var(--gray-50); padding: 20px; border-radius: 8px; margin-top: 20px;">
+        <h3 style="margin-top: 0;">كيف أحذف إعلاناً؟</h3>
+        <p>اذهب إلى "إعلاناتي"، اختر الإعلان، واضغط على "حذف".</p>
+
+        <h3>هل هناك رسوم؟</h3>
+        <p>النشر على سوقنا مجاني تماماً. لا توجد رسوم إخفية.</p>
+
+        <h3>كم سعر الإعلان؟</h3>
+        <p>أنت من تحدد السعر. اختر السعر الذي تشعر أنه عادل للمنتج.</p>
+
+        <h3>ماذا لو لم يشتري أحد؟</h3>
+        <p>يمكنك تعديل الوصف أو السعر أو إعادة نشر الإعلان.</p>
+      </div>
+
+      <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-200); text-align: center;">
+        <p><strong>هل لديك أسئلة أخرى؟</strong></p>
+        <p><a href="/faq.html">اقرأ الأسئلة الشائعة</a> أو <a href="mailto:appsouqna@gmail.com">تواصل معنا</a></p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

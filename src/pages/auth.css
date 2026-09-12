@@ -1,0 +1,43 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--space-6) var(--space-8);
+}
+.auth-card {
+  width: min(440px, 100%);
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.auth-card__title { margin-bottom: var(--space-1); }
+.auth-card__subtitle { color: var(--text-muted); margin-bottom: var(--space-5); }
+.auth-card__form { display: flex; flex-direction: column; gap: var(--space-4); }
+.auth-card__footer {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.9375rem;
+}
+.password-field { position: relative; display: flex; }
+.password-field .input { padding-inline-end: 76px; }
+.password-field__toggle {
+  position: absolute;
+  inset-inline-end: var(--space-2);
+  inset-block: 0;
+  border: none;
+  background: none;
+  color: var(--brand-dark);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding-inline: var(--space-2);
+}
+.otp-input {
+  letter-spacing: 0.6em;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}

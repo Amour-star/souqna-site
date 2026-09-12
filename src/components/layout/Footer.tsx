@@ -1,0 +1,92 @@
+import {Link} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {STORE_LINKS, SUPPORT_EMAIL} from '@/lib/config';
+import {useCategories} from '@/hooks/useCategories';
+import {localizedField} from '@/lib/i18n';
+import {LanguageSwitcher} from './LanguageSwitcher';
+
+export const Footer = () => {
+  const {t, i18n} = useTranslation();
+  const {categories} = useCategories();
+
+  return (
+    <footer className="site-footer">
+      <div className="container site-footer__grid">
+        <div>
+          <div className="site-footer__brand">
+            <img src="/logo.png" alt="" width={32} height={32} />
+            <span>Souqna</span>
+          </div>
+          <p className="muted small">{t('footer.aboutText')}</p>
+          <div className="site-footer__stores">
+            <a href={STORE_LINKS.android} target="_blank" rel="noreferrer noopener">
+              Google Play
+            </a>
+            <a href={STORE_LINKS.ios} target="_blank" rel="noreferrer noopener">
+              App Store
+            </a>
+          </div>
+        </div>
+
+        <nav aria-label={t('footer.marketplace')}>
+          <h3 className="site-footer__heading">{t('footer.marketplace')}</h3>
+          <ul className="site-footer__list">
+            {categories.slice(0, 6).map(category => (
+              <li key={category.id}>
+                <Link to={`/category/${category.id}`}>
+                  {localizedField(category, 'name', i18n.language)}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link to="/sell">{t('nav.sell')}</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <nav aria-label={t('footer.legal')}>
+          <h3 className="site-footer__heading">{t('footer.legal')}</h3>
+          <ul className="site-footer__list">
+            <li>
+              <a href="/safety.html">{t('footer.safety')}</a>
+            </li>
+            <li>
+              <a href="/faq.html">{t('footer.faq')}</a>
+            </li>
+            <li>
+              <a href="/how-it-works.html">{t('footer.howItWorks')}</a>
+            </li>
+            <li>
+              <a href="/privacy.html">{t('footer.privacy')}</a>
+            </li>
+            <li>
+              <a href="/terms.html">{t('footer.terms')}</a>
+            </li>
+            <li>
+              <a href="/support.html">{t('footer.support')}</a>
+            </li>
+            <li>
+              <a href="/data-deletion.html">{t('footer.deleteData')}</a>
+            </li>
+            <li>
+              <a href={`mailto:${SUPPORT_EMAIL}`}>{t('footer.contact')}</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="container site-footer__bottom">
+        <div>
+          <div className="muted small">{t('footer.rights', {year: new Date().getFullYear()})}</div>
+          <div className="muted small" style={{marginTop: 'var(--space-2)'}}>
+            Powered by{' '}
+            <a href="https://alhafid.de" target="_blank" rel="noreferrer noopener">
+              alhafid.de
+            </a>
+          </div>
+        </div>
+        <LanguageSwitcher />
+      </div>
+    </footer>
+  );
+};
