@@ -25,8 +25,12 @@ export const Footer = () => {
               rel="noreferrer noopener"
               title="Google Play"
               className="site-footer__store-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M3 6v12c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1zm8 11l-4-5h8l-4 5zm8-9l-8 10-8-10h16z" />
+              {/* Google Play official symbol: colorful play triangle */}
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.5 3.5L14.5 12L3.5 20.5V3.5Z" fill="#00A651" />
+                <path d="M14.5 12L3.5 20.5L14.5 15V12Z" fill="#0D652D" />
+                <path d="M14.5 12L20.5 16L3.5 20.5Z" fill="#1F71B8" />
+                <path d="M14.5 12L20.5 8L3.5 3.5Z" fill="#F7931E" />
               </svg>
             </a>
             <a
@@ -35,8 +39,17 @@ export const Footer = () => {
               rel="noreferrer noopener"
               title="App Store"
               className="site-footer__store-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.05 13.5c-.91 0-1.82.55-2.25 1.74h4.32c-.37-1.1-1.37-1.74-2.07-1.74zm-4.7 0c-.9 0-1.78.46-2.25 1.74h4.32c-.37-1.1-1.37-1.74-2.07-1.74zM18.5 12c1.93 0 3.5-1.57 3.5-3.5S20.43 5 18.5 5 15 6.57 15 8.5s1.57 3.5 3.5 3.5zm0-5c.83 0 1.5.67 1.5 1.5S19.33 10 18.5 10s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zM5.5 12c1.93 0 3.5-1.57 3.5-3.5S7.43 5 5.5 5 2 6.57 2 8.5 3.57 12 5.5 12zm0-5c.83 0 1.5.67 1.5 1.5S6.33 10 5.5 10 4 9.33 4 8.5 4.67 7 5.5 7z" />
+              {/* App Store official symbol: A with colored squares */}
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="6" height="6" fill="#FF3B30" rx="1" />
+                <rect x="9" y="2" width="6" height="6" fill="#34C759" rx="1" />
+                <rect x="16" y="2" width="6" height="6" fill="#00B4EF" rx="1" />
+                <rect x="2" y="9" width="6" height="6" fill="#FF9500" rx="1" />
+                <rect x="9" y="9" width="6" height="6" fill="#AF52DE" rx="1" />
+                <rect x="16" y="9" width="6" height="6" fill="#A2845E" rx="1" />
+                <rect x="2" y="16" width="6" height="6" fill="#5AC8FA" rx="1" />
+                <rect x="9" y="16" width="6" height="6" fill="#FFCC00" rx="1" />
+                <rect x="16" y="16" width="6" height="6" fill="#FF2D55" rx="1" />
               </svg>
             </a>
           </div>
