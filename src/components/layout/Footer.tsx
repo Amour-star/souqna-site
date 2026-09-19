@@ -18,40 +18,31 @@ export const Footer = () => {
             <span>Souqna</span>
           </div>
           <p className="muted small">{t('footer.aboutText')}</p>
-          <div className="site-footer__stores">
-            <a
-              href={STORE_LINKS.android}
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Google Play"
-              className="site-footer__store-icon">
-              {/* Google Play official symbol: colorful play triangle */}
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.5 3.5L14.5 12L3.5 20.5V3.5Z" fill="#00A651" />
-                <path d="M14.5 12L3.5 20.5L14.5 15V12Z" fill="#0D652D" />
-                <path d="M14.5 12L20.5 16L3.5 20.5Z" fill="#1F71B8" />
-                <path d="M14.5 12L20.5 8L3.5 3.5Z" fill="#F7931E" />
-              </svg>
-            </a>
-            <a
-              href={STORE_LINKS.ios}
-              target="_blank"
-              rel="noreferrer noopener"
-              title="App Store"
-              className="site-footer__store-icon">
-              {/* App Store official symbol: A with colored squares */}
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="6" height="6" fill="#FF3B30" rx="1" />
-                <rect x="9" y="2" width="6" height="6" fill="#34C759" rx="1" />
-                <rect x="16" y="2" width="6" height="6" fill="#00B4EF" rx="1" />
-                <rect x="2" y="9" width="6" height="6" fill="#FF9500" rx="1" />
-                <rect x="9" y="9" width="6" height="6" fill="#AF52DE" rx="1" />
-                <rect x="16" y="9" width="6" height="6" fill="#A2845E" rx="1" />
-                <rect x="2" y="16" width="6" height="6" fill="#5AC8FA" rx="1" />
-                <rect x="9" y="16" width="6" height="6" fill="#FFCC00" rx="1" />
-                <rect x="16" y="16" width="6" height="6" fill="#FF2D55" rx="1" />
-              </svg>
-            </a>
+          <div className="site-footer__download">
+            <h3 className="site-footer__heading">{t('footer.downloadApp')}</h3>
+            <p className="muted small">{t('footer.downloadAppText')}</p>
+            <div className="site-footer__stores">
+              <a
+                href={STORE_LINKS.android}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Google Play"
+                className="site-footer__store-badge">
+                <img
+                  src={i18n.language === 'ar' ? '/badges/google-play-ar.png' : '/badges/google-play-en.png'}
+                  alt="Google Play"
+                  loading="lazy"
+                />
+              </a>
+              <a
+                href={STORE_LINKS.ios}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="App Store"
+                className="site-footer__store-badge">
+                <img src="/badges/app-store.svg" alt="App Store" loading="lazy" />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -67,6 +58,9 @@ export const Footer = () => {
             ))}
             <li>
               <Link to="/sell">{t('nav.sell')}</Link>
+            </li>
+            <li>
+              <Link to="/import">{t('footer.importAds')}</Link>
             </li>
           </ul>
         </nav>

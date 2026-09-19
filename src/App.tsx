@@ -27,6 +27,7 @@ const VerifyOtpPage = lazy(() => import('@/pages/VerifyOtpPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 const LogoutPage = lazy(() => import('@/pages/LogoutPage'));
+const ImportPage = lazy(() => import('@/pages/ImportPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 /** Restores the top of the page on navigation, as a document-style site would. */
@@ -80,6 +81,7 @@ export const App = () => {
             <Route path="/category/:categoryId/:subCategoryId" element={<CategoryPage />} />
             <Route path="/listing/:slug" element={<ListingPage />} />
             <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
+            <Route path="/import" element={<ImportPage />} />
 
             <Route
               path="/sell"

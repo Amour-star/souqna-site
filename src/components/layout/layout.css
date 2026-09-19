@@ -257,35 +257,32 @@
   color: var(--brand);
   margin-bottom: var(--space-3);
 }
+.site-footer__download {
+  margin-top: var(--space-4);
+}
+.site-footer__download .site-footer__heading {
+  margin-bottom: var(--space-1);
+}
 .site-footer__stores {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-3);
   margin-top: var(--space-3);
   flex-wrap: wrap;
-}
-.site-footer__store-icon {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-muted);
-  transition: all var(--transition);
-  text-decoration: none;
 }
-.site-footer__store-icon:hover {
-  color: var(--brand);
-  background: var(--surface);
-  border-color: var(--brand);
+.site-footer__store-badge {
+  display: inline-flex;
+  transition: transform var(--transition), opacity var(--transition);
+  line-height: 0;
+}
+.site-footer__store-badge:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 142, 145, 0.15);
+  opacity: 0.9;
 }
-.site-footer__store-icon svg {
-  width: 24px;
-  height: 24px;
+.site-footer__store-badge img {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 .site-footer__heading {
   font-size: 0.8125rem;

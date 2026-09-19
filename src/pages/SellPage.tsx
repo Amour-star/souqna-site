@@ -34,6 +34,7 @@ import {
   Textarea,
 } from '@/components/ui';
 import {PasswordInput} from '@/components/ui/PasswordInput';
+import {ImportCallout} from '@/components/ImportCallout';
 import {
   isValid,
   validateListing,
@@ -491,6 +492,8 @@ const SellPage = () => {
   return (
     <div className="container page sell-page">
       <h1>{isEditing ? t('sell.editListing') : t('sell.title')}</h1>
+
+      {isEditing ? null : <ImportCallout />}
 
       <ol className="sell-steps" aria-label={t('sell.step', {current: step + 1, total: STEPS.length})}>
         {STEPS.map((key, index) => (
