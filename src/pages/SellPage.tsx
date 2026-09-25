@@ -22,7 +22,7 @@ import {
   mediaUrl,
   parseCustomFields,
 } from '@/lib/format';
-import {CONDITION} from '@/lib/config';
+import {CONDITION, FEATURES} from '@/lib/config';
 import {fieldOptions} from '@/lib/fieldOptions';
 import {MAX_IMAGES, prepareImageForUpload, validateImageFile} from '@/lib/images';
 import {
@@ -471,7 +471,7 @@ const SellPage = () => {
     <div className="container page sell-page">
       <h1>{isEditing ? t('sell.editListing') : t('sell.title')}</h1>
 
-      {isEditing ? null : <ImportCallout />}
+      {isEditing || !FEATURES.doushehImport ? null : <ImportCallout />}
 
       <ol className="sell-steps" aria-label={t('sell.step', {current: step + 1, total: STEPS.length})}>
         {STEPS.map((key, index) => (

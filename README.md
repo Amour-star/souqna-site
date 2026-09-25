@@ -83,6 +83,7 @@ keep their existing URLs.
 | `VITE_FEATURE_LISTING_STATUS` | `false` | Enable pause / mark-as-sold — needs the backend change in `backend-patch/` |
 | `VITE_FEATURE_REPORTS_API` | `false` | Submit listing reports to the API instead of the user's email client |
 | `VITE_FEATURE_FIREBASE_AUTH` | `false` | Sign in to Firebase so Firestore rules can identify the user |
+| `VITE_FEATURE_DOUSHESH_IMPORT` | `false` | Enable importing ads from Doushesh (`/import`). Off: the route redirects to `/sell` and all links are hidden |
 
 ## Routes
 

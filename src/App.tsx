@@ -5,6 +5,7 @@ import {Header} from '@/components/layout/Header';
 import {BottomNav} from '@/components/layout/BottomNav';
 import {Footer} from '@/components/layout/Footer';
 import {LoadingState} from '@/components/ui';
+import {FEATURES} from '@/lib/config';
 import {RequireAuth} from '@/components/layout/RequireAuth';
 
 // Route-level code splitting keeps the first paint small; the home and search
@@ -82,7 +83,10 @@ export const App = () => {
             <Route path="/category/:categoryId/:subCategoryId" element={<CategoryPage />} />
             <Route path="/listing/:slug" element={<ListingPage />} />
             <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
-            <Route path="/import" element={<ImportPage />} />
+            <Route
+              path="/import"
+              element={FEATURES.doushehImport ? <ImportPage /> : <Navigate to="/sell" replace />}
+            />
 
             <Route
               path="/sell"

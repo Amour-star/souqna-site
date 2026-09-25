@@ -62,7 +62,7 @@ implemented, ⛔ blocked · *API*: whether the live backend supports it.
 | Profile / settings / language | ✔ | ✅ | ✔ | Arabic default, English preserved |
 | Seller verification (KYC) | ✔ | ✅ | ✔ | Implemented from the app's contract; **not exercised against production** (would submit real ID documents) |
 | Buyer ↔ seller role switch | ✔ | ✅ | ✔ | |
-| Import ads from Doushesh | – | ✅ | ✔ | Web-only |
+| Import ads from Doushesh | – | ➖ | ✔ | Web-only; disabled by default (`VITE_FEATURE_DOUSHESH_IMPORT`) |
 | Plans / card subscription | ✔ | ➖ | ✔ | The app posts raw card details to `subscription`. Not replicated on the web — payments belong with a hosted payment provider |
 | Cart / checkout (`placeOrder`) | ◐ | ➖ | ✔ | Not reachable in the app: no navigation leads to Cart, and the Checkout call is commented out. Not a classifieds flow |
 | SEO: prerendered HTML, JSON-LD, sitemap, robots | – | ✅ | – | See README |
