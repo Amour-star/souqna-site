@@ -27,11 +27,14 @@ const ProfilePage = () => {
 
   const avatar = mediaUrl(user?.avatar);
 
-  const links = [
+  const links: {to: string; icon: string; label: string; count?: number}[] = [
     {to: '/profile/listings', icon: '🏷️', label: t('nav.myListings'), count: myListings.data?.totalRecords},
     {to: '/favorites', icon: '♡', label: t('nav.favorites'), count: favorites.length},
     {to: '/messages', icon: '💬', label: t('nav.messages'), count: unreadCount},
     {to: '/notifications', icon: '🔔', label: t('nav.notifications')},
+    ...(isSeller
+      ? [{to: '/profile/verification', icon: '🛡️', label: t('nav.verification')}]
+      : []),
     {to: '/profile/settings', icon: '⚙️', label: t('nav.settings')},
     {to: '/logout', icon: '↩', label: t('nav.logout')},
   ];

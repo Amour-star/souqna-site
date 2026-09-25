@@ -23,6 +23,7 @@ import {
   parseCustomFields,
 } from '@/lib/format';
 import {CONDITION} from '@/lib/config';
+import {fieldOptions} from '@/lib/fieldOptions';
 import {MAX_IMAGES, prepareImageForUpload, validateImageFile} from '@/lib/images';
 import {
   Button,
@@ -35,6 +36,7 @@ import {
 } from '@/components/ui';
 import {PasswordInput} from '@/components/ui/PasswordInput';
 import {ImportCallout} from '@/components/ImportCallout';
+import {LocationPicker} from '@/components/location/LocationPicker';
 import {
   isValid,
   validateListing,
@@ -110,7 +112,6 @@ const SellPage = () => {
   const [sellerType, setSellerType] = useState<1 | 2>(1);
   const [sellerError, setSellerError] = useState<string | null>(null);
   const [switching, setSwitching] = useState(false);
-  const [locating, setLocating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {categories} = useCategories();
@@ -276,29 +277,6 @@ const SellPage = () => {
     });
   };
 
-  const detectLocation = () => {
-    if (!navigator.geolocation) {
-      show(t('search.locatingError'), 'error');
-      return;
-    }
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        setLocating(false);
-        setForm(current => ({
-          ...current,
-          lat: String(position.coords.latitude),
-          long: String(position.coords.longitude),
-        }));
-      },
-      () => {
-        setLocating(false);
-        show(t('search.locatingError'), 'error');
-      },
-      {timeout: 10000},
-    );
-  };
-
   /** Translates a field error into the active language for display. */
   const errorText = (field: string): string | undefined => {
     const error = errors[field];
@@ -337,8 +315,8 @@ const SellPage = () => {
     customFields: categoryFields
       .map(field => ({
         name: field.name,
+        // Same `{name, value}` shape the mobile app sends; the backend derives the Arabic fields.
         value: form.customFields[field.name] ?? '',
-        ar_name: field.ar_name ?? undefined,
       }))
       .filter(entry => entry.value !== ''),
     images: images.filter(image => image.file).map(image => image.file as File),
@@ -745,14 +723,7 @@ const SellPage = () => {
               categoryFields.map(field => {
                 const label =
                   i18n.language === 'ar' && field.ar_label ? field.ar_label : field.label;
-                const options = (
-                  (i18n.language === 'ar' && field.ar_options
-                    ? field.ar_options
-                    : field.options) ?? ''
-                )
-                  .split(',')
-                  .map(option => option.trim())
-                  .filter(Boolean);
+                const options = fieldOptions(field, i18n.language);
                 const value = form.customFields[field.name] ?? '';
                 const error = errorText(`custom.${field.name}`);
                 const id = `custom-${field.name}`;
@@ -774,10 +745,14 @@ const SellPage = () => {
                       <Select id={id} value={value} onChange={event => setValue(event.target.value)}>
                         <option value="">—</option>
                         {options.map(option => (
-                          <option key={option} value={option}>
-                            {option}
+                          <option key={option.value} value={option.value}>
+                            {option.label}
                           </option>
                         ))}
+                        {/* A value saved earlier that is no longer in the list stays selectable. */}
+                        {value && !options.some(option => option.value === value) ? (
+                          <option value={value}>{value}</option>
+                        ) : null}
                       </Select>
                     ) : field.type === 'textarea' ? (
                       <Textarea
@@ -814,32 +789,12 @@ const SellPage = () => {
 
         {/* Step 5 — location */}
         {step === 4 ? (
-          <div className="stack">
-            <Field
-              label={t('sell.locationLabel')}
-              htmlFor="sell-location"
-              hint={t('sell.locationHint')}
-              error={errorText('location')}
-              required>
-              <Input
-                id="sell-location"
-                value={form.location}
-                placeholder={t('sell.locationPlaceholder')}
-                aria-invalid={Boolean(errors.location)}
-                onChange={event => update('location', event.target.value)}
-              />
-            </Field>
-
-            <Button variant="secondary" loading={locating} onClick={detectLocation}>
-              📍 {t('sell.detectLocation')}
-            </Button>
-
-            {form.lat && form.long ? (
-              <p className="muted small">
-                {Number(form.lat).toFixed(4)}, {Number(form.long).toFixed(4)}
-              </p>
-            ) : null}
-          </div>
+          <LocationPicker
+            idPrefix="sell-location"
+            value={{location: form.location, lat: form.lat, long: form.long}}
+            error={errorText('location')}
+            onChange={next => setForm(current => ({...current, ...next}))}
+          />
         ) : null}
 
         {/* Step 6 — preview */}

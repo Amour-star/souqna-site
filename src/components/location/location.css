@@ -1,0 +1,96 @@
+/* Direction-agnostic: logical properties only, so the same rules serve RTL and LTR. */
+
+.place-combobox {
+  position: relative;
+  width: 100%;
+}
+
+.place-combobox__list {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 4px);
+  z-index: 30;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  max-height: min(320px, 50vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  text-align: start;
+}
+
+.place-combobox__option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  /* 44px keeps touch targets comfortable on phones. */
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.place-combobox__option.is-active,
+.place-combobox__option:hover {
+  background: var(--brand-soft);
+}
+
+.place-combobox__name {
+  font-weight: 500;
+}
+
+.place-combobox__context {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.place-combobox__status {
+  padding: var(--space-3);
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+.location-picker {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.location-picker__row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .location-picker__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.location-picker__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--brand-soft);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+
+.location-picker__summary strong {
+  font-weight: 600;
+}
+
+.place-combobox__more {
+  color: var(--brand-dark);
+  font-size: 0.9em;
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-1);
+}

@@ -32,14 +32,39 @@ const urlEntry = (path, lastmod, priority) =>
   (lastmod ? `\n    <lastmod>${lastmod.slice(0, 10)}</lastmod>` : '') +
   `\n    <priority>${priority}</priority>\n  </url>`;
 
+/** Real HTML files in public/ — kept in the sitemap on every regeneration. */
+const STATIC_PAGES = [
+  ['/safety.html', '0.7'],
+  ['/how-it-works.html', '0.7'],
+  ['/faq.html', '0.7'],
+  ['/privacy.html', '0.4'],
+  ['/terms.html', '0.4'],
+  ['/support.html', '0.5'],
+];
+
 const main = async () => {
-  const entries = [urlEntry('/', null, '1.0'), urlEntry('/search', null, '0.6')];
+  const entries = [
+    urlEntry('/', null, '1.0'),
+    urlEntry('/search', null, '0.6'),
+    ...STATIC_PAGES.map(([page, priority]) => urlEntry(page, null, priority)),
+  ];
 
   const categoriesResponse = await fetch(`${API}/viewCategories`);
   const categories = (await categoriesResponse.json())?.data ?? [];
-  categories.forEach(category => {
-    entries.push(urlEntry(`/category/${category.id}`, category.updated_at, '0.8'));
-  });
+  categories
+    .filter(category => Number(category.status) === 1)
+    .forEach(category => {
+      entries.push(urlEntry(`/category/${category.id}`, category.updated_at, '0.8'));
+    });
+
+  // Subcategories that actually hold listings — empty ones would only be thin pages.
+  const subCategoriesResponse = await fetch(`${API}/viewSubCategories`);
+  const subCategories = (await subCategoriesResponse.json())?.data ?? [];
+  subCategories
+    .filter(sub => Number(sub.status) === 1 && Number(sub.productsCount ?? sub.products_count) > 0)
+    .forEach(sub => {
+      entries.push(urlEntry(`/category/${sub.categoryID}/${sub.id}`, sub.updated_at, '0.7'));
+    });
 
   let page = 1;
   let total = Infinity;

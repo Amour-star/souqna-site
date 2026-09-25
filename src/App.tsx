@@ -20,6 +20,7 @@ const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const MyListingsPage = lazy(() => import('@/pages/MyListingsPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+const VerificationPage = lazy(() => import('@/pages/VerificationPage'));
 const SellerProfilePage = lazy(() => import('@/pages/SellerProfilePage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
@@ -152,6 +153,14 @@ export const App = () => {
               element={
                 <RequireAuth>
                   <SettingsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/profile/verification"
+              element={
+                <RequireAuth>
+                  <VerificationPage />
                 </RequireAuth>
               }
             />
