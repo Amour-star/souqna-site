@@ -38,7 +38,7 @@ export const STORE_LINKS = {
   ios: 'https://apps.apple.com/us/app/souqna-app/id6753893826',
 };
 
-export const SUPPORT_EMAIL = 'appsouqna@gmail.com';
+export const SUPPORT_EMAIL = 'payment@souqna.net';
 
 /** Roles as defined by the backend `users.role` column. */
 export const ROLE = {
