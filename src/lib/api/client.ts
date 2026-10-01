@@ -106,6 +106,11 @@ api.interceptors.response.use(
     const original = error.config as (AxiosRequestConfig & {_retried?: boolean}) | undefined;
     const status = error.response?.status;
 
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.error('[api]', original?.method?.toUpperCase(), original?.url, status ?? 'no response', error.response?.data ?? error.message);
+    }
+
     if (status === 401 && original && !original._retried && readStoredSession()) {
       original._retried = true;
       const token = await refreshAccessToken();

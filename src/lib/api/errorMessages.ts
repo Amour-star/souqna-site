@@ -115,6 +115,8 @@ export const errorMessage = (error: unknown, fallbackKey = 'error.unexpected'): 
       return i18n.t('error.forbidden');
     case 404:
       return i18n.t('error.notFound');
+    case 413:
+      return i18n.t('error.imageTooLarge');
     case 500:
     case 502:
     case 503:

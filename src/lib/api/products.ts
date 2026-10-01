@@ -246,6 +246,21 @@ const appendProductFields = (form: FormData, input: ProductInput) => {
   form.append('custom_fields', JSON.stringify(input.customFields));
 };
 
+/**
+ * Some endpoints still answer HTTP 200 with `{success: false, message, errors?}`.
+ * Throwing an error that carries `response` lets `errorMessage()` map it exactly
+ * like a real 4xx instead of collapsing to the generic "unexpected error" toast.
+ */
+export class ApiResponseError extends Error {
+  response: {status: number; data: unknown};
+
+  constructor(data: {message?: string} | null | undefined, status = 200) {
+    super(data?.message || 'Request failed');
+    this.name = 'ApiResponseError';
+    this.response = {status, data: data ?? {}};
+  }
+}
+
 export const createProduct = async (input: ProductInput): Promise<Product | null> => {
   const form = new FormData();
   appendProductFields(form, input);
@@ -254,7 +269,7 @@ export const createProduct = async (input: ProductInput): Promise<Product | null
   const {data} = await api.post('createProduct', form, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
-  if (!data?.success) throw new Error(data?.message || 'Could not publish the listing');
+  if (!data?.success) throw new ApiResponseError(data);
   return (data.data as Product) ?? null;
 };
 
@@ -270,7 +285,7 @@ export const updateProduct = async (
   const {data} = await api.post('updateProduct', form, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
-  if (!data?.success) throw new Error(data?.message || 'Could not save the listing');
+  if (!data?.success) throw new ApiResponseError(data);
   return (data.data as Product) ?? null;
 };
 

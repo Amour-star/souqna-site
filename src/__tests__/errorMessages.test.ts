@@ -105,3 +105,25 @@ describe('errorMessage in English', () => {
     );
   });
 });
+
+describe('errorMessage for listing edits (BUG-01)', () => {
+  beforeEach(async () => {
+    await changeLanguage('ar');
+  });
+
+  it('shows the invalid field from a 422 instead of the generic message', () => {
+    const message = errorMessage(axiosError(422, {errors: {price: ['The price field must be greater than 0.']}}));
+    expect(message).toContain('السعر');
+    expect(message).not.toBe('حدث خطأ غير متوقع. حاول مرة أخرى.');
+  });
+
+  it('maps a legacy HTTP 200 {success:false} failure like a real error', async () => {
+    const {ApiResponseError} = await import('@/lib/api/products');
+    const err = new ApiResponseError({message: 'The custom fields payload is invalid.'});
+    expect(errorMessage(err)).toBe('صيغة الحقول الإضافية غير صحيحة.');
+  });
+
+  it('explains a 413 upload limit', () => {
+    expect(errorMessage(axiosError(413, {}))).toContain('ميغابايت');
+  });
+});
