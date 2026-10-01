@@ -193,7 +193,7 @@ describe('validation messages', () => {
   });
 });
 
-import {activeStepIndexes, STEP, stepAfter, visibleStep} from '@/lib/listingForm';
+import {activeStepIndexes, stepAfter, visibleStep} from '@/lib/listingForm';
 
 describe('wizard steps without category attributes (BUG-11)', () => {
   it('skips the attributes step both ways', () => {
