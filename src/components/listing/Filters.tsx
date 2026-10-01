@@ -3,7 +3,10 @@ import {useTranslation} from 'react-i18next';
 import {useCategories, useSubCategories} from '@/hooks/useCategories';
 import {localizedField} from '@/lib/i18n';
 import {CONDITION} from '@/lib/config';
+import {SUPPORTED_CURRENCIES} from '@/lib/format';
+import {fieldOptions} from '@/lib/fieldOptions';
 import {Button, Field, Input, Select} from '@/components/ui';
+import {PlaceCombobox} from '@/components/location/PlaceCombobox';
 import type {ProductFilters} from '@/types';
 
 export interface FiltersProps {
@@ -25,6 +28,10 @@ export const Filters = ({value, onChange, onClear}: FiltersProps) => {
   const {categories} = useCategories();
   const {subCategories} = useSubCategories(value.categoryID);
 
+  const categoryFields = (categories.find(item => item.id === value.categoryID)?.fields ?? []).filter(
+    field => field.type === 'select' || field.type === 'radio',
+  );
+
   const [minPrice, setMinPrice] = useState(value.minPrice?.toString() ?? '');
   const [maxPrice, setMaxPrice] = useState(value.maxPrice?.toString() ?? '');
   const [location, setLocation] = useState(value.location ?? '');
@@ -43,9 +50,15 @@ export const Filters = ({value, onChange, onClear}: FiltersProps) => {
   const commitPrice = () => {
     const min = minPrice.trim() ? Number(minPrice) : undefined;
     const max = maxPrice.trim() ? Number(maxPrice) : undefined;
+    const minValue = Number.isFinite(min as number) ? (min as number) : undefined;
+    const maxValue = Number.isFinite(max as number) ? (max as number) : undefined;
     patch({
-      minPrice: Number.isFinite(min as number) ? (min as number) : undefined,
-      maxPrice: Number.isFinite(max as number) ? (max as number) : undefined,
+      minPrice: minValue,
+      maxPrice: maxValue,
+      // A price bound only means something inside one currency (100,000 SYP is
+      // not 100,000 USD), so pick one rather than compare across currencies.
+      currency:
+        value.currency ?? (minValue !== undefined || maxValue !== undefined ? 'USD' : undefined),
     });
   };
 
@@ -80,7 +93,7 @@ export const Filters = ({value, onChange, onClear}: FiltersProps) => {
           id="filter-category"
           value={value.categoryID ?? ''}
           onChange={event =>
-            patch({categoryID: event.target.value || undefined, subCategoryID: undefined})
+            patch({categoryID: event.target.value || undefined, subCategoryID: undefined, attrs: undefined})
           }>
           <option value="">{t('search.allCategories')}</option>
           {categories.map(category => (
@@ -131,6 +144,17 @@ export const Filters = ({value, onChange, onClear}: FiltersProps) => {
             onBlur={commitPrice}
           />
         </div>
+        <Select
+          aria-label={t('search.currency')}
+          value={value.currency ?? ''}
+          onChange={event => patch({currency: event.target.value || undefined})}>
+          <option value="">{t('search.anyCurrency')}</option>
+          {SUPPORTED_CURRENCIES.map(currency => (
+            <option key={currency} value={currency}>
+              {t(`search.currency_${currency}`)}
+            </option>
+          ))}
+        </Select>
       </fieldset>
 
       <Field label={t('search.condition')} htmlFor="filter-condition">
@@ -146,19 +170,48 @@ export const Filters = ({value, onChange, onClear}: FiltersProps) => {
         </Select>
       </Field>
 
+      {categoryFields.map(field => {
+        const options = fieldOptions(field, i18n.language);
+        if (!options.length) return null;
+        const id = `filter-attr-${field.name}`;
+        return (
+          <Field
+            key={field.id}
+            label={localizedField(field, 'label', i18n.language)}
+            htmlFor={id}>
+            <Select
+              id={id}
+              value={value.attrs?.[field.name] ?? ''}
+              onChange={event => {
+                const next = {...(value.attrs ?? {})};
+                if (event.target.value) next[field.name] = event.target.value;
+                else delete next[field.name];
+                patch({attrs: Object.keys(next).length ? next : undefined});
+              }}>
+              <option value="">{t('search.anyValue')}</option>
+              {options.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        );
+      })}
+
       <Field label={t('search.location')} htmlFor="filter-location" error={locationError}>
-        <Input
+        <PlaceCombobox
           id="filter-location"
           value={location}
           placeholder={t('home.locationPlaceholder')}
-          onChange={event => setLocation(event.target.value)}
-          onBlur={() => patch({location: location.trim() || undefined})}
-          onKeyDown={event => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              patch({location: location.trim() || undefined});
-            }
+          includeGovernorates
+          onValueChange={setLocation}
+          onSelect={place => {
+            setLocation(place.name);
+            patch({location: place.name});
           }}
+          onEnterWithoutSelection={() => patch({location: location.trim() || undefined})}
+          onBlurCommit={() => patch({location: location.trim() || undefined})}
         />
       </Field>
 

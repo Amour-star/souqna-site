@@ -5,6 +5,7 @@ import {Header} from '@/components/layout/Header';
 import {BottomNav} from '@/components/layout/BottomNav';
 import {Footer} from '@/components/layout/Footer';
 import {LoadingState} from '@/components/ui';
+import {FEATURES} from '@/lib/config';
 import {RequireAuth} from '@/components/layout/RequireAuth';
 
 // Route-level code splitting keeps the first paint small; the home and search
@@ -20,6 +21,7 @@ const NotificationsPage = lazy(() => import('@/pages/NotificationsPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const MyListingsPage = lazy(() => import('@/pages/MyListingsPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+const VerificationPage = lazy(() => import('@/pages/VerificationPage'));
 const SellerProfilePage = lazy(() => import('@/pages/SellerProfilePage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
@@ -81,7 +83,10 @@ export const App = () => {
             <Route path="/category/:categoryId/:subCategoryId" element={<CategoryPage />} />
             <Route path="/listing/:slug" element={<ListingPage />} />
             <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
-            <Route path="/import" element={<ImportPage />} />
+            <Route
+              path="/import"
+              element={FEATURES.doushehImport ? <ImportPage /> : <Navigate to="/sell" replace />}
+            />
 
             <Route
               path="/sell"
@@ -152,6 +157,14 @@ export const App = () => {
               element={
                 <RequireAuth>
                   <SettingsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/profile/verification"
+              element={
+                <RequireAuth>
+                  <VerificationPage />
                 </RequireAuth>
               }
             />

@@ -98,6 +98,11 @@ export const FEATURES = {
    * email client. Needs `backend-patch/ReportController.php`.
    */
   reportsApi: import.meta.env.VITE_FEATURE_REPORTS_API === 'true',
+  /**
+   * Importing a seller's ads from Doushesh. Disabled by default: with the flag
+   * off, the /import route redirects to /sell and every link to it is hidden.
+   */
+  doushehImport: import.meta.env.VITE_FEATURE_DOUSHESH_IMPORT === 'true',
 };
 
 export const PAGE_SIZE = 24;

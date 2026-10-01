@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import {STORE_LINKS, SUPPORT_EMAIL} from '@/lib/config';
+import {FEATURES, STORE_LINKS, SUPPORT_EMAIL} from '@/lib/config';
 import {useCategories} from '@/hooks/useCategories';
 import {localizedField} from '@/lib/i18n';
 import {LanguageSwitcher} from './LanguageSwitcher';
@@ -59,9 +59,11 @@ export const Footer = () => {
             <li>
               <Link to="/sell">{t('nav.sell')}</Link>
             </li>
-            <li>
-              <Link to="/import">{t('footer.importAds')}</Link>
-            </li>
+            {FEATURES.doushehImport ? (
+              <li>
+                <Link to="/import">{t('footer.importAds')}</Link>
+              </li>
+            ) : null}
           </ul>
         </nav>
 

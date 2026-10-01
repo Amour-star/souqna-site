@@ -129,6 +129,8 @@ export interface AuthSession {
 export interface Paginated<T> {
   data: T[];
   totalRecords: number;
+  /** Set when a client-refined search covered only part of the matching set. */
+  truncated?: boolean;
 }
 
 export interface ApiEnvelope<T> {
@@ -170,6 +172,10 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
   condition?: number;
+  /** ISO currency code (USD, SYP, TRY). Price bounds only make sense within one currency. */
+  currency?: string;
+  /** Category-attribute filters, keyed by field name → canonical option value. */
+  attrs?: Record<string, string>;
   fromDate?: string;
   toDate?: string;
   sort?: SortOption;

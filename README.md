@@ -52,6 +52,8 @@ npm run typecheck
 npm run lint
 npm run test
 npm run sitemap    # regenerate public/sitemap.xml from live data
+npm run places     # regenerate src/data/syria-places.json from OpenStreetMap
+npm run prerender  # (also part of `build`) write crawlable HTML for home, categories, listings
 ```
 
 ## Deployment (Hostinger)
@@ -60,7 +62,9 @@ The build is a set of static files, which matches how souqna.net is hosted
 today.
 
 1. `npm run sitemap` (optional but recommended — it picks up new listings)
-2. `npm run build`
+2. `npm run build` — typechecks, bundles, then prerenders (see *SEO* below). The
+   prerender step needs the live API; if it is unreachable it logs a warning and
+   the plain SPA build is still produced.
 3. Upload the **contents** of `dist/` to `public_html/`, including the
    `.htaccess` file, which provides the SPA fallback, HTTPS redirect and cache
    headers.
@@ -79,6 +83,7 @@ keep their existing URLs.
 | `VITE_FEATURE_LISTING_STATUS` | `false` | Enable pause / mark-as-sold — needs the backend change in `backend-patch/` |
 | `VITE_FEATURE_REPORTS_API` | `false` | Submit listing reports to the API instead of the user's email client |
 | `VITE_FEATURE_FIREBASE_AUTH` | `false` | Sign in to Firebase so Firestore rules can identify the user |
+| `VITE_FEATURE_DOUSHESH_IMPORT` | `false` | Enable importing ads from Doushesh (`/import`). Off: the route redirects to `/sell` and all links are hidden |
 
 ## Routes
 
@@ -95,13 +100,68 @@ keep their existing URLs.
 /profile                 account hub                  (auth)
 /profile/listings        seller dashboard             (auth)
 /profile/settings        account settings             (auth)
+/profile/verification    seller identity verification (auth, sellers)
 /login /register /verify /forgot-password /reset-password /logout
 ```
 
 Route guards are a UX affordance only — the API authorises every protected
 action server-side.
 
+## Locations
+
+**The backend has no location data.** Every `/locations`, `/cities`,
+`/governorates` route 404s; a listing stores a free-text `location` string plus
+optional `lat`/`long`, and the mobile app resolves places live against
+OpenStreetMap Nominatim. The web keeps that contract and builds structure on top:
+
+- `src/data/syria-places.json` — governorates, cities/towns, and Damascus/Aleppo
+  districts **generated from OpenStreetMap** by `scripts/build-places.mjs` (not
+  typed by hand). Gives instant Arabic prefix autocomplete ("حل" → حلب), which
+  Nominatim cannot do because it only matches whole words.
+- For anything the index lacks — villages, streets — the user can choose the
+  "search the map" row, which queries OpenStreetMap Nominatim (restricted to
+  Syria, the same source the app uses). It is deliberately **not** run as you
+  type: Nominatim's public usage policy forbids client-side autocomplete.
+- The picker writes `governorate – area – landmark` (the format existing listings
+  already use) plus lat/long, so listings stay interchangeable with the app.
+  Existing free-text values are parsed on edit and never lost.
+
+The 14 governorate names come from OSM too. If the backend ever gains a locations
+API, replace `src/lib/places/places.ts`; the components only depend on it.
+
+## SEO
+
+The app is client-rendered on static hosting. `scripts/prerender.mjs` (run by
+`npm run build`) writes a real HTML file for `/`, every category, every
+subcategory that holds listings, and the newest listings (`PRERENDER_LISTINGS`,
+default 300), each with title, description, canonical, Open Graph, JSON-LD
+(`WebSite`, `Organization`, `BreadcrumbList`, `ItemList`, `Product`+`Offer`) and
+a semantic body with real links. It is not SSR: React replaces the static body
+when it boots.
+
+Files are flat and named by ASCII id (`home.html`, `category/<id>.html`,
+`category/<cat>__<sub>.html`, `listing/<id>.html`), and `public/.htaccess`
+rewrites the public URLs onto them — each rule fires only if its file exists, so
+anything not prerendered falls through to the SPA. Flat files (not
+`<slug>/index.html`) matter: Apache 301-redirects a directory URL to add a
+trailing slash, which would contradict the canonical. `index.html` stays the
+neutral SPA fallback for `/login`, `/profile` and so on, so `/` is served from
+`home.html` through `DirectoryIndex`. Any slug works for a listing URL — only the
+trailing id is used. Prerendered listings are a snapshot: rebuild to refresh
+them; the SPA always shows live data.
+
 ## Notes
+
+- **Server-side filtering is limited by the live API.** It honours keyword,
+  category, subcategory, location (substring), radius and date range. It ignores
+  price range, condition, currency and sort order. When one of those (or a
+  category attribute) is used, the web fetches up to 500 matching records,
+  refines and sorts them itself, and paginates locally so totals stay correct.
+  Beyond 500 matches the result is flagged `truncated`. The optional patch in
+  `backend-patch/` moves this server-side.
+- Category attributes are stored as `{name, value}` with the **English** option as
+  the value (`fieldOptions.ts` mirrors the app's parsing). No category has any
+  attribute configured in the admin panel today, so no attribute UI appears yet.
 
 - **`backend-patch/security/FIRESTORE_SECURITY.md` documents a critical,
   pre-existing security finding: chat conversations and message bodies are

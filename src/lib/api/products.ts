@@ -1,6 +1,7 @@
 import {api} from './client';
 import {PAGE_SIZE} from '@/lib/config';
 import {getAccessToken} from './client';
+import {parseCustomFields} from '@/lib/format';
 import type {ID, Paginated, Product, ProductFilters} from '@/types';
 
 /**
@@ -43,6 +44,24 @@ const applyClientRefinements = (
   if (filters.condition) {
     result = result.filter(item => Number(item.condition) === filters.condition);
   }
+  if (filters.currency) {
+    const wanted = filters.currency.toUpperCase();
+    // A listing with no currency is treated as USD, as the create form does.
+    result = result.filter(item => (item.currency || 'USD').toUpperCase() === wanted);
+  }
+  for (const [name, wanted] of Object.entries(filters.attrs ?? {})) {
+    const target = wanted.trim().toLowerCase();
+    if (!target) continue;
+    result = result.filter(item =>
+      parseCustomFields(item.custom_fields).some(
+        field =>
+          field.name === name &&
+          [field.value, field.ar_value].some(
+            candidate => String(candidate ?? '').trim().toLowerCase() === target,
+          ),
+      ),
+    );
+  }
 
   const sort = filters.sort ?? 'newest';
   if (sort === 'newest' || sort === 'oldest') {
@@ -59,6 +78,24 @@ const applyClientRefinements = (
 
   return result;
 };
+
+/**
+ * True when the request uses a refinement the live API ignores (price range,
+ * condition, or an order other than its native newest-first). Those can only
+ * be honoured correctly over the *whole* result set: refining a single page
+ * would show a shrunken page under a total that no longer matches it.
+ */
+const needsWindowedRefinement = (filters: ProductFilters): boolean =>
+  typeof filters.minPrice === 'number' ||
+  typeof filters.maxPrice === 'number' ||
+  Boolean(filters.condition) ||
+  Boolean(filters.currency) ||
+  Object.values(filters.attrs ?? {}).some(Boolean) ||
+  (filters.sort !== undefined && filters.sort !== 'newest');
+
+/** Records fetched per request, and the most requests a refined search will make. */
+const WINDOW_PAGE_SIZE = 100;
+const WINDOW_MAX_PAGES = 5;
 
 export const searchProducts = async (
   filters: ProductFilters = {},
@@ -91,25 +128,56 @@ export const searchProducts = async (
   if (filters.condition) body.condition = filters.condition;
   if (filters.sort) body.sortBy = filters.sort;
 
-  const request = async (url: string) =>
-    api.post(url, body, {headers: paginationHeaders(page, pageSize)});
+  const request = async (url: string, pageNo: number, recordsPerPage: number) =>
+    api.post(url, body, {headers: paginationHeaders(pageNo, recordsPerPage)});
 
-  let response;
-  try {
-    response = await request(endpoint);
-  } catch (error) {
-    // Mirrors the mobile fallback: an authenticated listing call that fails
-    // should still render public results rather than an error screen.
-    if (!isLoggedIn) throw error;
-    response = await request('showProductsWithoutAuth');
+  // Mirrors the mobile fallback: an authenticated listing call that fails
+  // should still render public results rather than an error screen. Once a
+  // fallback has been needed, later requests in the same search skip straight to it.
+  let activeEndpoint = endpoint;
+  const fetchPage = async (pageNo: number, recordsPerPage: number) => {
+    try {
+      return await request(activeEndpoint, pageNo, recordsPerPage);
+    } catch (error) {
+      if (activeEndpoint === 'showProductsWithoutAuth') throw error;
+      activeEndpoint = 'showProductsWithoutAuth';
+      return request(activeEndpoint, pageNo, recordsPerPage);
+    }
+  };
+
+  const itemsOf = (payload: any): Product[] => (Array.isArray(payload?.data) ? payload.data : []);
+
+  if (!needsWindowedRefinement(filters)) {
+    const payload = (await fetchPage(page, pageSize)).data ?? {};
+    const items = itemsOf(payload);
+    return {
+      data: applyClientRefinements(items, filters),
+      totalRecords: toNumber(payload.totalRecords ?? items.length),
+    };
   }
 
-  const payload = response.data ?? {};
-  const items: Product[] = Array.isArray(payload.data) ? payload.data : [];
+  // Refined search: pull a bounded window of the matching set, refine and sort
+  // it as a whole, then paginate locally so the total and every page agree.
+  const first = (await fetchPage(1, WINDOW_PAGE_SIZE)).data ?? {};
+  const window = itemsOf(first);
+  const serverTotal = toNumber(first.totalRecords ?? window.length);
+  const pagesNeeded = Math.min(WINDOW_MAX_PAGES, Math.ceil(serverTotal / WINDOW_PAGE_SIZE));
+  if (pagesNeeded > 1) {
+    const rest = await Promise.all(
+      Array.from({length: pagesNeeded - 1}, (_, index) =>
+        fetchPage(index + 2, WINDOW_PAGE_SIZE).then(response => itemsOf(response.data)),
+      ),
+    );
+    rest.forEach(items => window.push(...items));
+  }
 
+  const refined = applyClientRefinements(window, filters);
+  const start = (page - 1) * pageSize;
   return {
-    data: applyClientRefinements(items, filters),
-    totalRecords: toNumber(payload.totalRecords ?? items.length),
+    data: refined.slice(start, start + pageSize),
+    totalRecords: refined.length,
+    // More matches exist on the server than the window covered.
+    truncated: serverTotal > window.length,
   };
 };
 

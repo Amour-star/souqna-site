@@ -5,6 +5,10 @@
 # on a hard refresh. Static compliance pages (privacy.html, terms.html, …)
 # are real files and are served directly by the first condition below.
 
+# `/` is served from the prerendered home.html when it exists (see
+# scripts/prerender.mjs); index.html stays the neutral SPA fallback shell.
+DirectoryIndex home.html index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -12,6 +16,18 @@
   # Canonical host + HTTPS.
   RewriteCond %{HTTPS} !=on
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # Prerendered pages (scripts/prerender.mjs). Each rule fires only when the
+  # matching file exists, so a route that was not prerendered — or a missing
+  # file — simply falls through to the SPA below.
+  RewriteCond %{DOCUMENT_ROOT}/listing/$1.html -f
+  RewriteRule ^listing/(?:.*-)?([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$ /listing/$1.html [NC,L]
+
+  RewriteCond %{DOCUMENT_ROOT}/category/$1.html -f
+  RewriteRule ^category/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$ /category/$1.html [NC,L]
+
+  RewriteCond %{DOCUMENT_ROOT}/category/$1__$2.html -f
+  RewriteRule ^category/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$ /category/$1__$2.html [NC,L]
 
   # Never rewrite existing files or directories.
   RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -34,8 +50,9 @@
 </IfModule>
 
 <IfModule mod_headers.c>
-  # index.html must always be revalidated so a deploy reaches users at once.
-  <FilesMatch "index\.html$">
+  # HTML (the SPA shell and every prerendered page) must always be revalidated so
+  # a deploy reaches users at once; fingerprinted assets below are cached forever.
+  <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 

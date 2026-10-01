@@ -6,6 +6,7 @@ import {useCategories} from '@/hooks/useCategories';
 import {useProductSearch} from '@/hooks/useProductSearch';
 import {ListingGrid, ListingGridSkeleton} from '@/components/listing/ListingCard';
 import {Button, EmptyState, ErrorState, Skeleton} from '@/components/ui';
+import {PlaceCombobox} from '@/components/location/PlaceCombobox';
 import {localizedField} from '@/lib/i18n';
 import {mediaUrl} from '@/lib/format';
 import {SITE_URL, STORE_LINKS} from '@/lib/config';
@@ -71,13 +72,13 @@ const HomePage = () => {
               <label className="sr-only" htmlFor="hero-location">
                 {t('search.location')}
               </label>
-              <input
+              <PlaceCombobox
                 id="hero-location"
-                className="input"
-                type="text"
                 value={location}
                 placeholder={t('home.locationPlaceholder')}
-                onChange={event => setLocation(event.target.value)}
+                includeGovernorates
+                onValueChange={setLocation}
+                onSelect={place => setLocation(place.name)}
               />
             </div>
             <Button type="submit" variant="primary" size="lg">

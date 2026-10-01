@@ -47,6 +47,16 @@ export const clearRecentSearches = () => {
   }
 };
 
+const ATTR_PREFIX = 'attr.';
+
+const readAttrs = (params: URLSearchParams): Record<string, string> | undefined => {
+  const attrs: Record<string, string> = {};
+  params.forEach((value, key) => {
+    if (key.startsWith(ATTR_PREFIX) && value) attrs[key.slice(ATTR_PREFIX.length)] = value;
+  });
+  return Object.keys(attrs).length ? attrs : undefined;
+};
+
 const numberParam = (value: string | null): number | undefined => {
   if (value === null || value.trim() === '') return undefined;
   const parsed = Number(value);
@@ -73,6 +83,8 @@ export const useSearchFilters = (overrides: Partial<ProductFilters> = {}) => {
       minPrice: numberParam(searchParams.get('min')),
       maxPrice: numberParam(searchParams.get('max')),
       condition: numberParam(searchParams.get('condition')),
+      currency: searchParams.get('currency') ?? undefined,
+      attrs: readAttrs(searchParams),
       sort: sortParam && SORT_VALUES.includes(sortParam) ? sortParam : 'newest',
       page: numberParam(searchParams.get('page')) ?? 1,
       pageSize: PAGE_SIZE,
@@ -94,6 +106,10 @@ export const useSearchFilters = (overrides: Partial<ProductFilters> = {}) => {
       if (typeof next.minPrice === 'number') params.set('min', String(next.minPrice));
       if (typeof next.maxPrice === 'number') params.set('max', String(next.maxPrice));
       if (next.condition) params.set('condition', String(next.condition));
+      if (next.currency) params.set('currency', next.currency);
+      Object.entries(next.attrs ?? {}).forEach(([name, value]) => {
+        if (value) params.set(`${ATTR_PREFIX}${name}`, value);
+      });
       if (next.sort && next.sort !== 'newest') params.set('sort', next.sort);
       if (next.page && next.page > 1) params.set('page', String(next.page));
       setSearchParams(params, {replace: true});
