@@ -79,6 +79,7 @@ export const initI18n = async () => {
     resources: {[language]: {translation: resources}},
     lng: language,
     fallbackLng: language,
+    showSupportNotice: false,
     keySeparator: false,
     nsSeparator: false,
     interpolation: {escapeValue: false},
