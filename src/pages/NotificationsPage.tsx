@@ -6,6 +6,7 @@ import {useToast} from '@/components/ui/ToastProvider';
 import {clearNotifications, deleteNotification, fetchNotifications} from '@/lib/api/users';
 import {errorMessage} from '@/lib/api/errorMessages';
 import {relativeTime} from '@/lib/format';
+import {renderInlineMarkdown} from '@/lib/inlineMarkdown';
 import {Button, EmptyState, ErrorState, Skeleton} from '@/components/ui';
 import './notifications.css';
 
@@ -72,7 +73,7 @@ const NotificationsPage = () => {
                   <p className="notification__title">
                     {notification.title || notification.type || t('notifications.title')}
                   </p>
-                  <p className="muted small">{notification.body || notification.message}</p>
+                  <p className="muted small">{renderInlineMarkdown(notification.body || notification.message || '')}</p>
                   <p className="muted small">
                     {relativeTime(notification.created_at, i18n.language, t)}
                   </p>
