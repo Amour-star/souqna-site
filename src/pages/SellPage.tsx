@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useSeo} from '@/hooks/useSeo';
@@ -14,6 +14,7 @@ import {
   type ProductInput,
 } from '@/lib/api/products';
 import {errorMessage} from '@/lib/api/errorMessages';
+import {classifySaveError, type SaveFailure} from '@/lib/api/saveError';
 import {localizedField} from '@/lib/i18n';
 import {
   SUPPORTED_CURRENCIES,
@@ -38,6 +39,7 @@ import {PasswordInput} from '@/components/ui/PasswordInput';
 import {ImportCallout} from '@/components/ImportCallout';
 import {LocationPicker} from '@/components/location/LocationPicker';
 import {
+  STEP,
   isValid,
   validateListing,
   validateListingStep,
@@ -95,6 +97,7 @@ const STEPS = [
 const SellPage = () => {
   const {t, i18n} = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const {listingId} = useParams();
   const queryClient = useQueryClient();
   const {show} = useToast();
@@ -105,6 +108,8 @@ const SellPage = () => {
   const [form, setForm] = useState<SellForm>(EMPTY_FORM);
   const [images, setImages] = useState<DraftImage[]>([]);
   const [errors, setErrors] = useState<ListingErrors>({});
+  const [saveFailure, setSaveFailure] = useState<SaveFailure | null>(null);
+  const [saveMessage, setSaveMessage] = useState('');
   const [draftRestored, setDraftRestored] = useState(false);
   const [publishedId, setPublishedId] = useState<string | null>(null);
   const [sellerModalOpen, setSellerModalOpen] = useState(false);
@@ -121,6 +126,24 @@ const SellPage = () => {
     const category = categories.find(entry => entry.id === form.categoryID);
     return Array.isArray(category?.fields) ? category!.fields! : [];
   }, [categories, form.categoryID]);
+
+  // The attributes step only exists when the category defines attributes.
+  const hasAttributes = categoryFields.length > 0;
+  const activeSteps = useMemo(
+    () =>
+      STEPS.map((key, index) => ({key, index})).filter(
+        entry => entry.index !== STEP.ATTRIBUTES || hasAttributes,
+      ),
+    [hasAttributes],
+  );
+  const position = Math.max(
+    0,
+    activeSteps.findIndex(entry => entry.index === step),
+  );
+  const goToStep = (direction: 1 | -1) => {
+    const target = activeSteps[position + direction];
+    if (target) setStep(target.index);
+  };
 
   useSeo({
     title: isEditing ? t('sell.editListing') : t('sell.title'),
@@ -326,6 +349,7 @@ const SellPage = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
+      setSaveFailure(null);
       const input = buildInput();
       return isEditing
         ? updateProduct(listingId as string, input)
@@ -350,7 +374,34 @@ const SellPage = () => {
       setPublishedId(product?.id ?? null);
     },
     onError: error => {
-      show(errorMessage(error), 'error');
+      const failure = classifySaveError(error);
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error('[sell] save failed', failure, error);
+      }
+
+      if (failure.kind === 'validation') {
+        // Map the server's field errors onto the form and jump to the first one.
+        const next: ListingErrors = {};
+        failure.fields.forEach(({field, message}) => {
+          const label = t(`field.${field}`, {defaultValue: t('field.generic')});
+          next[field] = /required/i.test(message)
+            ? {key: 'error.fieldRequired', values: {field: label}}
+            : {key: 'error.fieldInvalid', values: {field: label}};
+        });
+        setErrors(next);
+        if (failure.step !== null) setStep(failure.step);
+      }
+
+      if (failure.kind === 'unauthenticated') {
+        // The client already tried a token refresh; the session is gone.
+        show(t('error.sessionExpired'), 'error');
+        navigate('/login', {state: {from: location.pathname}});
+        return;
+      }
+
+      setSaveMessage(errorMessage(error));
+      setSaveFailure(failure);
     },
   });
 
@@ -467,7 +518,7 @@ const SellPage = () => {
     );
   }
 
-  const isLastStep = step === STEPS.length - 1;
+  const isLastStep = step === STEP.PREVIEW;
 
   return (
     <div className="container page sell-page">
@@ -475,15 +526,15 @@ const SellPage = () => {
 
       {isEditing || !FEATURES.doushehImport ? null : <ImportCallout />}
 
-      <ol className="sell-steps" aria-label={t('sell.step', {current: step + 1, total: STEPS.length})}>
-        {STEPS.map((key, index) => (
+      <ol className="sell-steps" aria-label={t('sell.step', {current: position + 1, total: activeSteps.length})}>
+        {activeSteps.map(({key, index: stepIndex}, displayIndex) => (
           <li
             key={key}
-            className={`sell-steps__item${index === step ? ' sell-steps__item--active' : ''}${
-              index < step ? ' sell-steps__item--done' : ''
+            className={`sell-steps__item${stepIndex === step ? ' sell-steps__item--active' : ''}${
+              displayIndex < position ? ' sell-steps__item--done' : ''
             }`}
-            aria-current={index === step ? 'step' : undefined}>
-            <span className="sell-steps__index">{index + 1}</span>
+            aria-current={stepIndex === step ? 'step' : undefined}>
+            <span className="sell-steps__index">{displayIndex + 1}</span>
             <span className="sell-steps__label">{t(key)}</span>
           </li>
         ))}
@@ -526,6 +577,8 @@ const SellPage = () => {
                 onChange={event => {
                   update('categoryID', event.target.value);
                   update('subCategoryID', '');
+                  // Attribute values belong to the previous category's fields.
+                  update('customFields', {});
                 }}>
                 <option value="">—</option>
                 {categories.map(category => (
@@ -784,7 +837,7 @@ const SellPage = () => {
                 );
               })
             ) : (
-              <p className="muted">{t('sell.previewHint')}</p>
+              <p className="muted">{t('sell.noAttributes')}</p>
             )}
           </div>
         ) : null}
@@ -820,11 +873,34 @@ const SellPage = () => {
           </div>
         ) : null}
 
+        {saveFailure ? (
+          <div className="sell-save-error" role="alert">
+            <p>
+              {saveFailure.kind === 'validation'
+                ? t('sell.error.fixFields')
+                : saveFailure.kind === 'tooLarge'
+                  ? t('sell.error.tooLarge')
+                  : saveFailure.kind === 'forbidden'
+                    ? t('sell.error.noPermission')
+                    : saveFailure.kind === 'server' || saveFailure.kind === 'network'
+                      ? t('sell.error.saveRetry')
+                      : saveMessage}
+            </p>
+            {saveFailure.kind === 'server' ||
+            saveFailure.kind === 'network' ||
+            saveFailure.kind === 'unknown' ? (
+              <Button size="sm" disabled={mutation.isPending} onClick={() => mutation.mutate()}>
+                {t('common.retry')}
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+
         <div className="sell-actions">
           <Button
             variant="ghost"
             disabled={step === 0 || mutation.isPending}
-            onClick={() => setStep(current => Math.max(0, current - 1))}>
+            onClick={() => goToStep(-1)}>
             {t('sell.back')}
           </Button>
 
@@ -834,6 +910,7 @@ const SellPage = () => {
               size="lg"
               loading={mutation.isPending}
               onClick={() => {
+                if (mutation.isPending) return;
                 const all = validateListing(validationContext());
                 setErrors(all);
                 if (!isValid(all)) {
@@ -853,7 +930,7 @@ const SellPage = () => {
               variant="primary"
               size="lg"
               onClick={() => {
-                if (validateStep(step)) setStep(current => current + 1);
+                if (validateStep(step)) goToStep(1);
               }}>
               {t('sell.next')}
             </Button>

@@ -234,10 +234,12 @@ const appendProductFields = (form: FormData, input: ProductInput) => {
   form.append('currency', input.currency);
   form.append('categoryID', input.categoryID);
   form.append('subCategoryID', input.subCategoryID);
-  form.append('contactInfo', input.contactInfo);
   form.append('location', input.location);
-  form.append('lat', input.lat);
-  form.append('long', input.long);
+  // Optional fields are omitted when empty: Laravel turns "" into null, which
+  // numeric/phone rules without `nullable` then reject.
+  if (input.contactInfo) form.append('contactInfo', input.contactInfo);
+  if (input.lat) form.append('lat', input.lat);
+  if (input.long) form.append('long', input.long);
   if (input.cityId) form.append('city_id', String(input.cityId));
   if (input.condition) form.append('condition', String(input.condition));
   if (typeof input.negotiable === 'boolean') {
@@ -257,6 +259,10 @@ export class ApiResponseError extends Error {
   constructor(data: {message?: string} | null | undefined, status = 200) {
     super(data?.message || 'Request failed');
     this.name = 'ApiResponseError';
+    if (import.meta.env?.DEV) {
+      // eslint-disable-next-line no-console
+      console.error('[api] success:false', status, data);
+    }
     this.response = {status, data: data ?? {}};
   }
 }
