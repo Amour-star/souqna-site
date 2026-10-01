@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {buildListingMeta, injectListingMeta, listingIdFromSlug} from '@/lib/listingMeta';
+import {buildListingMeta, injectListingMeta, listingIdFromSlug} from '../../api/listing';
 
 const ID = '3f2b6c1e-9d44-4e0b-a5c7-0e5a8d1b2c3f';
 const shell = `<html><head>
