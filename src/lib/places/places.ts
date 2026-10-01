@@ -143,11 +143,12 @@ const scoreName = (rawQuery: string, rawName: string): number => {
  */
 const browseCities = (
   {governorates, places}: Gazetteer,
-  {governorateId, language}: {governorateId?: string; language: PlaceLanguage},
+  {governorateId}: {governorateId?: string},
 ): PlaceSuggestion[] => {
   const byId = new Map(governorates.map(governorate => [governorate.id, governorate]));
-  const nameOf = (item: {ar: string; en: string}) =>
-    language === 'en' && item.en ? item.en : item.ar;
+  // Syrian place names are shown in Arabic only, whatever the UI language is
+  // (see places.ts module doc) — `language` here only affects non-name text.
+  const nameOf = (item: {ar: string; en: string}) => item.ar;
 
   const pool = governorateId
     ? SYRIA_CITIES.filter(city => city.governorateId === governorateId)
@@ -185,12 +186,12 @@ export const searchLocalPlaces = async (
 ): Promise<PlaceSuggestion[]> => {
   const query = rawQuery;
   const gazetteer = await loadGazetteer();
-  if (!normalizeText(query)) return browseCities(gazetteer, {governorateId, language});
+  if (!normalizeText(query)) return browseCities(gazetteer, {governorateId});
 
   const {governorates, places} = gazetteer;
   const byId = new Map(governorates.map(governorate => [governorate.id, governorate]));
-  const nameOf = (item: {ar: string; en: string}) =>
-    language === 'en' && item.en ? item.en : item.ar;
+  // Syrian place names are shown in Arabic only, whatever the UI language is.
+  const nameOf = (item: {ar: string; en: string}) => item.ar;
 
   const scored: {score: number; order: number; suggestion: PlaceSuggestion}[] = [];
   let order = 0;
@@ -320,7 +321,9 @@ export const searchNominatim = async (
     limit: String(limit),
     dedupe: '1',
     countrycodes: 'sy',
-    'accept-language': language,
+    // Always Arabic: Syrian place names are shown in Arabic only, whatever
+    // the UI language is (see module doc).
+    'accept-language': 'ar',
   });
 
   try {
@@ -341,7 +344,7 @@ export const searchNominatim = async (
           key: `n:${result.osm_type ?? ''}${result.osm_id ?? `${lat},${lon}`}`,
           name,
           governorateId: governorate?.id,
-          context: governorate ? (language === 'en' ? governorate.en : governorate.ar) : '',
+          context: governorate ? governorate.ar : '',
           lat,
           lon,
           source: 'nominatim',
@@ -362,7 +365,6 @@ export const searchNominatim = async (
 export const reverseGeocode = async (
   lat: number,
   lon: number,
-  language: PlaceLanguage = 'ar',
   signal?: AbortSignal,
 ): Promise<{governorateId?: string; area: string} | null> => {
   const params = new URLSearchParams({
@@ -371,7 +373,8 @@ export const reverseGeocode = async (
     format: 'jsonv2',
     addressdetails: '1',
     zoom: '14',
-    'accept-language': language,
+    // Always Arabic: Syrian place names are shown in Arabic only.
+    'accept-language': 'ar',
   });
   try {
     const [{governorates}, response] = await Promise.all([

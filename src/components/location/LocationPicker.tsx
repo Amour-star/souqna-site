@@ -8,7 +8,6 @@ import {
   reverseGeocode,
   type Governorate,
   type LocationParts,
-  type PlaceLanguage,
   type PlaceSuggestion,
 } from '@/lib/places/places';
 import {PlaceCombobox} from './PlaceCombobox';
@@ -41,8 +40,7 @@ export const LocationPicker = ({
   error,
   idPrefix = 'location',
 }: LocationPickerProps) => {
-  const {t, i18n} = useTranslation();
-  const language: PlaceLanguage = i18n.language?.startsWith('ar') ? 'ar' : 'en';
+  const {t} = useTranslation();
 
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
   const [parts, setParts] = useState<LocationParts>({area: '', detail: ''});
@@ -128,7 +126,7 @@ export const LocationPicker = ({
     navigator.geolocation.getCurrentPosition(
       async position => {
         const {latitude, longitude} = position.coords;
-        const resolved = await reverseGeocode(latitude, longitude, language);
+        const resolved = await reverseGeocode(latitude, longitude);
         setLocating(false);
         const next: LocationParts = {
           governorateId: resolved?.governorateId ?? parts.governorateId,
@@ -163,8 +161,9 @@ export const LocationPicker = ({
             onChange={event => setGovernorate(event.target.value)}>
             <option value="">{t('location.chooseGovernorate')}</option>
             {governorates.map(item => (
+              // Governorate/city names are Arabic-only everywhere, regardless of UI language.
               <option key={item.id} value={item.id}>
-                {language === 'en' && item.en ? item.en : item.ar}
+                {item.ar}
               </option>
             ))}
           </Select>

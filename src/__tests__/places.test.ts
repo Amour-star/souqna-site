@@ -86,9 +86,9 @@ describe('searchLocalPlaces', () => {
     expect(results[0]).toMatchObject({source: 'governorate', name: 'حلب'});
   });
 
-  it('searches English names when the UI is English', async () => {
+  it('matches by English spelling but still shows the Arabic name only (Arabic-first, no transliterations)', async () => {
     const results = await searchLocalPlaces('alep', {language: 'en'});
-    expect(results[0].name).toBe('Aleppo');
+    expect(results[0].name).toBe('حلب');
   });
 
   it('browses the governorate capitals for an empty query, cities for an unknown one', async () => {
