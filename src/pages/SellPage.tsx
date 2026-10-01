@@ -152,6 +152,7 @@ const SellPage = () => {
       location: product.location ?? '',
       lat: product.lat ? String(product.lat) : '',
       long: product.long ? String(product.long) : '',
+      cityId: product.city_id ?? undefined,
       customFields: parseCustomFields(product.custom_fields).reduce<Record<string, string>>(
         (accumulator, field) => {
           accumulator[field.name] = field.value;
@@ -310,6 +311,7 @@ const SellPage = () => {
     location: form.location.trim(),
     lat: form.lat,
     long: form.long,
+    cityId: form.cityId,
     condition: form.condition ? Number(form.condition) : null,
     negotiable: form.negotiable,
     customFields: categoryFields
@@ -791,7 +793,7 @@ const SellPage = () => {
         {step === 4 ? (
           <LocationPicker
             idPrefix="sell-location"
-            value={{location: form.location, lat: form.lat, long: form.long}}
+            value={{location: form.location, lat: form.lat, long: form.long, cityId: form.cityId}}
             error={errorText('location')}
             onChange={next => setForm(current => ({...current, ...next}))}
           />

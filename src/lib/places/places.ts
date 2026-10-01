@@ -56,6 +56,14 @@ export interface PlaceSuggestion {
   lat: number;
   lon: number;
   source: 'governorate' | 'gazetteer' | 'nominatim';
+  /**
+   * The backend's stable numeric city id (`SYRIA_CITIES`/`cities` table), set
+   * only when this suggestion corresponds exactly to one of the 103 canonical
+   * cities — never for a governorate, a village found through Nominatim, or
+   * free text. Lets callers (the Sell form, search filters) send a real
+   * `city_id` instead of only the free-text `location` string.
+   */
+  cityId?: number;
 }
 
 export type PlaceLanguage = 'ar' | 'en';
@@ -167,9 +175,14 @@ const browseCities = (
       lat: match?.lat ?? governorate?.lat ?? 0,
       lon: match?.lon ?? governorate?.lon ?? 0,
       source: 'gazetteer',
+      cityId: city.id,
     };
   });
 };
+
+/** The canonical city (if any) a gazetteer place corresponds to exactly. */
+const canonicalCityFor = (governorateId: string, ar: string): number | undefined =>
+  SYRIA_CITIES.find(city => city.governorateId === governorateId && bare(city.ar) === bare(ar))?.id;
 
 export interface LocalSearchOptions {
   language?: PlaceLanguage;
@@ -235,6 +248,7 @@ export const searchLocalPlaces = async (
         lat: place.lat,
         lon: place.lon,
         source: 'gazetteer',
+        cityId: canonicalCityFor(place.g, place.ar),
       },
     });
   }

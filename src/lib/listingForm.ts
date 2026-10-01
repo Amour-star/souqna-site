@@ -27,6 +27,8 @@ export interface ListingFormValues {
   location: string;
   lat: string;
   long: string;
+  /** Stable backend city id, set only when the area is a confirmed canonical city. */
+  cityId?: number;
   customFields: Record<string, string>;
 }
 

@@ -37,6 +37,20 @@ export interface CategoryField {
   ar_options: string | null;
 }
 
+export interface CityGovernorate {
+  id: number;
+  name_ar: string;
+  name_en: string | null;
+}
+
+export interface City {
+  id: number;
+  name_ar: string;
+  name_en: string | null;
+  governorate_id: number;
+  governorate?: CityGovernorate | null;
+}
+
 export interface ProductImage {
   id: ID;
   productID: ID;
@@ -78,6 +92,8 @@ export interface Product {
   contactInfo: string | null;
   location: string | null;
   ar_location: string | null;
+  city_id?: number | null;
+  city?: City | null;
   lat: string | number | null;
   long: string | number | null;
   date: string | null;

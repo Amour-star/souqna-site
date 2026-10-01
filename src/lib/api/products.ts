@@ -219,6 +219,8 @@ export interface ProductInput {
   location: string;
   lat: string;
   long: string;
+  /** Stable backend city id, set only when the area is a confirmed canonical city. */
+  cityId?: number;
   condition?: number | null;
   negotiable?: boolean;
   customFields: {name: string; value: string; ar_name?: string; ar_value?: string}[];
@@ -236,6 +238,7 @@ const appendProductFields = (form: FormData, input: ProductInput) => {
   form.append('location', input.location);
   form.append('lat', input.lat);
   form.append('long', input.long);
+  if (input.cityId) form.append('city_id', String(input.cityId));
   if (input.condition) form.append('condition', String(input.condition));
   if (typeof input.negotiable === 'boolean') {
     form.append('negotiable', input.negotiable ? '1' : '0');
