@@ -11,7 +11,7 @@ import {describe, expect, it} from 'vitest';
 const config = JSON.parse(readFileSync(path.resolve(__dirname, '../../vercel.json'), 'utf8')) as {
   rewrites: {source: string; destination: string}[];
 };
-const rule = config.rewrites[0];
+const rule = config.rewrites.find(entry => entry.destination === '/index.html')!;
 // Vercel `source` is path-to-regexp; the parenthesised group is a plain regex.
 const matches = (url: string) => new RegExp(`^${rule.source}$`).test(url.split('?')[0]);
 
@@ -38,5 +38,11 @@ describe('vercel.json SPA fallback', () => {
     for (const file of ['public/safety.html', 'public/robots.txt', 'public/sitemap.xml', 'index.html']) {
       expect(existsSync(path.resolve(__dirname, '../..', file)), file).toBe(true);
     }
+  });
+});
+
+describe('listing share-preview rewrite (WEB-03)', () => {
+  it('routes /listing/:slug to the meta function before the SPA fallback', () => {
+    expect(config.rewrites[0]).toEqual({source: '/listing/:slug', destination: '/api/listing?slug=:slug'});
   });
 });
