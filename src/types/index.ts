@@ -162,8 +162,11 @@ export interface AppNotification {
   title?: string | null;
   body?: string | null;
   message?: string | null;
+  /** What the backend actually stores; `body`/`message` are derived from it. */
+  description?: string | null;
   type?: string | null;
   read?: boolean | number | null;
+  read_at?: string | null;
   isRead?: boolean | number | null;
   created_at?: string | null;
   data?: Record<string, unknown> | null;

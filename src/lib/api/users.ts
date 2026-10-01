@@ -32,6 +32,12 @@ export const fetchNotifications = async (role: number): Promise<AppNotification[
   return Array.isArray(payload) ? payload : [];
 };
 
+/** Marks every notification of the signed-in user as read (moves a broadcast's "read" counter). */
+export const markAllNotificationsRead = async () => {
+  const {data} = await api.post('notifications/read-all');
+  return data;
+};
+
 export const deleteNotification = async (id: ID, role: number) => {
   const endpoint =
     role === ROLE.SELLER

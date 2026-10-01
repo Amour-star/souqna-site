@@ -1,9 +1,11 @@
+import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useSeo} from '@/hooks/useSeo';
 import {useAuth} from '@/lib/auth/AuthContext';
 import {useToast} from '@/components/ui/ToastProvider';
-import {clearNotifications, deleteNotification, fetchNotifications} from '@/lib/api/users';
+import {clearNotifications, deleteNotification, fetchNotifications, markAllNotificationsRead} from '@/lib/api/users';
+import {isUnread, notificationBody} from '@/lib/notifications';
 import {errorMessage} from '@/lib/api/errorMessages';
 import {relativeTime} from '@/lib/format';
 import {renderInlineMarkdown} from '@/lib/inlineMarkdown';
@@ -39,6 +41,17 @@ const NotificationsPage = () => {
 
   const notifications = query.data ?? [];
 
+  // Opening the page counts as reading: tell the server once per visit. The highlight of this
+  // visit stays (the list is not refetched), the next visit shows them as read.
+  const markedRef = useRef(false);
+  useEffect(() => {
+    if (markedRef.current || !query.data?.some(isUnread)) return;
+    markedRef.current = true;
+    void markAllNotificationsRead().catch(() => {
+      markedRef.current = false;
+    });
+  }, [query.data]);
+
   return (
     <div className="container page">
       <div className="row-wrap" style={{justifyContent: 'space-between'}}>
@@ -64,7 +77,7 @@ const NotificationsPage = () => {
       ) : notifications.length ? (
         <ul className="notification-list">
           {notifications.map(notification => {
-            const unread = !(notification.read ?? notification.isRead);
+            const unread = isUnread(notification);
             return (
               <li
                 key={notification.id}
@@ -73,7 +86,7 @@ const NotificationsPage = () => {
                   <p className="notification__title">
                     {notification.title || notification.type || t('notifications.title')}
                   </p>
-                  <p className="muted small">{renderInlineMarkdown(notification.body || notification.message || '')}</p>
+                  <p className="muted small">{renderInlineMarkdown(notificationBody(notification))}</p>
                   <p className="muted small">
                     {relativeTime(notification.created_at, i18n.language, t)}
                   </p>
