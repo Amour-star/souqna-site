@@ -192,3 +192,26 @@ describe('validation messages', () => {
     messages.forEach(message => expect(message).not.toMatch(/sell\.error/));
   });
 });
+
+import {activeStepIndexes, STEP, stepAfter, visibleStep} from '@/lib/listingForm';
+
+describe('wizard steps without category attributes (BUG-11)', () => {
+  it('skips the attributes step both ways', () => {
+    expect(activeStepIndexes(false)).toEqual([STEP.CATEGORY, STEP.PHOTOS, STEP.DETAILS, STEP.LOCATION, STEP.PREVIEW]);
+    expect(stepAfter(STEP.DETAILS, 1, false)).toBe(STEP.LOCATION);
+    expect(stepAfter(STEP.LOCATION, -1, false)).toBe(STEP.DETAILS);
+  });
+
+  it('shows the attributes step when the category has attributes', () => {
+    expect(stepAfter(STEP.DETAILS, 1, true)).toBe(STEP.ATTRIBUTES);
+    expect(stepAfter(STEP.ATTRIBUTES, 1, true)).toBe(STEP.LOCATION);
+  });
+
+  it('never leaves the user stranded on a step that does not exist', () => {
+    expect(visibleStep(STEP.ATTRIBUTES, false)).toBe(STEP.LOCATION);   // stale draft / category change
+    expect(visibleStep(STEP.ATTRIBUTES, true)).toBe(STEP.ATTRIBUTES);
+    expect(stepAfter(STEP.ATTRIBUTES, -1, false)).toBe(STEP.DETAILS);  // back from a phantom step
+    expect(stepAfter(STEP.PREVIEW, 1, false)).toBe(STEP.PREVIEW);      // clamps at the end
+    expect(stepAfter(STEP.CATEGORY, -1, false)).toBe(STEP.CATEGORY);
+  });
+});

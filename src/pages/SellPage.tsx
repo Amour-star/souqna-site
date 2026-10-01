@@ -40,6 +40,8 @@ import {ImportCallout} from '@/components/ImportCallout';
 import {LocationPicker} from '@/components/location/LocationPicker';
 import {
   STEP,
+  stepAfter,
+  visibleStep,
   isValid,
   validateListing,
   validateListingStep,
@@ -140,10 +142,15 @@ const SellPage = () => {
     0,
     activeSteps.findIndex(entry => entry.index === step),
   );
-  const goToStep = (direction: 1 | -1) => {
-    const target = activeSteps[position + direction];
-    if (target) setStep(target.index);
-  };
+  const goToStep = (direction: 1 | -1) => setStep(stepAfter(step, direction, hasAttributes));
+
+  // A stale draft (or a category change) can leave us on the attributes step of a category without
+  // attributes: move to the next visible step instead of rendering an empty one.
+  useEffect(() => {
+    if (categories.length === 0) return;   // categories still loading: attributes are not known yet
+    const visible = visibleStep(step, hasAttributes);
+    if (visible !== step) setStep(visible);
+  }, [categories.length, hasAttributes, step]);
 
   useSeo({
     title: isEditing ? t('sell.editListing') : t('sell.title'),
