@@ -10,9 +10,15 @@
  *     OpenStreetMap, giving instant Arabic prefix autocomplete ("حل" → حلب);
  *  2. live OpenStreetMap Nominatim search — the same source the mobile app
  *     uses — for anything the gazetteer does not contain (villages, streets);
- *  3. helpers that compose and parse the stored `location` string, so listings
+ *  3. a browsable list of Syria's 103 cities, identical to the one the mobile
+ *     app's city picker shows, so opening the field (with nothing typed yet)
+ *     lists real cities instead of requiring the user to already know what
+ *     to search for;
+ *  4. helpers that compose and parse the stored `location` string, so listings
  *     created in the app or by hand still open correctly in the editor.
  */
+
+import {SYRIA_CITIES} from '@/data/syria-cities';
 
 export interface Governorate {
   id: string;
@@ -126,6 +132,44 @@ const scoreName = (rawQuery: string, rawName: string): number => {
   );
 };
 
+/**
+ * The cities a user sees when they open the city field without having typed
+ * anything: the chosen governorate's cities from `SYRIA_CITIES` (same list,
+ * same order the mobile app shows), or — before a governorate is chosen —
+ * just the 14 governorate capitals as quick picks. Coordinates come from the
+ * matching gazetteer entry when there is one (true for ~90% of the list);
+ * otherwise the governorate's centre point is a reasonable stand-in, exactly
+ * like picking the governorate alone already falls back to its centre.
+ */
+const browseCities = (
+  {governorates, places}: Gazetteer,
+  {governorateId, language}: {governorateId?: string; language: PlaceLanguage},
+): PlaceSuggestion[] => {
+  const byId = new Map(governorates.map(governorate => [governorate.id, governorate]));
+  const nameOf = (item: {ar: string; en: string}) =>
+    language === 'en' && item.en ? item.en : item.ar;
+
+  const pool = governorateId
+    ? SYRIA_CITIES.filter(city => city.governorateId === governorateId)
+    : SYRIA_CITIES.filter(city => city.isPopular);
+
+  return pool.map(city => {
+    const governorate = byId.get(city.governorateId);
+    const match = places.find(
+      place => place.g === city.governorateId && bare(place.ar) === bare(city.ar),
+    );
+    return {
+      key: `city:${city.id}`,
+      name: nameOf(city),
+      governorateId: city.governorateId,
+      context: governorate ? nameOf(governorate) : '',
+      lat: match?.lat ?? governorate?.lat ?? 0,
+      lon: match?.lon ?? governorate?.lon ?? 0,
+      source: 'gazetteer',
+    };
+  });
+};
+
 export interface LocalSearchOptions {
   language?: PlaceLanguage;
   /** Restrict results to one governorate. */
@@ -140,9 +184,10 @@ export const searchLocalPlaces = async (
   {language = 'ar', governorateId, includeGovernorates = false, limit = 8}: LocalSearchOptions = {},
 ): Promise<PlaceSuggestion[]> => {
   const query = rawQuery;
-  if (!normalizeText(query)) return [];
+  const gazetteer = await loadGazetteer();
+  if (!normalizeText(query)) return browseCities(gazetteer, {governorateId, language});
 
-  const {governorates, places} = await loadGazetteer();
+  const {governorates, places} = gazetteer;
   const byId = new Map(governorates.map(governorate => [governorate.id, governorate]));
   const nameOf = (item: {ar: string; en: string}) =>
     language === 'en' && item.en ? item.en : item.ar;

@@ -111,6 +111,31 @@ describe('LocationPicker', () => {
     expect(latest.long).toBe('37.51');
   });
 
+  it("browses the chosen governorate's full city list on focus, before typing anything", async () => {
+    await mount({location: '', lat: '', long: ''});
+    await act(async () => setNativeValue(byId<HTMLSelectElement>('t-governorate'), 'hl'));
+
+    const input = byId<HTMLInputElement>('t-area');
+    await act(async () => input.focus());
+    await flush();
+
+    const names = Array.from(container.querySelectorAll('[role="option"]')).map(el => el.textContent);
+    // The full list — same cities the mobile app's city picker shows for Aleppo — not just ones already typed.
+    expect(names.some(name => name?.includes('حلب'))).toBe(true);
+    expect(names.some(name => name?.includes('منبج'))).toBe(true);
+    // The 9-row cap only applies to typed search; browsing must not be truncated the same way.
+    expect(names.length).toBeGreaterThan(9);
+
+    const manbij = Array.from(container.querySelectorAll<HTMLElement>('[role="option"]')).find(option =>
+      option.textContent?.includes('منبج'),
+    );
+    await act(async () => manbij!.click());
+    // Manbij has no entry in this test's tiny gazetteer fixture, so it falls back to Aleppo's centre.
+    expect(latest.location).toBe('حلب – منبج');
+    expect(latest.lat).toBe('36.2');
+    expect(latest.long).toBe('37.16');
+  });
+
   it('supports keyboard selection', async () => {
     await mount({location: '', lat: '', long: ''});
     const input = byId<HTMLInputElement>('t-area');

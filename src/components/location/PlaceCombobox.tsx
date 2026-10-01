@@ -25,12 +25,16 @@ interface PlaceComboboxProps {
   onBlurCommit?: () => void;
 }
 
-const MIN_LOCAL_CHARS = 1;
 const MIN_REMOTE_CHARS = 3;
 
 /**
  * Autocomplete over Syrian places. Suggestions as you type come only from the
  * local gazetteer (instant, prefix-aware, Arabic-normalised).
+ *
+ * Focusing the field with nothing typed yet opens a browsable list of real
+ * cities too — the chosen governorate's cities (same list the mobile app's
+ * city picker shows), or the 14 governorate capitals before one is chosen —
+ * so picking a city never requires already knowing its name.
  *
  * OpenStreetMap Nominatim is queried only when the user explicitly asks for a
  * wider search: its public usage policy forbids search-as-you-type against the
@@ -64,18 +68,13 @@ export const PlaceCombobox = ({
   const [remoteTerm, setRemoteTerm] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  // Suggestions only appear once the user has typed, never for a prefilled value.
-  const touched = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const term = value.trim();
 
+  // Empty term browses cities (see `browseCities` in places.ts); typed text searches as before.
   useEffect(() => {
     let cancelled = false;
-    if (!touched.current || term.length < MIN_LOCAL_CHARS) {
-      setLocal([]);
-      return undefined;
-    }
     void searchLocalPlaces(term, {language, governorateId, includeGovernorates}).then(results => {
       if (!cancelled) setLocal(results);
     });
@@ -116,14 +115,17 @@ export const PlaceCombobox = ({
     return () => document.removeEventListener('pointerdown', onPointerDown);
   }, [open]);
 
-  // Local results first; remote ones only when they add something new.
+  // Local results first; remote ones only when they add something new. Typed
+  // search stays tight (9 rows); browsing a governorate's full city list (no
+  // typed term) is allowed to run longer — Rif Dimashq alone has 22 cities —
+  // the scrollable list in location.css handles the overflow.
   const seen = new Set(local.map(item => `${item.governorateId}|${item.name}`));
   const options = [
     ...local,
     ...remote.filter(item => !seen.has(`${item.governorateId}|${item.name}`)),
-  ].slice(0, 9);
+  ].slice(0, term ? 9 : 30);
 
-  const showList = open && touched.current && term.length > 0;
+  const showList = open && (term.length > 0 || local.length > 0);
   // A final row offers the wider OpenStreetMap search; it is not a place, so it
   // sits after the options and takes the next keyboard index.
   const canSearchMore = term.length >= MIN_REMOTE_CHARS && remoteTerm !== term;
@@ -181,14 +183,11 @@ export const PlaceCombobox = ({
         placeholder={placeholder}
         disabled={disabled}
         onChange={event => {
-          touched.current = true;
           onValueChange(event.target.value);
           setOpen(true);
           setActive(-1);
         }}
-        onFocus={() => {
-          if (touched.current) setOpen(true);
-        }}
+        onFocus={() => setOpen(true)}
         onBlur={onBlurCommit}
         onKeyDown={onKeyDown}
       />

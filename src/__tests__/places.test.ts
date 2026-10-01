@@ -91,9 +91,21 @@ describe('searchLocalPlaces', () => {
     expect(results[0].name).toBe('Aleppo');
   });
 
-  it('returns nothing for an empty query and an unknown one', async () => {
-    expect(await searchLocalPlaces('   ')).toEqual([]);
+  it('browses the governorate capitals for an empty query, cities for an unknown one', async () => {
+    const browsed = await searchLocalPlaces('   ');
+    expect(browsed.length).toBeGreaterThan(0);
+    expect(browsed.map(item => item.name)).toContain('دمشق');
+    expect(browsed.map(item => item.name)).toContain('حلب');
+
     expect(await searchLocalPlaces('قققق')).toEqual([]);
+  });
+
+  it('browses a governorate\'s cities (same list the mobile app shows) for an empty query scoped to it', async () => {
+    const results = await searchLocalPlaces('', {governorateId: 'hl'});
+    expect(results.every(item => item.governorateId === 'hl')).toBe(true);
+    const aleppo = results.find(item => item.name === 'حلب');
+    // Coordinates and context come from the matching gazetteer entry.
+    expect(aleppo).toMatchObject({lat: 36.2, lon: 37.16, context: 'حلب'});
   });
 
   it('respects the limit', async () => {
