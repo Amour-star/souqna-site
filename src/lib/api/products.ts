@@ -113,6 +113,14 @@ export const searchProducts = async (
   if (filters.subCategoryID) body.subCategoryID = filters.subCategoryID;
   if (filters.sellerID) body.sellerID = filters.sellerID;
   if (filters.location) body.location = filters.location;
+  if (filters.cityId) body.city_id = filters.cityId;
+  // Real indexed bounding-box query server-side (map "search this area").
+  if (filters.bounds) {
+    body.boundsNorth = filters.bounds.north;
+    body.boundsSouth = filters.bounds.south;
+    body.boundsEast = filters.bounds.east;
+    body.boundsWest = filters.bounds.west;
+  }
   if (typeof filters.lat === 'number' && typeof filters.long === 'number') {
     body.lat = filters.lat;
     body.long = filters.long;
@@ -187,6 +195,30 @@ export const fetchProduct = async (id: ID): Promise<Product> => {
     throw new Error(data?.message || 'Listing not found');
   }
   return data.data as Product;
+};
+
+/**
+ * Offers related to `id`, ranked by the server (same sub-category, category,
+ * city, similar price). Until the backend exposes the endpoint (older
+ * deployments answer 404) this falls back to recent offers of the category so
+ * the section never disappears.
+ */
+export const fetchRelatedProducts = async (
+  id: ID,
+  categoryID?: ID,
+  limit = 8,
+): Promise<Product[]> => {
+  try {
+    const {data} = await api.get(`productDetails/${id}/related`, {params: {limit}});
+    if (data?.success && Array.isArray(data.data)) {
+      return (data.data as Product[]).filter(entry => entry.id !== id).slice(0, limit);
+    }
+  } catch {
+    /* fall through to the category fallback */
+  }
+  if (!categoryID) return [];
+  const fallback = await fetchProductsByCategory(categoryID).catch(() => [] as Product[]);
+  return fallback.filter(entry => entry.id !== id).slice(0, limit);
 };
 
 export const fetchProductsBySubCategory = async (id: ID): Promise<Product[]> => {

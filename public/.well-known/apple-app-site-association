@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["T4F3W7P2Y8.app.souqna.app"],
+        "components": [
+          {"/": "/listing/*", "comment": "Offer pages open in the Souqna app when installed"}
+        ]
+      }
+    ]
+  }
+}

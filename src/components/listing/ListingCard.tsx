@@ -12,6 +12,7 @@ import {localizedField} from '@/lib/i18n';
 import {useAuth} from '@/lib/auth/AuthContext';
 import {useFavorites} from '@/hooks/useFavorites';
 import {Badge, Skeleton} from '@/components/ui';
+import {imageLoadingProps} from '@/lib/imageLoading';
 import type {Product} from '@/types';
 import './listing.css';
 
@@ -23,9 +24,12 @@ import './listing.css';
 const ListingCardBase = ({
   product,
   layout = 'grid',
+  index = Number.MAX_SAFE_INTEGER,
 }: {
   product: Product;
   layout?: 'grid' | 'list';
+  /** Position in its grid; the first few load eagerly (above the fold). */
+  index?: number;
 }) => {
   const {t, i18n} = useTranslation();
   const navigate = useNavigate();
@@ -58,7 +62,7 @@ const ListingCardBase = ({
             <img
               src={cover}
               alt=""
-              loading="lazy"
+              {...imageLoadingProps(index)}
               decoding="async"
               onError={() => setImageFailed(true)}
             />
@@ -142,8 +146,8 @@ export const ListingGrid = ({
   layout?: 'grid' | 'list';
 }) => (
   <div className={`listing-grid listing-grid--${layout}`}>
-    {products.map(product => (
-      <ListingCard key={product.id} product={product} layout={layout} />
+    {products.map((product, index) => (
+      <ListingCard key={product.id} product={product} layout={layout} index={index} />
     ))}
   </div>
 );

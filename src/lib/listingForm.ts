@@ -60,6 +60,30 @@ export const STEP = {
 
 export const STEP_COUNT = 6;
 
+/** Step indexes the wizard actually shows: the attributes step only exists for categories that define attributes. */
+export const activeStepIndexes = (hasAttributes: boolean): number[] =>
+  [STEP.CATEGORY, STEP.PHOTOS, STEP.DETAILS, STEP.ATTRIBUTES, STEP.LOCATION, STEP.PREVIEW].filter(
+    index => index !== STEP.ATTRIBUTES || hasAttributes,
+  );
+
+/**
+ * The step a "next"/"back" press lands on. A current step that is not in the active list (a stale
+ * draft pointing at the attributes step of a category that has none) is treated as the nearest
+ * visible step instead of jumping back to the first one.
+ */
+export const stepAfter = (current: number, direction: 1 | -1, hasAttributes: boolean): number => {
+  const steps = activeStepIndexes(hasAttributes);
+  const at = steps.indexOf(current);
+  if (at >= 0) return steps[Math.min(steps.length - 1, Math.max(0, at + direction))];
+  return direction === 1
+    ? steps.find(index => index > current) ?? steps[steps.length - 1]
+    : [...steps].reverse().find(index => index < current) ?? steps[0];
+};
+
+/** Where to move when the current step stops existing (e.g. the category changed). */
+export const visibleStep = (current: number, hasAttributes: boolean): number =>
+  activeStepIndexes(hasAttributes).includes(current) ? current : stepAfter(current, 1, hasAttributes);
+
 /** Validates one step of the composer. */
 export const validateListingStep = (
   step: number,
@@ -108,8 +132,14 @@ export const validateListingStep = (
       });
   }
 
-  if (step === STEP.LOCATION && !form.location.trim()) {
-    errors.location = {key: 'sell.error.location'};
+  if (step === STEP.LOCATION) {
+    if (!form.location.trim()) {
+      errors.location = {key: 'sell.error.location'};
+    } else if (!form.cityId) {
+      // Typed text is not enough: the city must be a confirmed suggestion from
+      // the official list, whose id is what the backend stores.
+      errors.location = {key: 'sell.error.city'};
+    }
   }
 
   return errors;

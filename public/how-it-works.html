@@ -82,9 +82,29 @@
     a { color: var(--brand); }
     .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
     @media (max-width: 600px) { .section-grid { grid-template-columns: 1fr; } }
+  
+    .site-header { background: var(--white, #fff); border-bottom: 1px solid var(--gray-200, #e2e8f0); }
+    .site-header__inner { max-width: 900px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .site-header__brand { font-weight: 700; font-size: 1.25rem; color: var(--brand, #008e91); text-decoration: none; }
+    .site-header nav { display: flex; gap: 16px; flex-wrap: wrap; margin-inline-start: auto; }
+    .site-header nav a { color: var(--gray-700, #334155); text-decoration: none; font-size: .95rem; }
+    .site-header nav a:hover { color: var(--brand, #008e91); }
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="/">سوقنا · Souqna</a>
+      <nav aria-label="Souqna">
+        <a href="/">الرئيسية</a>
+        <a href="/faq.html">الأسئلة الشائعة</a>
+        <a href="/safety.html">الأمان</a>
+        <a href="/support.html">الدعم</a>
+        <a href="/privacy.html">الخصوصية</a>
+        <a href="/terms.html">الشروط</a>
+      </nav>
+    </div>
+  </header>
   <div class="lang-switch">
     <a href="/how-it-works.html">العربية</a> | <a href="#" onclick="alert('English version coming soon');">English</a>
   </div>

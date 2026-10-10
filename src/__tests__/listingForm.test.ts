@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
 import {beforeAll, describe, expect, it} from 'vitest';
 import i18n, {changeLanguage, initI18n} from '@/lib/i18n';
 import {
@@ -37,6 +39,7 @@ const arabicListing: ListingFormValues = {
   description: 'جهاز بحالة ممتازة، استعمال ٦ أشهر، مع العلبة والشاحن الأصلي.',
   price: '850',
   location: 'دمشق، المزة',
+  cityId: 1,
 };
 
 const context = (
@@ -115,6 +118,27 @@ describe('listing validation', () => {
     expect(errors.price).toBeUndefined();
   });
 
+  it('requires a confirmed city, not just typed text', () => {
+    const typedOnly = validateListingStep(
+      STEP.LOCATION,
+      context({...arabicListing, cityId: undefined}),
+    );
+    expect(typedOnly.location?.key).toBe('sell.error.city');
+    expect(isValid(validateListing(context({...arabicListing, cityId: undefined})))).toBe(false);
+    expect(
+      validateListingStep(STEP.LOCATION, context(arabicListing)).location,
+    ).toBeUndefined();
+  });
+
+  it('says it in the current language', () => {
+    const ar = JSON.parse(readFileSync(path.resolve(__dirname, '../i18n/locales/ar.json'), 'utf8'));
+    const en = JSON.parse(readFileSync(path.resolve(__dirname, '../i18n/locales/en.json'), 'utf8'));
+    expect(ar['sell.error.city']).toBe('يرجى اختيار المدينة قبل نشر الإعلان.');
+    expect(en['sell.error.city']).toBe('Please select a city before publishing your offer.');
+    expect(ar['listing.related']).toBe('إعلانات مشابهة');
+    expect(en['listing.related']).toBe('Related Offers');
+  });
+
   it('requires a location', () => {
     const errors = validateListingStep(STEP.LOCATION, context({...arabicListing, location: ' '}));
     expect(errors.location?.key).toBe('sell.error.location');
@@ -190,5 +214,28 @@ describe('validation messages', () => {
     expect(messages).toContain('Add at least one photo.');
     expect(messages).toContain('The title needs at least 3 characters.');
     messages.forEach(message => expect(message).not.toMatch(/sell\.error/));
+  });
+});
+
+import {activeStepIndexes, stepAfter, visibleStep} from '@/lib/listingForm';
+
+describe('wizard steps without category attributes (BUG-11)', () => {
+  it('skips the attributes step both ways', () => {
+    expect(activeStepIndexes(false)).toEqual([STEP.CATEGORY, STEP.PHOTOS, STEP.DETAILS, STEP.LOCATION, STEP.PREVIEW]);
+    expect(stepAfter(STEP.DETAILS, 1, false)).toBe(STEP.LOCATION);
+    expect(stepAfter(STEP.LOCATION, -1, false)).toBe(STEP.DETAILS);
+  });
+
+  it('shows the attributes step when the category has attributes', () => {
+    expect(stepAfter(STEP.DETAILS, 1, true)).toBe(STEP.ATTRIBUTES);
+    expect(stepAfter(STEP.ATTRIBUTES, 1, true)).toBe(STEP.LOCATION);
+  });
+
+  it('never leaves the user stranded on a step that does not exist', () => {
+    expect(visibleStep(STEP.ATTRIBUTES, false)).toBe(STEP.LOCATION);   // stale draft / category change
+    expect(visibleStep(STEP.ATTRIBUTES, true)).toBe(STEP.ATTRIBUTES);
+    expect(stepAfter(STEP.ATTRIBUTES, -1, false)).toBe(STEP.DETAILS);  // back from a phantom step
+    expect(stepAfter(STEP.PREVIEW, 1, false)).toBe(STEP.PREVIEW);      // clamps at the end
+    expect(stepAfter(STEP.CATEGORY, -1, false)).toBe(STEP.CATEGORY);
   });
 });
