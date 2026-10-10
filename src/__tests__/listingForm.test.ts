@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
 import {beforeAll, describe, expect, it} from 'vitest';
 import i18n, {changeLanguage, initI18n} from '@/lib/i18n';
 import {
@@ -37,6 +39,7 @@ const arabicListing: ListingFormValues = {
   description: 'جهاز بحالة ممتازة، استعمال ٦ أشهر، مع العلبة والشاحن الأصلي.',
   price: '850',
   location: 'دمشق، المزة',
+  cityId: 1,
 };
 
 const context = (
@@ -113,6 +116,27 @@ describe('listing validation', () => {
   it('accepts a zero price, which means "free"', () => {
     const errors = validateListingStep(STEP.DETAILS, context({...arabicListing, price: '0'}));
     expect(errors.price).toBeUndefined();
+  });
+
+  it('requires a confirmed city, not just typed text', () => {
+    const typedOnly = validateListingStep(
+      STEP.LOCATION,
+      context({...arabicListing, cityId: undefined}),
+    );
+    expect(typedOnly.location?.key).toBe('sell.error.city');
+    expect(isValid(validateListing(context({...arabicListing, cityId: undefined})))).toBe(false);
+    expect(
+      validateListingStep(STEP.LOCATION, context(arabicListing)).location,
+    ).toBeUndefined();
+  });
+
+  it('says it in the current language', () => {
+    const ar = JSON.parse(readFileSync(path.resolve(__dirname, '../i18n/locales/ar.json'), 'utf8'));
+    const en = JSON.parse(readFileSync(path.resolve(__dirname, '../i18n/locales/en.json'), 'utf8'));
+    expect(ar['sell.error.city']).toBe('يرجى اختيار المدينة قبل نشر الإعلان.');
+    expect(en['sell.error.city']).toBe('Please select a city before publishing your offer.');
+    expect(ar['listing.related']).toBe('إعلانات مشابهة');
+    expect(en['listing.related']).toBe('Related Offers');
   });
 
   it('requires a location', () => {

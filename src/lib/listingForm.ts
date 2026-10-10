@@ -132,8 +132,14 @@ export const validateListingStep = (
       });
   }
 
-  if (step === STEP.LOCATION && !form.location.trim()) {
-    errors.location = {key: 'sell.error.location'};
+  if (step === STEP.LOCATION) {
+    if (!form.location.trim()) {
+      errors.location = {key: 'sell.error.location'};
+    } else if (!form.cityId) {
+      // Typed text is not enough: the city must be a confirmed suggestion from
+      // the official list, whose id is what the backend stores.
+      errors.location = {key: 'sell.error.city'};
+    }
   }
 
   return errors;

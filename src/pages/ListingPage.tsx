@@ -2,14 +2,13 @@ import {useEffect, useMemo, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useQuery} from '@tanstack/react-query';
-import {fetchProduct, recordProductView} from '@/lib/api/products';
+import {fetchProduct, fetchRelatedProducts, recordProductView} from '@/lib/api/products';
 import {useSeo} from '@/hooks/useSeo';
 import {useAuth} from '@/lib/auth/AuthContext';
 import {useFavorites} from '@/hooks/useFavorites';
 import {useToast} from '@/components/ui/ToastProvider';
-import {useProductSearch} from '@/hooks/useProductSearch';
 import {Gallery} from '@/components/listing/Gallery';
-import {ListingGrid} from '@/components/listing/ListingCard';
+import {ListingGrid, ListingGridSkeleton} from '@/components/listing/ListingCard';
 import {Badge, Button, EmptyState, ErrorState, LoadingState, Modal, Select, Textarea} from '@/components/ui';
 import {localizedField} from '@/lib/i18n';
 import {
@@ -87,10 +86,12 @@ const ListingPage = () => {
     [product],
   );
 
-  const similar = useProductSearch(
-    {categoryID: product?.categoryID, pageSize: 8, page: 1},
-    Boolean(product?.categoryID),
-  );
+  const related = useQuery({
+    queryKey: ['related', id],
+    queryFn: () => fetchRelatedProducts(id, product?.categoryID),
+    enabled: Boolean(product?.id),
+    staleTime: 5 * 60_000,
+  });
 
   useSeo({
     title: title || t('common.loading'),
@@ -420,14 +421,16 @@ const ListingPage = () => {
         </aside>
       </article>
 
-      {similar.data?.data.length ? (
-        <section className="listing-detail__similar" aria-labelledby="similar-listings">
-          <h2 id="similar-listings">{t('listing.similar')}</h2>
-          <ListingGrid
-            products={similar.data.data.filter(entry => entry.id !== product.id).slice(0, 4)}
-          />
-        </section>
-      ) : null}
+      <section className="listing-detail__similar" aria-labelledby="related-listings">
+        <h2 id="related-listings">{t('listing.related')}</h2>
+        {related.isLoading ? (
+          <ListingGridSkeleton count={4} />
+        ) : related.data?.length ? (
+          <ListingGrid products={related.data} />
+        ) : (
+          <p className="field__hint">{t('listing.relatedEmpty')}</p>
+        )}
+      </section>
 
       <Modal
         open={reportOpen}

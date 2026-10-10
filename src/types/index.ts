@@ -179,15 +179,27 @@ export type SortOption =
   | 'price_desc'
   | 'distance';
 
+/** A map viewport, for "search this area" — a real indexed query server-side. */
+export interface MapBounds {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+}
+
 export interface ProductFilters {
   q?: string;
   categoryID?: ID;
   subCategoryID?: ID;
   sellerID?: ID;
   location?: string;
+  /** Stable backend city id (see City), independent of the free-text `location`. */
+  cityId?: number;
   lat?: number;
   long?: number;
   radius?: number;
+  /** The map's current viewport; takes a real indexed bounding-box query server-side. */
+  bounds?: MapBounds;
   minPrice?: number;
   maxPrice?: number;
   condition?: number;

@@ -46,3 +46,20 @@ describe('listing share-preview rewrite (WEB-03)', () => {
     expect(config.rewrites[0]).toEqual({source: '/listing/:slug', destination: '/api/listing?slug=:slug'});
   });
 });
+
+describe('app link association files (share links open the app)', () => {
+  it('serves /.well-known untouched by the SPA fallback', () => {
+    expect(matches('/.well-known/apple-app-site-association')).toBe(false);
+    expect(matches('/.well-known/assetlinks.json')).toBe(false);
+  });
+
+  it('declares the Android package and the iOS app for /listing/*', () => {
+    const links = JSON.parse(readFileSync(path.resolve(__dirname, '../../public/.well-known/assetlinks.json'), 'utf8'));
+    expect(links[0].target.package_name).toBe('com.souqnaapp');
+    expect(links[0].target.sha256_cert_fingerprints[0]).toMatch(/^([0-9A-F]{2}:){31}[0-9A-F]{2}$/);
+
+    const aasa = JSON.parse(readFileSync(path.resolve(__dirname, '../../public/.well-known/apple-app-site-association'), 'utf8'));
+    expect(aasa.applinks.details[0].appIDs).toEqual(['T4F3W7P2Y8.app.souqna.app']);
+    expect(aasa.applinks.details[0].components[0]['/']).toBe('/listing/*');
+  });
+});
