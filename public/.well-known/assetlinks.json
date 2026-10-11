@@ -1,10 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.souqnaapp",
       "sha256_cert_fingerprints": [
+        "84:21:D3:70:4F:52:C5:40:5C:16:49:69:64:94:2D:90:63:66:CF:2D:28:AF:7C:91:92:C1:FA:A4:EB:A6:FF:3F",
         "BF:E2:3C:A6:D3:A9:D8:3D:C1:F2:68:20:E5:FC:8A:F9:68:5A:61:C5:0D:69:0E:BF:8E:71:FF:95:A2:D3:EC:43"
       ]
     }
