@@ -51,28 +51,17 @@ npm run build      # typecheck + production build into dist/
 npm run typecheck
 npm run lint
 npm run test
-npm run sitemap    # regenerate public/sitemap.xml from live data
+npm run seo:validate     # validate production SEO (robots, sitemaps, raw HTML, status codes)
+npm run seo:consistency  # compare eligible API listings with the served sitemap
 npm run places     # regenerate src/data/syria-places.json from OpenStreetMap
-npm run prerender  # (also part of `build`) write crawlable HTML for home, categories, listings
 ```
 
-## Deployment (Hostinger)
+## Deployment (Vercel)
 
-The build is a set of static files, which matches how souqna.net is hosted
-today.
-
-1. `npm run sitemap` (optional but recommended — it picks up new listings)
-2. `npm run build` — typechecks, bundles, then prerenders (see *SEO* below). The
-   prerender step needs the live API; if it is unreachable it logs a warning and
-   the plain SPA build is still produced.
-3. Upload the **contents** of `dist/` to `public_html/`, including the
-   `.htaccess` file, which provides the SPA fallback, HTTPS redirect and cache
-   headers.
-
-Deep links such as `/listing/<slug>` only survive a refresh if `.htaccess` is
-uploaded. The Google Play compliance pages (`privacy.html`, `terms.html`,
-`support.html`, `data-deletion.html`, `delete-account.html`) are real files and
-keep their existing URLs.
+Production is served by Vercel (`vercel.json`). `npm run build` typechecks, bundles and renames `dist/index.html` to
+`dist/app-shell.html`; the functions in `api/` (SSR pages, sitemaps, ops) fill that shell with real content per route.
+Sitemaps are dynamic — there is nothing to regenerate or upload. See **docs/seo.md** for the indexing policy, monitoring,
+Search Console steps and required environment variables (`SEO_ADMIN_TOKEN`, `CRON_SECRET`, optional `SEO_PING_SECRET`, `INDEXNOW_KEY`).
 
 ### Environment variables (all optional)
 
