@@ -1,53 +1,68 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "functions": {
+    "api/page.ts": {"maxDuration": 30},
+    "api/sitemap.ts": {"maxDuration": 60},
+    "api/ops.ts": {"maxDuration": 60}
+  },
+  "crons": [{"path": "/api/ops?op=cron", "schedule": "17 4 * * *"}],
+  "redirects": [
     {
-      "source": "/listing/:slug",
-      "destination": "/api/listing?slug=:slug"
+      "source": "/(.*)",
+      "has": [{"type": "host", "value": "souqna.net"}],
+      "destination": "https://www.souqna.net/$1",
+      "permanent": true
     },
+    {"source": "/sitemap_index.xml", "destination": "/sitemap.xml", "permanent": true},
+    {"source": "/index.html", "destination": "/", "permanent": true},
+    {"source": "/home.html", "destination": "/", "permanent": true}
+  ],
+  "rewrites": [
+    {"source": "/sitemap.xml", "destination": "/api/sitemap?f=index"},
+    {"source": "/sitemap-pages.xml", "destination": "/api/sitemap?f=pages"},
+    {"source": "/sitemap-categories.xml", "destination": "/api/sitemap?f=categories"},
+    {"source": "/sitemap-cities.xml", "destination": "/api/sitemap?f=cities"},
+    {"source": "/sitemap-listings-:n.xml", "destination": "/api/sitemap?f=listings&n=:n"},
+    {"source": "/llms.txt", "destination": "/api/ops?op=llms"},
+    {"source": "/:key([a-f0-9]{32}).txt", "destination": "/api/ops?op=indexnow-key&key=:key"},
     {
-      "source": "/((?!assets/|\\.well-known/|.*\\.[A-Za-z0-9]+$).*)",
-      "destination": "/index.html"
+      "source": "/((?!assets/|\\.well-known/|api/|.*\\.[A-Za-z0-9]+$).*)",
+      "destination": "/api/page?path=$1"
     }
   ],
   "headers": [
     {
       "source": "/assets/(.*)",
+      "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]
+    },
+    {
+      "source": "/(.*)\\.(png|ico|svg|webp|jpg|jpeg|webmanifest)",
+      "headers": [{"key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800"}]
+    },
+    {
+      "source": "/app-shell.html",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
+        {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"},
+        {"key": "X-Robots-Tag", "value": "noindex"}
       ]
+    },
+    {
+      "source": "/seo-admin.html",
+      "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}]
     },
     {
       "source": "/.well-known/apple-app-site-association",
       "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600"
-        }
+        {"key": "Content-Type", "value": "application/json"},
+        {"key": "Cache-Control", "value": "public, max-age=3600"}
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        }
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+        {"key": "X-Frame-Options", "value": "SAMEORIGIN"}
       ]
     }
   ]

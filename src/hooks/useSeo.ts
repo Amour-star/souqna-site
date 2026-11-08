@@ -48,6 +48,33 @@ const setCanonical = (href: string) => {
 
 const STRUCTURED_DATA_ID = 'souqna-structured-data';
 
+const decode = (value: string) => {
+  try {
+    return decodeURI(value).normalize('NFC');
+  } catch {
+    return value;
+  }
+};
+
+/**
+ * Server-rendered pages (api/page.ts) ship the final title, description,
+ * canonical, robots, Open Graph and JSON-LD in the first response and mark the
+ * document with `data-ssr-path`. While the visitor is still on that page the
+ * server owns the head — rewriting it from client state could only introduce
+ * conflicts (a second canonical, a second JSON-LD block, a different title
+ * between what a crawler fetched and what it renders). Once the user navigates
+ * client-side, ownership is released and the hook works as before.
+ */
+const serverOwnsHead = (): boolean => {
+  const root = document.documentElement;
+  const owned = root.dataset.ssrPath;
+  if (!owned) return false;
+  if (decode(owned) === decode(window.location.pathname)) return true;
+  delete root.dataset.ssrPath;
+  document.head.querySelectorAll('script[data-ssr]').forEach(element => element.remove());
+  return false;
+};
+
 /**
  * Per-route document head management: title, description, canonical, Open
  * Graph and JSON-LD. The app is client-rendered, so this runs on navigation;
@@ -63,7 +90,8 @@ export const useSeo = ({
   structuredData,
 }: SeoInput) => {
   useEffect(() => {
-    const fullTitle = title.includes('Souqna') ? title : `${title} | Souqna`;
+    if (serverOwnsHead()) return undefined;
+    const fullTitle = /سوقنا|Souqna/.test(title) ? title : `${title} | سوقنا`;
     document.title = fullTitle;
 
     if (description) {
@@ -73,7 +101,7 @@ export const useSeo = ({
 
     setMetaByProperty('og:title', fullTitle);
     setMetaByProperty('og:type', type === 'product' ? 'product' : type);
-    setMetaByProperty('og:site_name', 'Souqna');
+    setMetaByProperty('og:site_name', 'سوقنا');
     setMetaByName('twitter:card', image ? 'summary_large_image' : 'summary');
 
     const url = `${SITE_URL}${canonicalPath ?? window.location.pathname}`;
@@ -92,6 +120,7 @@ export const useSeo = ({
   }, [title, description, canonicalPath, image, type, noIndex]);
 
   useEffect(() => {
+    if (serverOwnsHead()) return undefined;
     const existing = document.getElementById(STRUCTURED_DATA_ID);
     existing?.remove();
     if (!structuredData) return undefined;

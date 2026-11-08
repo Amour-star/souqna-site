@@ -94,7 +94,8 @@ const ListingPage = () => {
   });
 
   useSeo({
-    title: title || t('common.loading'),
+    // Same shape as the server-rendered title: `<name> | <city> | سوقنا`.
+    title: title ? [title, location.split(',')[0]?.trim()].filter(Boolean).join(' | ') : t('common.loading'),
     description: description ? description.slice(0, 160) : undefined,
     canonicalPath: product ? listingPath(product) : undefined,
     image: cover,

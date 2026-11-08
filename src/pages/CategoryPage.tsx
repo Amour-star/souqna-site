@@ -40,8 +40,8 @@ const CategoryPage = () => {
   const totalPages = Math.max(1, Math.ceil(total / (filters.pageSize ?? PAGE_SIZE)));
 
   useSeo({
-    title: heading,
-    description: t('home.heroSubtitle'),
+    title: `${heading} في سوريا`,
+    description: `تصفح إعلانات ${heading} في سوريا على سوقنا. قارن الأسعار وتواصل مع البائعين مباشرة.`,
     canonicalPath: subCategoryId
       ? `/category/${categoryId}/${subCategoryId}`
       : `/category/${categoryId}`,

@@ -1,16 +1,28 @@
+# Souqna – https://www.souqna.net
+# Public pages (home, categories, cities, listings, guides), CSS, JS and images are crawlable
+# by every search and AI-search crawler (Googlebot, Bingbot, OAI-SearchBot, PerplexityBot, ClaudeBot…).
+# Nothing here blocks them. robots.txt only saves crawl budget on private utility routes;
+# keeping a page OUT of the index is done with noindex (meta / X-Robots-Tag), not with this file.
+
 User-agent: *
 Allow: /
-# Account areas hold no public content and must not be crawled.
+
+# Account and utility routes — no public content.
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
 Disallow: /favorites
-Disallow: /sell
+Disallow: /sell$
+Disallow: /sell/
 Disallow: /login
 Disallow: /register
 Disallow: /verify
 Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /logout
+Disallow: /import
+Disallow: /api/
+Disallow: /seo-admin.html
+Disallow: /app-shell.html
 
 Sitemap: https://www.souqna.net/sitemap.xml

@@ -10,6 +10,7 @@ import {PlaceCombobox} from '@/components/location/PlaceCombobox';
 import {localizedField} from '@/lib/i18n';
 import {mediaUrl} from '@/lib/format';
 import {SITE_URL, STORE_LINKS} from '@/lib/config';
+import {HOME_DESCRIPTION, HOME_TITLE} from '@/lib/seoCopy';
 import './home.css';
 
 const HomePage = () => {
@@ -23,8 +24,8 @@ const HomePage = () => {
   const [location, setLocation] = useState('');
 
   useSeo({
-    title: 'سوقنا | سوق سوريا للبيع والشراء',
-    description: t('home.seoDescription'),
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     canonicalPath: '/',
     structuredData: {
       '@context': 'https://schema.org',

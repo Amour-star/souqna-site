@@ -1,0 +1,28 @@
+name: SEO validation
+
+# Detects SEO regressions on production: robots.txt, sitemap integrity, raw-HTML checks on
+# sampled pages (title / description / canonical / noindex / h1 / JSON-LD), status codes,
+# and database-vs-sitemap consistency. A failing run is the alert.
+on:
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Site to validate
+        default: https://www.souqna.net
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ inputs.base_url || 'https://www.souqna.net' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run seo:validate
+      - run: npm run seo:consistency
