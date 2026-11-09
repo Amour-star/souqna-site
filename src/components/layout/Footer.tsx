@@ -67,6 +67,19 @@ export const Footer = () => {
           </ul>
         </nav>
 
+        <nav aria-label="مدن سوريا">
+          <h3 className="site-footer__heading">إعلانات المدن</h3>
+          <ul className="site-footer__list">
+            <li><Link to="/city/damascus">إعلانات دمشق</Link></li>
+            <li><Link to="/city/aleppo">إعلانات حلب</Link></li>
+            <li><Link to="/city/homs">إعلانات حمص</Link></li>
+            <li><Link to="/city/hama">إعلانات حماة</Link></li>
+            <li><Link to="/city/latakia">إعلانات اللاذقية</Link></li>
+            <li><Link to="/city/tartus">إعلانات طرطوس</Link></li>
+            <li><Link to="/city/rif-dimashq">إعلانات ريف دمشق</Link></li>
+          </ul>
+        </nav>
+
         <nav aria-label={t('footer.legal')}>
           <h3 className="site-footer__heading">{t('footer.legal')}</h3>
           <ul className="site-footer__list">

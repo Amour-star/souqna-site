@@ -63,7 +63,9 @@ export const useSeo = ({
   structuredData,
 }: SeoInput) => {
   useEffect(() => {
-    const fullTitle = title.includes('Souqna') ? title : `${title} | Souqna`;
+    const fullTitle = title.includes('سوقنا') || title.includes('Souqna')
+      ? title
+      : `${title} | سوقنا`;
     document.title = fullTitle;
 
     if (description) {
@@ -73,7 +75,8 @@ export const useSeo = ({
 
     setMetaByProperty('og:title', fullTitle);
     setMetaByProperty('og:type', type === 'product' ? 'product' : type);
-    setMetaByProperty('og:site_name', 'Souqna');
+    setMetaByProperty('og:locale', 'ar_SY');
+    setMetaByProperty('og:site_name', 'Souqna - سوقنا');
     setMetaByName('twitter:card', image ? 'summary_large_image' : 'summary');
 
     const url = `${SITE_URL}${canonicalPath ?? window.location.pathname}`;

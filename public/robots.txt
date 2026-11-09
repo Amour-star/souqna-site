@@ -1,6 +1,21 @@
+# Souqna (سوقنا) - Crawler & Search Engine Policy
+# Production: https://www.souqna.net/
+
 User-agent: *
 Allow: /
-# Account areas hold no public content and must not be crawled.
+Allow: /category/
+Allow: /city/
+Allow: /listing/
+Allow: /assets/
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Protect private account, authentication, moderation and utility routes
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
@@ -12,5 +27,32 @@ Disallow: /verify
 Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /logout
+Disallow: /import
+Disallow: /api/
+Disallow: /search?*
 
+# Explicit permissions for search engines and AI crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Sitemap Index Declarations
 Sitemap: https://www.souqna.net/sitemap.xml
+Sitemap: https://www.souqna.net/sitemap_index.xml

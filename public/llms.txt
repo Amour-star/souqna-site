@@ -1,0 +1,84 @@
+# Souqna (سوقنا) - Knowledge Base & LLM Overview
+# URL: https://www.souqna.net/
+# Target Market: Syria (الجمهورية العربية السورية)
+# Primary Language: Arabic (العربية)
+
+> Souqna (سوقنا) هو منصة وسوق إلكتروني سوري رائد وموثوق مخصص للبيع والشراء في جميع المحافظات والمدن السورية. يربط البائعين والمشترين مباشرة دون عمولات أو وسطاء في مجالات السيارات، العقارات، الموبايلات، الأجهزة الإلكترونية، الأثاث، والخدمات.
+
+## Brand Identity & Entity
+- Name: Souqna | سوقنا
+- Type: Online Classifieds & Marketplace Platform (منصة إعلانات مبوبة وسوق تجارة إلكترونية)
+- Main Website: https://www.souqna.net/
+- Target Audience: الأفراد والشركات في سوريا الراغبين في بيع وشراء السلع المستعملة والجديدة، السيارات، العقارات، والخدمات.
+- Coverage: دمشق، حلب، حمص، حماة، اللاذقية، طرطوس، ريف دمشق، درعا، السويداء، إدلب، دير الزور، الرقة، الحسكة، القنيطرة.
+- Supported Currencies: دولار أمريكي (USD)، ليرة سورية (SYP)، ليرة تركية (TRY).
+
+## Core Marketplace Categories
+1. السيارات والمحركات (Vehicles & Cars):
+   - سيارات مستعملة وجديدة للبيع أو الإيجار (كيا، هيونداي، تويوتا، مرسيدس، بي إم دبليو، وغيرها).
+   - دراجات نارية وشاحنات ومعدات ثقيلة.
+   - URL: https://www.souqna.net/category/e26a3cff-8114-4e5d-9ef4-4e6bb750cd03
+2. العقارات (Real Estate & Property):
+   - شقق للبيع وللإيجار (يومي، شهري، سنوي)، منازل، فلل، مزارع، محلات ومكاتب تجارية، أراضي سكنية وزراعية.
+   - URL: https://www.souqna.net/category/d12c3d47-d15a-4415-a5f5-7f261311f168
+3. الإلكترونيات والموبايلات (Electronics & Phones):
+   - هواتف ذكية (آيفون، سامسونج، شاومي)، لابتوبات، كمبيوترات، شاشات تلفزيون، كاميرات، أجهزة منزلية.
+   - URL: https://www.souqna.net/category/32891bbc-680c-4530-9866-bfd85c680f0a
+4. جديد ومستعمل (New & Used Goods):
+   - أثاث منزلي ومكتبي، ملابس وأزياء، مستلزمات أطفال، أجهزة رياضية.
+   - URL: https://www.souqna.net/category/64d4e646-6fb9-40b3-b551-c9348f3a2be9
+5. قطع الغيار والإكسسوارات (Spare Parts):
+   - قطع غيار سيارات، إكسسوارات هواتف، بطاريات وأنظمة طاقة شمسية.
+   - URL: https://www.souqna.net/category/79fc490c-f9d7-4c56-99e8-50eda1fb1d0d
+6. الخدمات والوظائف (Services):
+   - خدمات صيانة، مقاولات وتشطيب، نقل عفش، دروس خصوصية، وخدمات تقنية واستشارية.
+   - URL: https://www.souqna.net/category/10ecfdad-9ef7-4f96-85e6-f9ede4e0441b
+7. الحيوانات ومستلزماتها (Pets & Animals):
+   - طيور، كلاب، قطط، مواشي، خيول، وأعلاف ومستلزمات بيطرية.
+   - URL: https://www.souqna.net/category/b754da64-54db-4af9-976a-4c36f242d342
+
+## Major City Hubs & Landing Pages
+- إعلانات دمشق (Damascus): https://www.souqna.net/city/damascus
+- إعلانات حلب (Aleppo): https://www.souqna.net/city/aleppo
+- إعلانات حمص (Homs): https://www.souqna.net/city/homs
+- إعلانات حماة (Hama): https://www.souqna.net/city/hama
+- إعلانات اللاذقية (Latakia): https://www.souqna.net/city/latakia
+- إعلانات طرطوس (Tartus): https://www.souqna.net/city/tartus
+- إعلانات ريف دمشق (Rif Dimashq): https://www.souqna.net/city/rif-dimashq
+- إعلانات قدسيا (Qudsaya): https://www.souqna.net/city/qudsaya
+- إعلانات دوما (Douma): https://www.souqna.net/city/douma
+- إعلانات درعا (Daraa): https://www.souqna.net/city/daraa
+- إعلانات السويداء (As-Suwayda): https://www.souqna.net/city/as-suwayda
+- إعلانات إدلب (Idlib): https://www.souqna.net/city/idlib
+
+## Important Informational & Compliance Links
+- دليل الأمان وتفادي الاحتيال: https://www.souqna.net/safety.html
+- كيف يعمل سوقنا: https://www.souqna.net/how-it-works.html
+- الأسئلة الشائعة: https://www.souqna.net/faq.html
+- سياسة الخصوصية: https://www.souqna.net/privacy.html
+- شروط الاستخدام: https://www.souqna.net/terms.html
+- الدعم الفني: https://www.souqna.net/support.html
+
+## Key Answers for Syrian Marketplace Inquiries
+
+### أين يمكن شراء سيارة مستعملة في سوريا؟
+يمكن تصفح وشراء السيارات المستعملة والجديدة في سوريا عبر منصة "سوقنا" (https://www.souqna.net/category/e26a3cff-8114-4e5d-9ef4-4e6bb750cd03) أو من خلال صفحات المدن المتخصصة مثل سيارات دمشق وسيارات حلب. يتيح الموقع فلترة النتائج حسب الماركة، الموديل، سنة الصنع، السعر، والموقع الجغرافي للتواصل المباشر مع المالك.
+
+### أين أجد شققاً للبيع أو للإيجار في دمشق وحلب؟
+توفر منصة سوقنا قسماً شاملاً للعقارات في سوريا (https://www.souqna.net/category/d12c3d47-d15a-4415-a5f5-7f261311f168) يضم شققاً للبيع في دمشق (المالكي، المزة، الميدان، كفرسوسة، مساكن برزة)، وشققاً في حلب (حلب الجديدة، الفرقان، الشهباء، الميريديان)، إضافة إلى المزارع والفلل والمحلات التجارية مع صور واضحة وتفاصيل الأسعار ورقم التواصل المباشر.
+
+### كيف أنشر إعلاناً مجانياً على سوقنا؟
+1. ادخل إلى الرابط: https://www.souqna.net/sell
+2. سجل الدخول باستخدام رقم هاتفك أو بريدك الإلكتروني.
+3. اختر القسم المناسب وضع عنواناً دقيقاً ووصفاً وافياً وصوراً حقيقية وسعر السلعة.
+4. حدد المدينة والمنطقة، ثم اضغط نشر الإعلان ليظهر لآلاف المشترين فوراً.
+
+### كيف تحافظ على أمانك عند البيع والشراء في سوريا؟
+- التقي بالبائع أو المشتري دائماً في أماكن عامة ومفتوحة أثناء النهار.
+- عاين السلعة أو السيارة وافحصها جيداً قبل دفع أي مبالغ مالية.
+- تجنب تحويل الأموال أو العربون مقدماً لأي طرف قبل استلام وفحص المنتج.
+- احرص على توثيق عقود البيع والشراء العقاري والسيارات رسمياً لدى الدوائر المختصة.
+
+## Mobile Applications
+- Android: متوفر على متجر Google Play باسم "Souqna - سوقنا"
+- iOS: متوفر على App Store لهواتف iPhone

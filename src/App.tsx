@@ -13,6 +13,7 @@ import {RequireAuth} from '@/components/layout/RequireAuth';
 const HomePage = lazy(() => import('@/pages/HomePage'));
 const SearchPage = lazy(() => import('@/pages/SearchPage'));
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'));
+const CityPage = lazy(() => import('@/pages/CityPage'));
 const ListingPage = lazy(() => import('@/pages/ListingPage'));
 const SellPage = lazy(() => import('@/pages/SellPage'));
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'));
@@ -81,6 +82,8 @@ export const App = () => {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/category/:categoryId" element={<CategoryPage />} />
             <Route path="/category/:categoryId/:subCategoryId" element={<CategoryPage />} />
+            <Route path="/city/:citySlug" element={<CityPage />} />
+            <Route path="/city/:citySlug/:categoryId" element={<CityPage />} />
             <Route path="/listing/:slug" element={<ListingPage />} />
             <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
             <Route

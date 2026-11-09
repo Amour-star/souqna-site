@@ -1,5 +1,6 @@
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
+import {listingPath} from '@/lib/format';
 import {useSeo} from '@/hooks/useSeo';
 import {useCategories, useSubCategories} from '@/hooks/useCategories';
 import {useProductSearch} from '@/hooks/useProductSearch';
@@ -33,37 +34,60 @@ const CategoryPage = () => {
   const subCategoryName = subCategory
     ? localizedField(subCategory, 'name', i18n.language)
     : '';
-  const heading = subCategoryName || categoryName || t('search.title');
+  const heading = subCategoryName
+    ? `${subCategoryName} — ${categoryName}`
+    : categoryName || t('search.title');
 
   const total = query.data?.totalRecords ?? 0;
   const page = filters.page ?? 1;
   const totalPages = Math.max(1, Math.ceil(total / (filters.pageSize ?? PAGE_SIZE)));
 
+  const seoTitle = `${heading} في سوريا`;
+  const seoDescription = total > 0
+    ? `تصفح ${total} إعلان ضمن ${heading} في سوريا على سوقنا. قارن الأسعار وتواصل مع البائعين مباشرة في دمشق وحلب وكافة المدن السورية.`
+    : `تصفح أحدث إعلانات ${heading} في سوريا على سوقنا. بيع واشترِ بسهولة وتواصل مع البائعين مباشرة.`;
+
+  const breadcrumbs = [
+    {name: 'الرئيسية', path: '/'},
+    ...(category ? [{name: categoryName, path: `/category/${categoryId}`}] : []),
+    ...(category && subCategory
+      ? [{name: subCategoryName, path: `/category/${categoryId}/${subCategoryId}`}]
+      : []),
+  ];
+
+  const items = query.data?.data ?? [];
+
   useSeo({
-    title: heading,
-    description: t('home.heroSubtitle'),
+    title: seoTitle,
+    description: seoDescription,
     canonicalPath: subCategoryId
       ? `/category/${categoryId}/${subCategoryId}`
       : `/category/${categoryId}`,
     structuredData: category
       ? {
           '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {'@type': 'ListItem', position: 1, name: 'Souqna', item: SITE_URL},
+          '@graph': [
             {
-              '@type': 'ListItem',
-              position: 2,
-              name: categoryName,
-              item: `${SITE_URL}/category/${categoryId}`,
+              '@type': 'BreadcrumbList',
+              itemListElement: breadcrumbs.map((crumb, idx) => ({
+                '@type': 'ListItem',
+                position: idx + 1,
+                name: crumb.name,
+                item: `${SITE_URL}${crumb.path}`,
+              })),
             },
-            ...(subCategoryName
+            ...(items.length
               ? [
                   {
-                    '@type': 'ListItem',
-                    position: 3,
-                    name: subCategoryName,
-                    item: `${SITE_URL}/category/${categoryId}/${subCategoryId}`,
+                    '@type': 'ItemList',
+                    name: heading,
+                    numberOfItems: items.length,
+                    itemListElement: items.slice(0, 24).map((p, idx) => ({
+                      '@type': 'ListItem',
+                      position: idx + 1,
+                      name: p.name,
+                      url: `${SITE_URL}${listingPath(p)}`,
+                    })),
                   },
                 ]
               : []),
@@ -74,27 +98,51 @@ const CategoryPage = () => {
 
   return (
     <div className="container page">
-      <h1>{heading}</h1>
+      {/* Crawlable Breadcrumbs */}
+      <nav aria-label="مسار التصفح" style={{marginBottom: 'var(--space-3)'}}>
+        <ol style={{display: 'flex', gap: '8px', listStyle: 'none', padding: 0, fontSize: '0.875rem', margin: 0}}>
+          {breadcrumbs.map((crumb, index) => {
+            const isLast = index === breadcrumbs.length - 1;
+            return (
+              <li key={crumb.path} style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                {index > 0 && <span aria-hidden="true" style={{color: 'var(--color-text-muted)'}}>/</span>}
+                {isLast ? (
+                  <span aria-current="page" style={{fontWeight: 600}}>{crumb.name}</span>
+                ) : (
+                  <Link to={crumb.path} style={{color: 'var(--color-primary)'}}>{crumb.name}</Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
 
+      <h1>{heading}</h1>
+      <p style={{margin: '0 0 var(--space-4)', color: 'var(--color-text-muted)', fontSize: '0.95rem'}}>
+        {seoDescription}
+      </p>
+
+      {/* Crawlable Subcategory Links with real href attributes */}
       {subCategories.length ? (
-        <div className="row-wrap" style={{marginBottom: 'var(--space-4)'}}>
-          {subCategories.map(entry => (
-            <button
-              key={entry.id}
-              type="button"
-              className="chip"
-              aria-pressed={filters.subCategoryID === entry.id}
-              onClick={() =>
-                setFilters({
-                  ...filters,
-                  subCategoryID:
-                    filters.subCategoryID === entry.id ? undefined : entry.id,
-                  page: 1,
-                })
-              }>
-              {localizedField(entry, 'name', i18n.language)}
-            </button>
-          ))}
+        <div className="row-wrap" style={{marginBottom: 'var(--space-4)', gap: '8px', display: 'flex', flexWrap: 'wrap'}}>
+          <Link
+            to={`/category/${categoryId}`}
+            className={`chip ${!subCategoryId ? 'chip--active' : ''}`}
+            style={{textDecoration: 'none'}}>
+            الكل
+          </Link>
+          {subCategories.map(entry => {
+            const isSelected = subCategoryId === entry.id;
+            return (
+              <Link
+                key={entry.id}
+                to={`/category/${categoryId}/${entry.id}`}
+                className={`chip ${isSelected ? 'chip--active' : ''}`}
+                style={{textDecoration: 'none'}}>
+                {localizedField(entry, 'name', i18n.language)}
+              </Link>
+            );
+          })}
         </div>
       ) : null}
 

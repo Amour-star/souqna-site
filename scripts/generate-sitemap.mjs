@@ -1,14 +1,19 @@
 /**
- * Generates sitemap.xml from live backend data.
+ * Generates dynamic XML sitemap index and sub-sitemaps from live backend data.
  *
- * Run before deploying (`npm run sitemap`) so search engines see the current
- * categories and active listings. Kept as a build step rather than a runtime
- * route because the site is served as static files.
+ * Sitemaps generated:
+ *   public/sitemap.xml          -> Root Sitemap Index
+ *   public/sitemap_index.xml    -> Alias Sitemap Index
+ *   public/sitemap-pages.xml    -> Homepage & informational pages
+ *   public/sitemap-categories.xml -> Active categories & subcategories
+ *   public/sitemap-cities.xml   -> Syrian city landing pages
+ *   public/sitemap-listings-N.xml -> Paginated published listings (1,000 per file)
  */
 import {writeFile} from 'node:fs/promises';
 
-const API = process.env.VITE_API_URL || 'https://backend.souqna.net/api';
-const SITE = process.env.VITE_SITE_URL || 'https://www.souqna.net';
+const API = (process.env.VITE_API_URL || 'https://backend.souqna.net/api').replace(/\/+$/, '');
+const SITE = (process.env.VITE_SITE_URL || 'https://www.souqna.net').replace(/\/+$/, '');
+const LISTINGS_PER_SITEMAP = 1000;
 const PAGE_SIZE = 200;
 
 const slugify = value =>
@@ -23,53 +28,108 @@ const slugify = value =>
     .slice(0, 70);
 
 const escapeXml = value =>
-  value.replace(/[<>&'"]/g, character =>
+  String(value ?? '').replace(/[<>&'"]/g, character =>
     ({'<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;'})[character],
   );
 
-const urlEntry = (path, lastmod, priority) =>
-  `  <url>\n    <loc>${escapeXml(`${SITE}${path}`)}</loc>` +
-  (lastmod ? `\n    <lastmod>${lastmod.slice(0, 10)}</lastmod>` : '') +
-  `\n    <priority>${priority}</priority>\n  </url>`;
+const urlEntry = (path, lastmod, priority, changefreq = 'weekly') => {
+  const parts = [`  <url>`, `    <loc>${escapeXml(`${SITE}${path}`)}</loc>`];
+  if (lastmod) parts.push(`    <lastmod>${lastmod.slice(0, 10)}</lastmod>`);
+  if (changefreq) parts.push(`    <changefreq>${changefreq}</changefreq>`);
+  if (priority) parts.push(`    <priority>${priority}</priority>`);
+  parts.push(`  </url>`);
+  return parts.join('\n');
+};
 
-/** Real HTML files in public/ — kept in the sitemap on every regeneration. */
 const STATIC_PAGES = [
-  ['/safety.html', '0.7'],
-  ['/how-it-works.html', '0.7'],
-  ['/faq.html', '0.7'],
-  ['/privacy.html', '0.4'],
-  ['/terms.html', '0.4'],
-  ['/support.html', '0.5'],
+  ['/', '1.0', 'daily'],
+  ['/safety.html', '0.7', 'weekly'],
+  ['/how-it-works.html', '0.7', 'weekly'],
+  ['/faq.html', '0.7', 'weekly'],
+  ['/support.html', '0.6', 'monthly'],
+  ['/privacy.html', '0.3', 'yearly'],
+  ['/terms.html', '0.3', 'yearly'],
+];
+
+const SYRIAN_CITIES = [
+  {slug: 'damascus', priority: '0.9'},
+  {slug: 'aleppo', priority: '0.9'},
+  {slug: 'homs', priority: '0.8'},
+  {slug: 'hama', priority: '0.8'},
+  {slug: 'latakia', priority: '0.8'},
+  {slug: 'tartus', priority: '0.8'},
+  {slug: 'rif-dimashq', priority: '0.8'},
+  {slug: 'qudsaya', priority: '0.7'},
+  {slug: 'douma', priority: '0.7'},
+  {slug: 'daraa', priority: '0.7'},
+  {slug: 'as-suwayda', priority: '0.7'},
+  {slug: 'idlib', priority: '0.7'},
+  {slug: 'jableh', priority: '0.7'},
+  {slug: 'baniyas', priority: '0.7'},
+  {slug: 'deir-ez-zor', priority: '0.7'},
+  {slug: 'ar-raqqa', priority: '0.7'},
+  {slug: 'al-hasakah', priority: '0.7'},
+  {slug: 'quneitra', priority: '0.6'},
 ];
 
 const main = async () => {
-  const entries = [
-    urlEntry('/', null, '1.0'),
-    urlEntry('/search', null, '0.6'),
-    ...STATIC_PAGES.map(([page, priority]) => urlEntry(page, null, priority)),
-  ];
+  console.log(`Generating sitemaps from API: ${API}`);
+  const today = new Date().toISOString().slice(0, 10);
 
-  const categoriesResponse = await fetch(`${API}/viewCategories`);
+  // 1. Pages Sitemap
+  const pageEntries = STATIC_PAGES.map(([path, priority, freq]) =>
+    urlEntry(path, today, priority, freq),
+  );
+  const pagesXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pageEntries.join(
+    '\n',
+  )}\n</urlset>\n`;
+  await writeFile('public/sitemap-pages.xml', pagesXml, 'utf8');
+  console.log(`✓ public/sitemap-pages.xml generated (${pageEntries.length} URLs)`);
+
+  // 2. Categories Sitemap
+  const categoryEntries = [];
+  const [categoriesResponse, subCategoriesResponse] = await Promise.all([
+    fetch(`${API}/viewCategories`),
+    fetch(`${API}/viewSubCategories`),
+  ]);
   const categories = (await categoriesResponse.json())?.data ?? [];
+  const subCategories = (await subCategoriesResponse.json())?.data ?? [];
+
   categories
     .filter(category => Number(category.status) === 1)
     .forEach(category => {
-      entries.push(urlEntry(`/category/${category.id}`, category.updated_at, '0.8'));
+      categoryEntries.push(urlEntry(`/category/${category.id}`, category.updated_at, '0.8', 'daily'));
     });
 
-  // Subcategories that actually hold listings — empty ones would only be thin pages.
-  const subCategoriesResponse = await fetch(`${API}/viewSubCategories`);
-  const subCategories = (await subCategoriesResponse.json())?.data ?? [];
   subCategories
-    .filter(sub => Number(sub.status) === 1 && Number(sub.productsCount ?? sub.products_count) > 0)
+    .filter(sub => Number(sub.status) === 1 && Number(sub.productsCount ?? sub.products_count ?? 0) > 0)
     .forEach(sub => {
-      entries.push(urlEntry(`/category/${sub.categoryID}/${sub.id}`, sub.updated_at, '0.7'));
+      categoryEntries.push(
+        urlEntry(`/category/${sub.categoryID}/${sub.id}`, sub.updated_at, '0.7', 'daily'),
+      );
     });
 
+  const categoriesXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${categoryEntries.join(
+    '\n',
+  )}\n</urlset>\n`;
+  await writeFile('public/sitemap-categories.xml', categoriesXml, 'utf8');
+  console.log(`✓ public/sitemap-categories.xml generated (${categoryEntries.length} URLs)`);
+
+  // 3. Syrian Cities Sitemap
+  const cityEntries = SYRIAN_CITIES.map(c => urlEntry(`/city/${c.slug}`, today, c.priority, 'daily'));
+  const citiesXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${cityEntries.join(
+    '\n',
+  )}\n</urlset>\n`;
+  await writeFile('public/sitemap-cities.xml', citiesXml, 'utf8');
+  console.log(`✓ public/sitemap-cities.xml generated (${cityEntries.length} URLs)`);
+
+  // 4. Fetch all active listings in batches
+  console.log('Fetching active listings from database...');
   let page = 1;
-  let total = Infinity;
+  let totalRecords = Infinity;
   const listings = [];
-  while (listings.length < total && page <= 25) {
+
+  while (listings.length < totalRecords && page <= 35) {
     const response = await fetch(`${API}/showProductsWithoutAuth`, {
       method: 'POST',
       headers: {
@@ -80,32 +140,61 @@ const main = async () => {
       body: '{}',
     });
     const payload = await response.json();
-    const batch = payload?.data ?? [];
-    total = payload?.totalRecords ?? batch.length;
+    const batch = (payload?.data ?? []).filter(p => [0, 1].includes(Number(p.status)));
+    totalRecords = Number(payload?.totalRecords) || listings.length;
     if (!batch.length) break;
     listings.push(...batch);
     page += 1;
   }
 
-  listings
-    // Status 0 and 1 are both publicly served by the API; 2/3 are paused/sold.
-    .filter(product => [0, 1].includes(Number(product.status)))
-    .forEach(product => {
+  console.log(`Fetched ${listings.length} active published listings out of ${totalRecords} total.`);
+
+  // 5. Chunk listings into sitemap-listings-N.xml
+  const totalChunks = Math.max(1, Math.ceil(listings.length / LISTINGS_PER_SITEMAP));
+  for (let chunk = 1; chunk <= totalChunks; chunk++) {
+    const chunkListings = listings.slice(
+      (chunk - 1) * LISTINGS_PER_SITEMAP,
+      chunk * LISTINGS_PER_SITEMAP,
+    );
+    const listingEntries = chunkListings.map(product => {
       const slug = slugify(
-        [product.name, product.location?.split(',')[0]].filter(Boolean).join(' '),
+        [product.name, product.location?.split(/[,–-]/)[0]].filter(Boolean).join(' '),
       );
-      entries.push(
-        urlEntry(
-          slug ? `/listing/${slug}-${product.id}` : `/listing/${product.id}`,
-          product.updated_at,
-          '0.7',
-        ),
-      );
+      const path = slug ? `/listing/${slug}-${product.id}` : `/listing/${product.id}`;
+      return urlEntry(path, product.updated_at || product.created_at, '0.7', 'weekly');
     });
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`;
-  await writeFile('public/sitemap.xml', xml, 'utf8');
-  console.log(`sitemap.xml written: ${entries.length} urls (${listings.length} listings scanned)`);
+    const chunkXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${listingEntries.join(
+      '\n',
+    )}\n</urlset>\n`;
+    await writeFile(`public/sitemap-listings-${chunk}.xml`, chunkXml, 'utf8');
+    console.log(`✓ public/sitemap-listings-${chunk}.xml generated (${listingEntries.length} URLs)`);
+  }
+
+  // 6. Generate root Sitemap Index referencing all sub-sitemaps
+  const sitemapUrls = [
+    `${SITE}/sitemap-pages.xml`,
+    `${SITE}/sitemap-categories.xml`,
+    `${SITE}/sitemap-cities.xml`,
+  ];
+  for (let chunk = 1; chunk <= totalChunks; chunk++) {
+    sitemapUrls.push(`${SITE}/sitemap-listings-${chunk}.xml`);
+  }
+
+  const sitemapIndexEntries = sitemapUrls
+    .map(
+      loc =>
+        `  <sitemap>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${today}</lastmod>\n  </sitemap>`,
+    )
+    .join('\n');
+
+  const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapIndexEntries}\n</sitemapindex>\n`;
+
+  // Write both public/sitemap.xml AND public/sitemap_index.xml
+  await writeFile('public/sitemap.xml', sitemapIndexXml, 'utf8');
+  await writeFile('public/sitemap_index.xml', sitemapIndexXml, 'utf8');
+  console.log(`✓ public/sitemap.xml and public/sitemap_index.xml written with ${sitemapUrls.length} sitemaps.`);
+  console.log(`\n🎉 Total sitemap generation complete! Indexed ${listings.length} listings, ${categoryEntries.length} categories, and ${cityEntries.length} cities.`);
 };
 
 main().catch(error => {

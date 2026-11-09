@@ -31,9 +31,9 @@ const DIST = 'dist';
 const MAX_LISTINGS = Number(process.env.PRERENDER_LISTINGS || 300);
 const CATEGORY_PAGE_SIZE = 24;
 
-const HOME_TITLE = 'سوقنا | سوق سوريا للبيع والشراء';
+const HOME_TITLE = 'سوقنا | سوق سوريا للبيع والشراء – سيارات وعقارات وموبايلات';
 const HOME_DESCRIPTION =
-  'سوقنا منصة سورية آمنة وموثوقة للبيع والشراء. تصفح الإعلانات ابحث عن السيارات والموبايلات والعقارات والأثاث وغيرها في مختلف مناطق سوريا.';
+  'سوقنا هو سوق سوريا الإلكتروني للبيع والشراء. تصفح آلاف الإعلانات للسيارات والعقارات والموبايلات والإلكترونيات والخدمات في دمشق وحلب وحمص وجميع المدن السورية.';
 
 // ---------------------------------------------------------------------------
 // helpers (kept in step with src/lib/format.ts)
@@ -217,6 +217,12 @@ const fileFor = route => {
 };
 
 const writePage = async (route, html) => {
+  if (route === '/') {
+    // Write both dist/index.html (for Vercel) and dist/home.html (for Apache DirectoryIndex)
+    await writeFile(path.join(DIST, 'index.html'), html, 'utf8');
+    await writeFile(path.join(DIST, 'home.html'), html, 'utf8');
+    return;
+  }
   const file = fileFor(route);
   await mkdir(path.dirname(file), {recursive: true});
   await writeFile(file, html, 'utf8');

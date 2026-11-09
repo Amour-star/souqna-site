@@ -6,7 +6,7 @@
   "description": "Souqna marketplace web application — shares the Souqna backend, authentication and data with the Souqna mobile app.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/prerender.mjs",
+    "build": "tsc --noEmit && node scripts/generate-sitemap.mjs && vite build && node scripts/prerender.mjs",
     "build:only": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
@@ -14,7 +14,8 @@
     "test": "vitest run",
     "prerender": "node scripts/prerender.mjs",
     "places": "node scripts/build-places.mjs",
-    "sitemap": "node scripts/generate-sitemap.mjs"
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "seo:audit": "node scripts/seo-audit.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.59.0",
