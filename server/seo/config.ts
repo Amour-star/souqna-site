@@ -39,7 +39,7 @@ export const PAGE_SIZE = 24;
  * engines can verify ownership), so a default is safe; override with
  * INDEXNOW_KEY to rotate it.
  */
-export const INDEXNOW_KEY = env('INDEXNOW_KEY') || '5f0c3a9e7b1d4c82a6e9d3f1b7c24a08';
+export const INDEXNOW_KEY = env('INDEXNOW_KEY') || '41e4118f6c774b7189da3b10b3e64c29';
 export const CRON_SECRET = env('CRON_SECRET');
 export const SEO_ADMIN_TOKEN = env('SEO_ADMIN_TOKEN');
 export const PING_SECRET = env('SEO_PING_SECRET');

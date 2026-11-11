@@ -120,24 +120,9 @@ API, replace `src/lib/places/places.ts`; the components only depend on it.
 
 ## SEO
 
-The app is client-rendered on static hosting. `scripts/prerender.mjs` (run by
-`npm run build`) writes a real HTML file for `/`, every category, every
-subcategory that holds listings, and the newest listings (`PRERENDER_LISTINGS`,
-default 300), each with title, description, canonical, Open Graph, JSON-LD
-(`WebSite`, `Organization`, `BreadcrumbList`, `ItemList`, `Product`+`Offer`) and
-a semantic body with real links. It is not SSR: React replaces the static body
-when it boots.
-
-Files are flat and named by ASCII id (`home.html`, `category/<id>.html`,
-`category/<cat>__<sub>.html`, `listing/<id>.html`), and `public/.htaccess`
-rewrites the public URLs onto them — each rule fires only if its file exists, so
-anything not prerendered falls through to the SPA. Flat files (not
-`<slug>/index.html`) matter: Apache 301-redirects a directory URL to add a
-trailing slash, which would contradict the canonical. `index.html` stays the
-neutral SPA fallback for `/login`, `/profile` and so on, so `/` is served from
-`home.html` through `DirectoryIndex`. Any slug works for a listing URL — only the
-trailing id is used. Prerendered listings are a snapshot: rebuild to refresh
-them; the SPA always shows live data.
+Pages are server-rendered by `api/page.ts` (home, categories, cities, listings, guides) and sitemaps are generated
+dynamically by `api/sitemap.ts` from the live API. There are no prerendered or static sitemap files. Full policy,
+monitoring and Search Console steps: **docs/seo.md**.
 
 ## Notes
 
