@@ -51,28 +51,17 @@ npm run build      # typecheck + production build into dist/
 npm run typecheck
 npm run lint
 npm run test
-npm run sitemap    # regenerate public/sitemap.xml from live data
+npm run seo:validate     # validate production SEO (robots, sitemaps, raw HTML, status codes)
+npm run seo:consistency  # compare eligible API listings with the served sitemap
 npm run places     # regenerate src/data/syria-places.json from OpenStreetMap
-npm run prerender  # (also part of `build`) write crawlable HTML for home, categories, listings
 ```
 
-## Deployment (Hostinger)
+## Deployment (Vercel)
 
-The build is a set of static files, which matches how souqna.net is hosted
-today.
-
-1. `npm run sitemap` (optional but recommended — it picks up new listings)
-2. `npm run build` — typechecks, bundles, then prerenders (see *SEO* below). The
-   prerender step needs the live API; if it is unreachable it logs a warning and
-   the plain SPA build is still produced.
-3. Upload the **contents** of `dist/` to `public_html/`, including the
-   `.htaccess` file, which provides the SPA fallback, HTTPS redirect and cache
-   headers.
-
-Deep links such as `/listing/<slug>` only survive a refresh if `.htaccess` is
-uploaded. The Google Play compliance pages (`privacy.html`, `terms.html`,
-`support.html`, `data-deletion.html`, `delete-account.html`) are real files and
-keep their existing URLs.
+Production is served by Vercel (`vercel.json`). `npm run build` typechecks, bundles and renames `dist/index.html` to
+`dist/app-shell.html`; the functions in `api/` (SSR pages, sitemaps, ops) fill that shell with real content per route.
+Sitemaps are dynamic — there is nothing to regenerate or upload. See **docs/seo.md** for the indexing policy, monitoring,
+Search Console steps and required environment variables (`SEO_ADMIN_TOKEN`, `CRON_SECRET`, optional `SEO_PING_SECRET`, `INDEXNOW_KEY`).
 
 ### Environment variables (all optional)
 
@@ -131,24 +120,9 @@ API, replace `src/lib/places/places.ts`; the components only depend on it.
 
 ## SEO
 
-The app is client-rendered on static hosting. `scripts/prerender.mjs` (run by
-`npm run build`) writes a real HTML file for `/`, every category, every
-subcategory that holds listings, and the newest listings (`PRERENDER_LISTINGS`,
-default 300), each with title, description, canonical, Open Graph, JSON-LD
-(`WebSite`, `Organization`, `BreadcrumbList`, `ItemList`, `Product`+`Offer`) and
-a semantic body with real links. It is not SSR: React replaces the static body
-when it boots.
-
-Files are flat and named by ASCII id (`home.html`, `category/<id>.html`,
-`category/<cat>__<sub>.html`, `listing/<id>.html`), and `public/.htaccess`
-rewrites the public URLs onto them — each rule fires only if its file exists, so
-anything not prerendered falls through to the SPA. Flat files (not
-`<slug>/index.html`) matter: Apache 301-redirects a directory URL to add a
-trailing slash, which would contradict the canonical. `index.html` stays the
-neutral SPA fallback for `/login`, `/profile` and so on, so `/` is served from
-`home.html` through `DirectoryIndex`. Any slug works for a listing URL — only the
-trailing id is used. Prerendered listings are a snapshot: rebuild to refresh
-them; the SPA always shows live data.
+Pages are server-rendered by `api/page.ts` (home, categories, cities, listings, guides) and sitemaps are generated
+dynamically by `api/sitemap.ts` from the live API. There are no prerendered or static sitemap files. Full policy,
+monitoring and Search Console steps: **docs/seo.md**.
 
 ## Notes
 

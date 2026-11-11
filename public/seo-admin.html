@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>مراقبة SEO | سوقنا</title>
+  <style>
+    :root { --brand:#008e91; --bg:#f8fafc; --card:#fff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --bad:#b91c1c; --good:#15803d; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0f172a; --card:#1e293b; --text:#f1f5f9; --muted:#94a3b8; --line:#334155; --bad:#f87171; --good:#4ade80; } }
+    body { margin:0; font-family:"IBM Plex Sans Arabic",system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+    main { max-width:960px; margin:0 auto; padding:16px; }
+    h1 { color:var(--brand); }
+    form, section { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
+    input, button { font:inherit; padding:8px 12px; border-radius:8px; border:1px solid var(--line); }
+    button { background:var(--brand); color:#fff; border-color:var(--brand); cursor:pointer; }
+    table { width:100%; border-collapse:collapse; }
+    td, th { text-align:start; padding:6px 8px; border-bottom:1px solid var(--line); }
+    .num { font-variant-numeric:tabular-nums; direction:ltr; text-align:end; }
+    .bad { color:var(--bad); font-weight:600; } .good { color:var(--good); font-weight:600; } .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header"><a class="site-header__brand" href="/">سوقنا · الرئيسية</a></header>
+<main>
+  <h1>مراقبة SEO</h1>
+  <p class="muted">لوحة قراءة فقط. تعرض أعداداً مجمّعة فقط — لا بيانات مستخدمين. تتطلب المتغير <code>SEO_ADMIN_TOKEN</code> على Vercel.</p>
+  <form id="form">
+    <label>رمز الوصول <input id="token" type="password" autocomplete="off" required /></label>
+    <label><input id="deep" type="checkbox" /> فحص HTML حي لعيّنة من الصفحات (أبطأ)</label>
+    <button type="submit">تحديث</button>
+  </form>
+  <div id="out" aria-live="polite"></div>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  try { $('token').value = sessionStorage.getItem('seo-token') || ''; } catch {}
+  const row = (label, value, bad) => `<tr><td>${esc(label)}</td><td class="num ${bad ? 'bad' : ''}">${esc(value)}</td></tr>`;
+  const table = (title, rows) => `<section><h2>${esc(title)}</h2><table>${rows.join('')}</table></section>`;
+  $('form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const token = $('token').value;
+    try { sessionStorage.setItem('seo-token', token); } catch {}
+    $('out').innerHTML = '<p class="muted">جارٍ التحميل… (قد يستغرق عدة ثوانٍ)</p>';
+    try {
+      const response = await fetch('/api/ops?op=health' + ($('deep').checked ? '&deep=1' : ''), { headers: { Authorization: 'Bearer ' + token } });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const r = await response.json();
+      const c = r.content, s = r.sitemap, t = r.totals;
+      let html = table('الإعلانات', [
+        row('إعلانات في الواجهة العامة', t.scanned),
+        row('قابلة للفهرسة (في الـ sitemap)', t.indexable),
+        ...Object.entries(t.states).filter(([k]) => k !== 'indexable').map(([k, v]) => row('مستبعدة: ' + k, v)),
+      ]);
+      html += table('الـ Sitemap', [
+        row('إجمالي الروابط', s.totalUrls), row('صفحات', s.pages), row('تصنيفات', s.categories), row('مدن', s.cities),
+        row('إعلانات', s.listings), row('ملفات إعلانات', s.listingFiles),
+        row('آخر توليد للملف المخزّن', r.sitemapServedAt || 'غير معروف'),
+      ]);
+      html += table('جودة البيانات', [
+        row('بدون عنوان', c.missingTitle, c.missingTitle), row('بدون وصف كافٍ', c.missingDescription, c.missingDescription),
+        row('بدون صور', c.missingImages, c.missingImages), row('بدون مدينة', c.missingCity, c.missingCity),
+        row('بدون تصنيف', c.missingCategory, c.missingCategory),
+        row('عناوين مكررة (عدد الإعلانات)', c.duplicateTitles, c.duplicateTitles), row('أوصاف مكررة (عدد الإعلانات)', c.duplicateDescriptions, c.duplicateDescriptions),
+      ]);
+      if (r.deep) {
+        html += table('فحص الصفحات الحي', [
+          row('صفحات مفحوصة', r.deep.checked), row('صفحات بها مشاكل', r.deep.broken.length, r.deep.broken.length),
+          row('آخر فحص ناجح', r.deep.lastSuccessfulValidation || 'لا يوجد (توجد مشاكل)'),
+        ]);
+        if (r.deep.broken.length) html += `<section><h2>المشاكل</h2><ul>${r.deep.broken.map(b => `<li dir="ltr">${esc(b.url)} — ${esc(b.problems.join('; '))}</li>`).join('')}</ul></section>`;
+      }
+      html += `<p class="muted">تم التوليد: ${esc(r.generatedAt)}</p>`;
+      $('out').innerHTML = html;
+    } catch (error) { $('out').innerHTML = `<p class="bad">تعذّر التحميل: ${esc(error.message)}</p>`; }
+  });
+</script>
+</body>
+</html>

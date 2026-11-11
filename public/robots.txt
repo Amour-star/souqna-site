@@ -1,26 +1,19 @@
-# Souqna (سوقنا) - Crawler & Search Engine Policy
-# Production: https://www.souqna.net/
+# Souqna – https://www.souqna.net
+# Public pages (home, categories, cities, listings, guides), CSS, JS and images are crawlable
+# by every search and AI-search crawler (Googlebot, Bingbot, OAI-SearchBot, PerplexityBot, ClaudeBot…).
+# Nothing here blocks them. robots.txt only saves crawl budget on private utility routes;
+# keeping a page OUT of the index is done with noindex (meta / X-Robots-Tag), not with this file.
 
 User-agent: *
 Allow: /
-Allow: /category/
-Allow: /city/
-Allow: /listing/
-Allow: /assets/
-Allow: /*.js$
-Allow: /*.css$
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.webp$
-Allow: /*.svg$
 
-# Protect private account, authentication, moderation and utility routes
+# Account and utility routes — no public content.
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
 Disallow: /favorites
-Disallow: /sell
+Disallow: /sell$
+Disallow: /sell/
 Disallow: /login
 Disallow: /register
 Disallow: /verify
@@ -29,30 +22,7 @@ Disallow: /reset-password
 Disallow: /logout
 Disallow: /import
 Disallow: /api/
-Disallow: /search?*
+Disallow: /seo-admin.html
+Disallow: /app-shell.html
 
-# Explicit permissions for search engines and AI crawlers
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-# Sitemap Index Declarations
 Sitemap: https://www.souqna.net/sitemap.xml
-Sitemap: https://www.souqna.net/sitemap_index.xml

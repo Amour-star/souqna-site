@@ -82,8 +82,8 @@ export const App = () => {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/category/:categoryId" element={<CategoryPage />} />
             <Route path="/category/:categoryId/:subCategoryId" element={<CategoryPage />} />
-            <Route path="/city/:citySlug" element={<CityPage />} />
-            <Route path="/city/:citySlug/:categoryId" element={<CityPage />} />
+            <Route path="/city/:slug" element={<CityPage />} />
+            <Route path="/city/:slug/:categoryId" element={<CityPage />} />
             <Route path="/listing/:slug" element={<ListingPage />} />
             <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
             <Route

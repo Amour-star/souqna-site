@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {FEATURES, STORE_LINKS, SUPPORT_EMAIL} from '@/lib/config';
 import {useCategories} from '@/hooks/useCategories';
 import {localizedField} from '@/lib/i18n';
+import {CITY_PAGES} from '@/lib/cities';
 import {LanguageSwitcher} from './LanguageSwitcher';
 
 export const Footer = () => {
@@ -59,6 +60,10 @@ export const Footer = () => {
             <li>
               <Link to="/sell">{t('nav.sell')}</Link>
             </li>
+            <li>
+              {/* Guides are standalone server-rendered pages, so a normal anchor is correct. */}
+              <a href="/guides">{t('footer.guides')}</a>
+            </li>
             {FEATURES.doushehImport ? (
               <li>
                 <Link to="/import">{t('footer.importAds')}</Link>
@@ -67,16 +72,16 @@ export const Footer = () => {
           </ul>
         </nav>
 
-        <nav aria-label="مدن سوريا">
-          <h3 className="site-footer__heading">إعلانات المدن</h3>
+        <nav aria-label={t('footer.cities')}>
+          <h3 className="site-footer__heading">{t('footer.cities')}</h3>
           <ul className="site-footer__list">
-            <li><Link to="/city/damascus">إعلانات دمشق</Link></li>
-            <li><Link to="/city/aleppo">إعلانات حلب</Link></li>
-            <li><Link to="/city/homs">إعلانات حمص</Link></li>
-            <li><Link to="/city/hama">إعلانات حماة</Link></li>
-            <li><Link to="/city/latakia">إعلانات اللاذقية</Link></li>
-            <li><Link to="/city/tartus">إعلانات طرطوس</Link></li>
-            <li><Link to="/city/rif-dimashq">إعلانات ريف دمشق</Link></li>
+            {CITY_PAGES.filter(city => city.isPopular)
+              .slice(0, 8)
+              .map(city => (
+                <li key={city.id}>
+                  <Link to={`/city/${city.slug}`}>{i18n.language === 'ar' ? city.ar : city.en}</Link>
+                </li>
+              ))}
           </ul>
         </nav>
 

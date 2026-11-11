@@ -10,7 +10,7 @@ import {PlaceCombobox} from '@/components/location/PlaceCombobox';
 import {localizedField} from '@/lib/i18n';
 import {mediaUrl} from '@/lib/format';
 import {SITE_URL, STORE_LINKS} from '@/lib/config';
-import {SYRIAN_CITIES} from '@/data/cities';
+import {HOME_DESCRIPTION, HOME_TITLE} from '@/lib/seoCopy';
 import './home.css';
 
 const HomePage = () => {
@@ -24,33 +24,19 @@ const HomePage = () => {
   const [location, setLocation] = useState('');
 
   useSeo({
-    title: 'سوقنا | سوق سوريا للبيع والشراء – سيارات وعقارات وموبايلات',
-    description:
-      'سوقنا هو سوق سوريا الإلكتروني للبيع والشراء. تصفح آلاف الإعلانات للسيارات والعقارات والموبايلات والإلكترونيات والخدمات في دمشق وحلب وحمص وجميع المدن السورية.',
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     canonicalPath: '/',
     structuredData: {
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'WebSite',
-          name: 'سوقنا — Souqna',
-          url: SITE_URL,
-          inLanguage: 'ar',
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: `${SITE_URL}/search?q={search_term_string}`,
-            'query-input': 'required name=search_term_string',
-          },
-        },
-        {
-          '@type': 'Organization',
-          name: 'Souqna',
-          alternateName: 'سوقنا',
-          url: SITE_URL,
-          logo: `${SITE_URL}/logo.png`,
-          areaServed: {'@type': 'Country', name: 'Syria'},
-        },
-      ],
+      '@type': 'WebSite',
+      name: 'Souqna — سوقنا',
+      url: SITE_URL,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE_URL}/search?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
     },
   });
 
@@ -161,31 +147,6 @@ const HomePage = () => {
         ) : (
           <EmptyState icon="📭" title={t('search.emptyTitle')} body={t('search.emptyBody')} />
         )}
-      </section>
-
-      {/* Syrian Marketplace Cities & Governorates */}
-      <section className="container home-section">
-        <div style={{marginBottom: 'var(--space-3)'}}>
-          <h2 style={{fontSize: '1.25rem', margin: '0 0 var(--space-1)'}}>المدن والمحافظات في سوريا</h2>
-          <p className="muted" style={{margin: 0}}>تصفح الإعلانات والسلع المعروضة حسب محافظتك أو مدينتك في سوريا</p>
-        </div>
-        <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
-          {SYRIAN_CITIES.map(city => (
-            <Link
-              key={city.slug}
-              to={`/city/${city.slug}`}
-              className="chip"
-              style={{
-                textDecoration: 'none',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                fontWeight: 500,
-                fontSize: '0.9rem',
-              }}>
-              إعلانات {city.nameAr}
-            </Link>
-          ))}
-        </div>
       </section>
 
       <section className="container home-section">

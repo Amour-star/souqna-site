@@ -93,90 +93,29 @@ const ListingPage = () => {
     staleTime: 5 * 60_000,
   });
 
-  const cityName = product?.city || location.split(/[,–-]/)[0]?.trim();
-  const seoTitle = product
-    ? (cityName ? `${title} | ${cityName}` : title)
-    : t('common.loading');
-
-  const categoryLabel = product?.category
-    ? localizedField(product.category, 'name', i18n.language) || product.category.name
-    : '';
-  const subCategoryLabel = product?.sub_category
-    ? localizedField(product.sub_category, 'name', i18n.language) || product.sub_category.name
-    : '';
-
-  const naturalDescription = product
-    ? [
-        `${title} في ${cityName || 'سوريا'}`,
-        categoryLabel ? `ضمن فئة ${categoryLabel}` : null,
-        price ? `السعر: ${price}` : null,
-        description ? description.slice(0, 140) : null,
-      ]
-        .filter(Boolean)
-        .join('. ')
-    : undefined;
-
-  const breadcrumbs = useMemo(() => {
-    if (!product) return [];
-    return [
-      {name: 'الرئيسية', path: '/'},
-      ...(product.categoryID
-        ? [{name: categoryLabel || 'التصنيف', path: `/category/${product.categoryID}`}]
-        : []),
-      ...(product.categoryID && product.subCategoryID
-        ? [
-            {
-              name: subCategoryLabel || 'الفئة الفرعية',
-              path: `/category/${product.categoryID}/${product.subCategoryID}`,
-            },
-          ]
-        : []),
-      {name: title, path: listingPath(product)},
-    ];
-  }, [product, categoryLabel, subCategoryLabel, title]);
-
   useSeo({
-    title: seoTitle,
-    description: naturalDescription,
+    // Same shape as the server-rendered title: `<name> | <city> | سوقنا`.
+    title: title ? [title, location.split(',')[0]?.trim()].filter(Boolean).join(' | ') : t('common.loading'),
+    description: description ? description.slice(0, 160) : undefined,
     canonicalPath: product ? listingPath(product) : undefined,
     image: cover,
     type: 'product',
-    noIndex: product ? !isPublished(product.status) : false,
     structuredData:
       product && isPublished(product.status)
         ? {
             '@context': 'https://schema.org',
-            '@graph': [
-              {
-                '@type': 'Product',
-                name: title,
-                description: description?.slice(0, 500) || naturalDescription,
-                image: (product.images ?? []).map(image => mediaUrl(image.path)).filter(Boolean),
-                category: categoryLabel || undefined,
-                offers: {
-                  '@type': 'Offer',
-                  price: Number(product.price) || undefined,
-                  priceCurrency: product.currency || 'USD',
-                  availability: 'https://schema.org/InStock',
-                  url: `${SITE_URL}${listingPath(product)}`,
-                  seller: product.seller?.name
-                    ? {
-                        '@type': 'Person',
-                        name: product.seller.name,
-                      }
-                    : undefined,
-                },
-              },
-              {
-                '@type': 'BreadcrumbList',
-                itemListElement: breadcrumbs.map((crumb, idx) => ({
-                  '@type': 'ListItem',
-                  position: idx + 1,
-                  name: crumb.name,
-                  item: `${SITE_URL}${crumb.path}`,
-                })),
-              },
-            ],
+            '@type': 'Product',
+            name: title,
+            description: description?.slice(0, 500),
+            image: product.images.map(image => mediaUrl(image.path)).filter(Boolean),
+            category: product.category?.name,
+            offers: {
+              '@type': 'Offer',
+              price: Number(product.price) || undefined,
+              priceCurrency: product.currency || 'USD',
+              availability: 'https://schema.org/InStock',
+              url: `${SITE_URL}${listingPath(product)}`,
+            },
           }
         : null,
   });
@@ -300,27 +239,6 @@ const ListingPage = () => {
 
   return (
     <div className="container page">
-      {/* Crawlable Breadcrumbs */}
-      {breadcrumbs.length > 1 && (
-        <nav aria-label="مسار التصفح" style={{marginBottom: 'var(--space-3)'}}>
-          <ol style={{display: 'flex', gap: '8px', listStyle: 'none', padding: 0, fontSize: '0.875rem', margin: 0}}>
-            {breadcrumbs.map((crumb, index) => {
-              const isLast = index === breadcrumbs.length - 1;
-              return (
-                <li key={crumb.path} style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                  {index > 0 && <span aria-hidden="true" style={{color: 'var(--color-text-muted)'}}>/</span>}
-                  {isLast ? (
-                    <span aria-current="page" style={{fontWeight: 600}}>{crumb.name}</span>
-                  ) : (
-                    <Link to={crumb.path} style={{color: 'var(--color-primary)'}}>{crumb.name}</Link>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
-      )}
-
       <article className="listing-detail">
         <div className="listing-detail__main">
           <Gallery images={product.images ?? []} title={title} />
